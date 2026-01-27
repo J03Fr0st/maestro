@@ -2,58 +2,93 @@
 
 ## Overview
 
-Skills are domain-specific knowledge documents that provide specialized guidance for common tasks. They use progressive disclosure for efficient context loading, where Copilot first reads metadata and only loads full content when relevant.
+Skills are domain-specific knowledge documents following the [Agent Skills specification](https://agentskills.io/specification). They provide specialized guidance for common tasks using progressive disclosure for efficient context loading.
 
-Skills are stored in `copilot/skills/<skill-name>/SKILL.md`. Copy them to `.github/skills/` in your project for VS Code auto-discovery.
+Skills are stored in `.github/skills/<skill-name>/SKILL.md`.
 
 ## Available Skills
 
 | Skill | Description |
 |-------|-------------|
-| [`azure-devops-cli`](../copilot/skills/azure-devops-cli/SKILL.md) | Azure DevOps CLI for projects, repos, pipelines, PRs, work items |
-| [`code-review`](../copilot/skills/code-review/SKILL.md) | Code review checklist and guidelines |
-| [`gh-cli`](../copilot/skills/gh-cli/SKILL.md) | GitHub CLI comprehensive reference |
-| [`project-documentation`](../copilot/skills/project-documentation/SKILL.md) | Brownfield project documentation and analysis |
+| [`azure-devops-cli`](../.github/skills/azure-devops-cli/SKILL.md) | Azure DevOps CLI for projects, repos, pipelines, PRs |
+| [`code-review`](../.github/skills/code-review/SKILL.md) | Code review checklist covering correctness, security, performance |
+| [`gh-cli`](../.github/skills/gh-cli/SKILL.md) | GitHub CLI for repositories, issues, PRs, and Actions |
+| [`git-commit`](../.github/skills/git-commit/SKILL.md) | Conventional commit messages with quality checks |
+| [`pr-description`](../.github/skills/pr-description/SKILL.md) | Generate PR descriptions from git changes |
+| [`project-documentation`](../.github/skills/project-documentation/SKILL.md) | Brownfield project documentation and analysis |
+| [`skill-authoring`](../.github/skills/skill-authoring/SKILL.md) | Create agent skills following the spec |
 
-## Skill File Format
+## Skill Structure
+
+Skills follow the Agent Skills specification structure:
+
+```
+skill-name/
+├── SKILL.md           # Required: skill definition (<500 lines)
+├── references/        # Optional: detailed documentation
+│   └── REFERENCE.md
+├── scripts/           # Optional: executable code
+└── assets/            # Optional: templates, data files
+```
+
+## SKILL.md Format
 
 Each skill has a `SKILL.md` file with YAML frontmatter:
 
-```markdown
+```yaml
 ---
 name: skill-name
-description: What it does AND when to use it. Be specific for better auto-activation.
+description: What it does. Use when [trigger 1], [trigger 2], or [trigger 3].
 ---
 
 # Skill Title
 
 ## When to Use
-- Scenario 1
-- Scenario 2
+- Specific scenario 1
+- Specific scenario 2
 
-## Decision Tree
-Flowchart for choosing the right approach
+## Instructions
+Step-by-step guidance...
 
-## Recommended Approach
-Opinionated best practice with examples
-
-## Pitfalls and Gotchas
-Common mistakes to avoid
-
-## Code Examples
-Practical, copy-paste ready code
+## Examples
+Input/output samples...
 ```
 
 ## Frontmatter Fields
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `name` | string | Yes | Skill identifier for discovery |
-| `description` | string | Yes | Purpose AND activation triggers (be specific) |
+### Required Fields
+
+| Field | Constraints |
+|-------|-------------|
+| `name` | Max 64 chars, lowercase, hyphens only, must match directory |
+| `description` | Max 1024 chars, includes what AND when to use |
+
+### Optional Fields
+
+| Field | Purpose |
+|-------|---------|
+| `license` | License name or reference |
+| `compatibility` | Environment requirements |
+| `metadata` | Key-value mapping for additional properties |
+| `allowed-tools` | Space-delimited list of pre-approved tools |
+
+## Progressive Disclosure
+
+Skills load content efficiently in layers:
+
+| Layer | Token Budget | When Loaded |
+|-------|--------------|-------------|
+| Metadata | ~100 tokens | At startup for all skills |
+| Instructions | <5000 tokens | When skill is activated |
+| Resources | As needed | Only when required |
+
+### Guidelines
+
+- Keep main `SKILL.md` under 500 lines
+- Move detailed reference material to `references/` directory
+- Keep file references one level deep from `SKILL.md`
 
 ## How Skills Work
-
-Skills use **progressive disclosure**:
 
 1. **Discovery** - Copilot reads `name` and `description` from frontmatter
 2. **Matching** - Your prompt is compared against skill descriptions
@@ -69,156 +104,65 @@ Skills activate automatically based on prompt matching. Write specific descripti
 description: "Help with GitHub"
 
 # More effective - specific triggers
-description: "GitHub CLI (gh) commands for PRs, issues, repos, and workflows"
-```
-
-## Skill Structure
-
-### Basic Structure
-
-```
-copilot/skills/
-  my-skill/
-    SKILL.md           # Main skill file (required)
-```
-
-### Extended Structure
-
-```
-copilot/skills/
-  my-skill/
-    SKILL.md           # Main skill file
-    examples.md        # Code examples
-    templates/         # Template files
-      component.md
-      service.md
-    scripts/           # Helper scripts
-      setup.sh
+description: "GitHub CLI for repositories, issues, PRs, and Actions. Use when working with GitHub from command line."
 ```
 
 ## Using Skills
 
 ### Automatic (Recommended)
+
 Simply describe your task - skills activate when relevant:
+
 ```
 Help me create a pull request for this feature
 → gh-cli skill activates automatically
 ```
 
+### Via Prompts
+
+Prompts can trigger skills:
+
+```markdown
+---
+name: commit
+description: Smart git commit
+agent: agent
+---
+
+Use the `git-commit` skill to create a commit.
+```
+
 ### Explicit Reference
+
 Reference a skill directly in your prompt:
+
 ```
 Use the azure-devops-cli skill to help me create a pipeline.
 ```
 
-### Quick Reference
-Open skill documents directly when facing related decisions.
-
 ## Creating New Skills
 
-### 1. Create Directory Structure
+See the [skill-authoring](../.github/skills/skill-authoring/SKILL.md) skill for complete guidance.
 
-```bash
-mkdir -p copilot/skills/my-skill
-```
+### Quick Start
 
-### 2. Create SKILL.md
+1. Create directory: `.github/skills/<skill-name>/`
+2. Add `SKILL.md` with frontmatter and content
+3. Keep main file under 500 lines
+4. Move detailed reference to `references/` directory
 
-```markdown
----
-name: my-skill
-description: Specific description with activation keywords
----
+### Validation Checklist
 
-# My Skill
-
-## When to Use
-- Scenario 1: When you need to...
-- Scenario 2: When dealing with...
-
-## Decision Tree
-
-```mermaid
-graph TD
-    A[Start] --> B{Question 1?}
-    B -->|Yes| C[Approach A]
-    B -->|No| D[Approach B]
-```
-
-## Recommended Approach
-
-### Step 1: Setup
-```bash
-# Example command
-npm install my-package
-```
-
-### Step 2: Configuration
-```json
-{
-  "setting": "value"
-}
-```
-
-## Pitfalls and Gotchas
-
-- **Common Mistake 1**: Explanation and fix
-- **Common Mistake 2**: Explanation and fix
-
-## Code Examples
-
-### Basic Usage
-```typescript
-// Example code
-const result = doSomething();
-```
-
-### Advanced Usage
-```typescript
-// More complex example
-const advanced = doSomethingComplex({
-  option: true
-});
-```
-```
-
-### 3. Add Supporting Files (Optional)
-
-Create additional files for complex skills:
-- `examples.md` - Extended code examples
-- `templates/` - Template files for scaffolding
-- `reference.md` - API or command reference
-
-### 4. Deploy
-
-Copy to your project's `.github/skills/` for auto-discovery:
-
-```bash
-cp -r copilot/skills/my-skill .github/skills/
-```
-
-## Best Practices
-
-### Description Quality
-- Include specific keywords that trigger activation
-- Mention the tools, technologies, or scenarios covered
-- Be concise but comprehensive
-
-### Content Organization
-- Start with "When to Use" for quick scanning
-- Include decision trees for complex choices
-- Provide copy-paste ready examples
-- Document common mistakes
-
-### Progressive Disclosure
-- Keep SKILL.md focused on core content
-- Move extended examples to separate files
-- Link to external resources when appropriate
-
-### Maintenance
-- Update examples when APIs change
-- Add new pitfalls as they're discovered
-- Version skills for breaking changes
+- [ ] `name` is lowercase with hyphens only
+- [ ] `name` matches parent directory name
+- [ ] `name` has no consecutive hyphens
+- [ ] `name` does not start or end with hyphen
+- [ ] `name` is under 64 characters
+- [ ] `description` is under 1024 characters
+- [ ] `description` includes what AND when
+- [ ] `SKILL.md` is under 500 lines
+- [ ] File references use relative paths
+- [ ] Referenced files exist
 
 ## Skill vs Instructions vs Prompts
 
@@ -234,70 +178,9 @@ cp -r copilot/skills/my-skill .github/skills/
 
 - **Skills**: Deep expertise on a topic (CLI tools, frameworks, patterns)
 - **Instructions**: Coding style and conventions (formatting, naming, practices)
-- **Prompts**: Repeatable workflows (bug fix, review, documentation)
+- **Prompts**: Repeatable workflows that may trigger skills
 
-## Example: CLI Skill Structure
+## References
 
-```markdown
----
-name: gh-cli
-description: GitHub CLI (gh) for repos, PRs, issues, actions, and releases
----
-
-# GitHub CLI Reference
-
-## When to Use
-- Creating or managing pull requests
-- Working with GitHub issues
-- Managing GitHub Actions workflows
-- Creating releases
-
-## Quick Reference
-
-| Command | Purpose |
-|---------|---------|
-| `gh pr create` | Create pull request |
-| `gh pr merge` | Merge pull request |
-| `gh issue create` | Create issue |
-| `gh run list` | List workflow runs |
-
-## Common Workflows
-
-### Create and Merge PR
-```bash
-gh pr create --title "Feature" --body "Description"
-gh pr merge --squash
-```
-
-### List Open Issues
-```bash
-gh issue list --state open --label bug
-```
-
-## Pitfalls
-
-- **Authentication**: Run `gh auth login` first
-- **Default Branch**: Use `--base main` if not default
-- **Rate Limits**: Cache responses for bulk operations
-```
-
-## Deployment
-
-Copy all skills to your project:
-
-```bash
-cp -r copilot/skills/* .github/skills/
-```
-
-Or copy specific skills:
-
-```bash
-cp -r copilot/skills/gh-cli .github/skills/
-```
-
-### Verification
-
-Skills in `.github/skills/` are automatically discovered by VS Code Copilot. Verify by:
-1. Opening Copilot Chat
-2. Typing a relevant prompt
-3. Checking if the skill is referenced in the response
+- [Agent Skills Specification](https://agentskills.io/specification)
+- [VS Code Copilot Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills)

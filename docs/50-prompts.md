@@ -4,27 +4,19 @@
 
 Prompt files are reusable Markdown-based templates for standardized development tasks. They enable developers to build libraries of consistent workflows without duplicating guidelines across interactions.
 
-Prompt files are stored in `copilot/prompts/`. Copy them to `.github/prompts/` in your project for VS Code auto-discovery.
+Prompt files are stored in `.github/prompts/`.
 
-## Prompt Categories
-
-### Development (`dev/`)
+## Available Prompts
 
 | Prompt | Purpose |
 |--------|---------|
-| `commit.prompt.md` | Smart git commit with conventional commit messages and pre-commit quality checks |
-| `performance.prompt.md` | Performance optimization |
-| `pr.prompt.md` | Generate a comprehensive pull request description from git changes |
+| `commit.prompt.md` | Smart git commit (triggers git-commit skill) |
+| `project-docs.prompt.md` | Project documentation (triggers project-documentation skill) |
 | `review.prompt.md` | Code review checklist |
-
-### Documentation (`docs/`)
-
-| Prompt | Purpose |
-|--------|---------|
-| `prd.prompt.md` | Product requirements document |
-| `planning.prompt.md` | Technical planning |
 | `adr.prompt.md` | Architecture decision records |
 | `changelog.prompt.md` | Changelog entries |
+| `planning.prompt.md` | Technical planning |
+| `prd.prompt.md` | Product requirements document |
 
 ## Prompt File Format
 
@@ -116,13 +108,45 @@ Use #tool:search/codebase to find related code.
 Use #tool:read/problems to check for errors.
 ```
 
+## Prompt-to-Skill Pattern
+
+Prompts can trigger skills by referencing them in the body. This keeps prompts lightweight while skills contain detailed instructions.
+
+### Example: Commit Prompt
+
+```markdown
+---
+name: commit
+description: Smart git commit with conventional commit messages
+agent: agent
+---
+
+Use the `git-commit` skill to create a smart git commit by analyzing changes and generating a meaningful conventional commit message.
+
+Run pre-commit quality checks if build/test/lint commands exist, then stage changes if needed and create the commit.
+```
+
+### Example: Project Docs Prompt
+
+```markdown
+---
+name: project-docs
+description: Generate comprehensive project documentation
+agent: agent
+---
+
+Use the `project-documentation` skill to create comprehensive documentation for this codebase.
+
+Analyze the project structure, detect architecture patterns, and produce documentation suitable for AI-assisted development.
+```
+
 ## Using Prompt Files
 
 ### Via Slash Command
 Type `/` followed by the prompt name in chat:
 ```
-/bugfix
-/refactor
+/commit
+/project-docs
 ```
 
 ### Via Command Palette
@@ -154,7 +178,8 @@ Add files or selections before running:
 2. Add optional YAML frontmatter
 3. Write the prompt body with instructions
 4. Use variables for dynamic content
-5. Test using the editor play button
+5. Reference skills for detailed guidance
+6. Test using the editor play button
 
 ### Example: Security Review Prompt
 
@@ -191,6 +216,10 @@ Return findings grouped by severity (Critical, High, Medium, Low).
 - Use numbered steps for multi-part tasks
 - Include input/output examples when helpful
 
+### Skill Integration
+- Use lightweight prompts that trigger skills for complex tasks
+- Keep prompts focused on the task, skills focused on the knowledge
+
 ### Reusability
 - Reference custom instructions via Markdown links instead of duplicating
 - Use variables for content that changes between uses
@@ -200,8 +229,8 @@ Return findings grouped by severity (Critical, High, Medium, Low).
 - Verify with different inputs and contexts
 
 ### Organization
-- Group related prompts in subdirectories
 - Use consistent naming conventions
+- Group related prompts logically
 
 ## Tool Priority
 

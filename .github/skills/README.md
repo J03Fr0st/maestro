@@ -78,3 +78,9 @@ See [skill-authoring](./skill-authoring/SKILL.md) for complete guide.
 
 - [Agent Skills Specification](https://agentskills.io/specification)
 - [VS Code Copilot Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills)
+
+ALWAYS read and follow the relevant skill from `.github/skills/` 
+before executing tasks matching these domains:
+- GitHub CLI operations → gh-cli
+- Git commits → git-commit
+- Code reviews → code-review

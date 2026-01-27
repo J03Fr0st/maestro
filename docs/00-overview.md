@@ -16,19 +16,18 @@ Maestro is a comprehensive toolkit for customizing GitHub Copilot with reusable 
 
 ### Agents
 
-Custom agents for AI-assisted development (`copilot/agents/`):
+Custom agents for AI-assisted development (`.github/agents/`):
 
 | Agent | Purpose |
 |-------|---------|
-| **Beast Mode** | Autonomous problem-solving with research and testing |
-| **Planner** | Generate executable implementation plans |
-| **Implementer** | Execute implementation tasks from plans |
-| **Reviewer** | Code review with security and performance focus |
-| **Docs** | Documentation creation and updates |
+| **Maestro Conductor** | Orchestrates multi-agent workflows |
+| **Maestro Planner** | Generate executable implementation plans |
+| **Maestro Implementer** | Execute implementation tasks from plans |
+| **Maestro Reviewer** | Code review with security and performance focus |
 
 ### Instructions
 
-Coding guidelines applied automatically based on file type (`copilot/instructions/`):
+Coding guidelines applied automatically based on file type (`.github/instructions/`):
 
 | Instruction | Scope |
 |-------------|-------|
@@ -38,27 +37,35 @@ Coding guidelines applied automatically based on file type (`copilot/instruction
 | **DotNet** | `.cs` files - C# guidelines |
 | **Testing** | Test files - testing standards |
 | **Security** | All files - security practices |
+| **Agents** | Agent file guidelines |
 
 ### Prompts
 
-Reusable task templates (`copilot/prompts/`):
+Reusable task templates (`.github/prompts/`):
 
-**Development:**
-- Commit messages, PRs, code review, performance optimization
-
-**Documentation:**
-- PRDs, technical planning, ADRs, changelogs
+| Prompt | Purpose |
+|--------|---------|
+| `commit` | Smart git commit (triggers git-commit skill) |
+| `project-docs` | Project documentation (triggers project-documentation skill) |
+| `review` | Code review checklist |
+| `adr` | Architecture decision records |
+| `changelog` | Changelog entries |
+| `planning` | Technical planning |
+| `prd` | Product requirements document |
 
 ### Skills
 
-Domain-specific knowledge documents (`copilot/skills/`):
+Domain-specific knowledge following [Agent Skills spec](https://agentskills.io/specification) (`.github/skills/`):
 
 | Skill | Description |
 |-------|-------------|
-| **azure-devops-cli** | Azure DevOps CLI commands and workflows |
-| **code-review** | Code review checklist and guidelines |
-| **gh-cli** | GitHub CLI reference |
-| **project-documentation** | Brownfield project analysis |
+| **azure-devops-cli** | Azure DevOps CLI for projects, repos, pipelines, PRs |
+| **code-review** | Code review checklist covering correctness, security, performance |
+| **gh-cli** | GitHub CLI for repositories, issues, PRs, and Actions |
+| **git-commit** | Conventional commit messages with quality checks |
+| **pr-description** | Generate PR descriptions from git changes |
+| **project-documentation** | Brownfield project documentation and analysis |
+| **skill-authoring** | Create agent skills following the spec |
 
 ## Documentation
 
@@ -74,15 +81,14 @@ Domain-specific knowledge documents (`copilot/skills/`):
 
 ## Quick Start
 
-1. Copy the `copilot/` folder to your project's `.github/` directory
+1. Copy the `.github/` folder components to your project
 2. Customize the instructions for your project
 3. Start using agents, prompts, and skills in VS Code Copilot Chat
 
 ```bash
 # Copy to your project
-cp -r copilot/.github/* .github/
-cp -r copilot/agents .github/
-cp -r copilot/instructions .github/
-cp -r copilot/prompts .github/
-cp -r copilot/skills .github/
+cp -r .github/agents your-project/.github/
+cp -r .github/instructions your-project/.github/
+cp -r .github/prompts your-project/.github/
+cp -r .github/skills your-project/.github/
 ```

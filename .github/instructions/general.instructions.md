@@ -1,6 +1,16 @@
 ---
 applyTo: "**"
 ---
+## Skill Usage
+ALWAYS read and follow the relevant skill from `.github/skills/` before executing tasks matching these domains:
+- GitHub CLI operations → `gh-cli`
+- Azure DevOps CLI operations → `azure-devops-cli`
+- Git commits → `git-commit`
+- Pull request descriptions → `pr-description`
+- Code reviews → `code-review`
+- Project documentation → `project-documentation`
+
+Read the skill's SKILL.md file first, then follow its workflow and guidelines.
 
 # Code Generation Guidelines
 
@@ -22,6 +32,8 @@ applyTo: "**"
 - Hardcoded values that should be configurable
 - Excessive comments for obvious code
 - Changes outside the scope of the request
+
+
 
 ## When to Ask
 Ask before implementing when:
