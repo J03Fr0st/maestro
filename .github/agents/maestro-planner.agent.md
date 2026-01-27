@@ -37,25 +37,25 @@ Do NOT:
 
 Map the territory:
 
-1. **Project Structure**: Use `#tool:search/listDirectory` to identify key directories
-2. **Subagent Search**: Use `#tool:search/searchSubagent` launch a specialized search sub-agent for finding code/files
-3. **Semantic Search**: Use `#tool:search/codebase` with task-related terms
-4. **Pattern Discovery**: Use `#tool:search/textSearch` for code patterns
+1. **Project Structure**: List directories to identify key areas
+2. **Subagent Search**: Launch a specialized search sub-agent for finding code/files
+3. **Semantic Search**: Search the codebase with task-related terms
+4. **Pattern Discovery**: Use text search for code patterns
 
 ### Phase 2: Deep Investigation
 
 For each relevant area:
 
-1. **Read Key Files**: Use `#tool:read/readFile` to understand implementations
-2. **Trace Dependencies**: Use `#tool:search/usages` to map interactions
-3. **Find Tests**: Use `#tool:search/fileSearch` with `**/*.test.*`, `**/*.spec.*`
+1. **Read Key Files**: Read files to understand implementations
+2. **Trace Dependencies**: Search for code usages to map interactions
+3. **Find Tests**: Search for test files with patterns like `**/*.test.*`, `**/*.spec.*`
 
 ### Phase 3: External Research
 
 When task involves external libraries:
 
-1. **Fetch Documentation**: Use `#tool:web/fetch` for official docs
-2. **Search Examples**: Use `#tool:web/githubRepo` for reference implementations
+1. **Fetch Documentation**: Fetch official documentation from the web
+2. **Search Examples**: Search GitHub repositories for reference implementations
 
 ## Confidence Threshold
 

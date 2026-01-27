@@ -64,7 +64,7 @@ Do NOT:
 - **Test Results**: Tests added and status
 - **Notes**: Deviations or decisions made
 
-Get changed files with `#tool:search/changes`
+**Get changed files** by reading git changes or asking the implementer
 
 ### 2. Validate Against Tech Spec
 
@@ -111,12 +111,12 @@ Patterns: "query(" without parameterization, "innerHTML",
 ### 4. Verify Tests
 
 1. Check test coverage—tests exist for new functionality
-2. Run tests with `#tool:execute/runTests`
+2. **Run tests automatically** by executing the appropriate test command in the terminal (npm test, dotnet test, pytest, etc.)
 3. Assess test quality—meaningful assertions, not trivial
 
 ### 5. Check for Errors
 
-Use `#tool:read/problems`:
+**Read error diagnostics** from the Problems panel:
 - No compile errors
 - No lint errors
 - No type errors
@@ -125,7 +125,7 @@ Use `#tool:read/problems`:
 
 **Always append your review to the Tech Spec file.** This creates a complete record of the implementation lifecycle.
 
-Use `#tool:edit/editFiles` to append to the Tech Spec at `/plan/[filename].md`:
+**Edit the Tech Spec file** using the edit tool to append to `/plan/[filename].md`:
 
 ```markdown
 ---
