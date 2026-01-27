@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Comprehensive code review checklist for PRs. Use this when reviewing pull requests, performing self-review before submitting PRs, training new reviewers, or establishing team review standards.
+description: Code review checklist for pull requests covering correctness, security, performance, and maintainability. Use when reviewing PRs, performing self-review, or establishing team review standards.
 ---
 
 # Code Review Checklist

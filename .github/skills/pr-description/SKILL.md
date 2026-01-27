@@ -1,6 +1,6 @@
 ---
 name: pr-description
-description: Generate comprehensive pull request descriptions from git changes. Use this when creating PRs, preparing PR descriptions, or documenting changes before submission.
+description: Generate pull request descriptions from git changes with summary, categorized changes, and risk assessment. Use when creating PRs, preparing descriptions, or documenting changes.
 ---
 
 # PR Description Generator

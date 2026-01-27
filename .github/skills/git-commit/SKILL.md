@@ -1,6 +1,6 @@
 ---
 name: git-commit
-description: Smart git commit with conventional commit messages and pre-commit quality checks. Use this when committing changes, creating meaningful commit messages, or ensuring commit quality.
+description: Create git commits with conventional commit messages and quality checks. Use when committing changes, generating commit messages, or running pre-commit validations.
 ---
 
 # Smart Git Commit

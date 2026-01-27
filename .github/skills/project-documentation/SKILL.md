@@ -1,6 +1,6 @@
 ---
 name: project-documentation
-description: Comprehensive brownfield project documentation and analysis. Use this skill when asked to document an existing codebase, analyze project architecture, create project documentation, understand a brownfield project, generate source tree analysis, or create technical documentation for AI-assisted development. This skill performs systematic codebase scanning, architecture detection, and generates structured documentation to help AI agents understand and extend existing projects.
+description: Document brownfield codebases with architecture analysis and source tree mapping. Use when documenting existing projects, analyzing architecture, generating technical docs, or preparing codebases for AI-assisted development.
 ---
 
 # Project Documentation Skill
@@ -154,7 +154,7 @@ docs/
 
 ### Index Template (index.md)
 
-```markdown
+```
 # {project_name} Documentation Index
 
 **Type:** {repository_type}
@@ -192,7 +192,7 @@ When planning new features, reference:
 
 ### Project Overview Template
 
-```markdown
+```
 # {project_name} - Project Overview
 
 **Date:** {date}
@@ -232,7 +232,7 @@ When planning new features, reference:
 
 ### Architecture Template
 
-```markdown
+```
 # {project_name} - Architecture
 
 ## System Overview
@@ -264,7 +264,7 @@ When planning new features, reference:
 
 ### Deep-Dive Template
 
-```markdown
+```
 # {target_name} - Deep Dive Documentation
 
 **Scope:** {target_path}
@@ -347,7 +347,7 @@ For projects with multiple parts (client/server, microservices):
 
 ### Integration Documentation
 
-```markdown
+```
 # Integration Architecture
 
 ## Communication Patterns
