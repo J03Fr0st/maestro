@@ -1,4 +1,4 @@
-# Maestro
+# maestro
 
 A comprehensive GitHub Copilot toolkit with reusable agents, prompts, instructions, and skills.
 
@@ -12,7 +12,7 @@ A comprehensive GitHub Copilot toolkit with reusable agents, prompts, instructio
 ## Structure
 
 ```
-Maestro/
+maestro/
 ├── copilot/
 │   ├── .github/
 │   │   └── copilot-instructions.md    # Repository-level instructions
@@ -52,9 +52,9 @@ Maestro/
 
 | Agent | Purpose |
 |-------|---------|
-| **Planner** | Generate structured implementation plans |
-| **Implementer** | Execute plans and make code changes |
-| **Reviewer** | Thorough code review with security checks |
+| **maestro Planner** | Generate structured implementation plans |
+| **maestro Implementer** | Execute plans and make code changes |
+| **maestro Reviewer** | Thorough code review with security checks |
 | **Beast Mode** | Autonomous parallel task execution |
 | **Docs** | Create and maintain documentation |
 

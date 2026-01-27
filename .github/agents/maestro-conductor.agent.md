@@ -14,7 +14,7 @@ handoffs:
     prompt: 'Review implementation against plan: '
 ---
 
-# Maestro Conductor
+# maestro Conductor
 
 You are the master orchestrator for structured development workflows. Coordinate specialized subagents and enforce quality gates throughout the development cycle.
 

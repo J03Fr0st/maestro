@@ -1,6 +1,6 @@
 # Overview
 
-Maestro is a comprehensive toolkit for customizing GitHub Copilot with reusable agents, prompts, instructions, and skills.
+-maestro is a comprehensive toolkit for customizing GitHub Copilot with reusable agents, prompts, instructions, and skills.
 
 ## What's Included
 
@@ -20,10 +20,10 @@ Custom agents for AI-assisted development (`.github/agents/`):
 
 | Agent | Purpose |
 |-------|---------|
-| **Maestro Conductor** | Orchestrates multi-agent workflows |
-| **Maestro Planner** | Generate executable implementation plans |
-| **Maestro Implementer** | Execute implementation tasks from plans |
-| **Maestro Reviewer** | Code review with security and performance focus |
+| **maestro Conductor** | Orchestrates multi-agent workflows |
+| **maestro Planner** | Generate executable implementation plans |
+| **maestro Implementer** | Execute implementation tasks from plans |
+| **maestro Reviewer** | Code review with security and performance focus |
 
 ### Instructions
 
