@@ -47,21 +47,57 @@ NEXT   → Move to next task
 
 ## Execution Steps
 
-### 1. Load Phase Context
+### 1. Load Planning Context
 
-Read the implementation plan:
-- Identify phase goal (GOAL-XXX)
-- Extract assigned tasks (TASK-XXX)
-- Note requirements (REQ-XXX) and constraints (CON-XXX)
-- Check files to modify (FILE-XXX)
+Read the Tech Spec from the planner and extract:
+
+```markdown
+## From Tech Spec
+
+### Overview
+- **Problem Statement**: What we're solving
+- **Proposed Solution**: High-level approach
+- **Scope**: In/out of scope boundaries
+
+### Development Context
+- **Codebase Patterns**: Error handling, validation, testing conventions
+- **Files to Reference**: Table of files with purpose and key elements
+- **Technical Decisions**: Rationale for approach
+
+### Implementation
+- **Tasks**: Checkbox list with files and details
+- **Acceptance Criteria**: Testable conditions for completion
+
+### Dependencies
+- **Internal/External**: Components and libraries involved
+
+### Testing Strategy
+- **Unit/Integration/Manual**: What to test and verify
+```
+
+Map to your execution:
+- Tasks → Your implementation checklist
+- Acceptance Criteria → Your test cases
+- Files to Reference → Your modification targets
+- Codebase Patterns → Your style guide
 
 ### 2. Create Progress Tracker
 
-Use `#tool:todo` to track tasks:
+Convert Tech Spec tasks to `#tool:todo`:
+
+**From Tech Spec:**
+```markdown
+### Tasks
+- [ ] **Task 1**: Add validation to user input
+  - Files: `src/validators/user.ts`
+  - Details: Use zod schema matching existing patterns
 ```
-- [ ] TASK-001: Write tests for [feature]
-- [ ] TASK-002: Implement [feature]
-- [ ] TASK-003: Verify all tests pass
+
+**Your Todo:**
+```
+- [ ] Write tests for user input validation
+- [ ] Implement validation in src/validators/user.ts
+- [ ] Verify acceptance criteria met
 ```
 
 ### 3. Execute Each Task
@@ -95,26 +131,37 @@ After each task:
 
 ### 5. Report Completion
 
+Reference the Tech Spec acceptance criteria:
+
 ```markdown
-## Phase [N] Implementation Complete
+## Implementation Complete
 
 ### Summary
-- **Tasks Completed**: [X/Y]
-- **Tests Added**: [N] new tests
-- **Files Modified**: [list]
+- **Problem Solved**: [From Tech Spec Problem Statement]
+- **Solution Implemented**: [From Tech Spec Proposed Solution]
+
+### Acceptance Criteria Status
+
+| Criteria | Status |
+|----------|--------|
+| [Criteria 1 from Tech Spec] | ✅ Met |
+| [Criteria 2 from Tech Spec] | ✅ Met |
+| All existing tests pass | ✅ Met |
+| New tests cover changes | ✅ Met |
+
+### Tasks Completed
+
+| Task | Files Modified |
+|------|----------------|
+| [Task 1 from Tech Spec] | `path/to/file.ts` |
+| [Task 2 from Tech Spec] | `path/to/file.ts` |
 
 ### Test Results
-✅ All tests passing
-- [test-file.test.ts]: [N] tests passed
-
-### Changes Made
-
-| Task | Description |
-|------|-------------|
-| TASK-001 | [What was done] |
+- **New Tests**: [N] added
+- **All Tests**: ✅ Passing
 
 ### Notes
-- [Decisions made or deviations]
+- [Decisions made or deviations from Tech Spec]
 
 ### Ready for Review
 ```
@@ -123,9 +170,10 @@ After each task:
 
 When uncertain:
 
-1. **Check the Plan**: Requirements and constraints should specify
-2. **Follow Existing Patterns**: Search codebase for similar implementations
-3. **Present Options**: If genuinely ambiguous, present 2-3 options to conductor:
+1. **Check the Tech Spec**: Problem statement, scope, and technical decisions should specify
+2. **Follow Codebase Patterns**: Tech Spec documents patterns—follow them
+3. **Reference Files to Reference**: Tech Spec lists key files with patterns to follow
+4. **Present Options**: If genuinely ambiguous, present 2-3 options to conductor:
 
 ```markdown
 ## Decision Needed
@@ -192,7 +240,9 @@ Report to conductor:
 
 ## File Change Guidelines
 
-- Only modify files listed in plan
+- Only modify files listed in Tech Spec "Files to Reference" table
+- Follow patterns documented in "Codebase Patterns" section
+- Stay within "Scope > In Scope" boundaries
 - Don't refactor outside task scope
 - Don't "improve" unrelated code
 - Note any additional changes needed in report
@@ -200,8 +250,8 @@ Report to conductor:
 ## Resume Behavior
 
 On "continue" or "resume":
-1. Read plan file
+1. Read Tech Spec for context
 2. Check `#tool:todo` for incomplete tasks
 3. Find first incomplete task
-4. Report: "Resuming from TASK-XXX"
-5. Continue execution
+4. Report: "Resuming from [Task description]"
+5. Continue TDD execution
