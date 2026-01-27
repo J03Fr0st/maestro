@@ -11,6 +11,8 @@ When using this devkit, copy the `copilot/skills/` folder to your project's `.gi
 | [azure-devops-cli](./azure-devops-cli/SKILL.md) | Azure DevOps CLI for projects, repos, pipelines, PRs, work items |
 | [code-review](./code-review/SKILL.md) | Code review checklist for PRs |
 | [gh-cli](./gh-cli/SKILL.md) | GitHub CLI comprehensive reference |
+| [git-commit](./git-commit/SKILL.md) | Smart git commit with conventional commit messages |
+| [pr-description](./pr-description/SKILL.md) | Generate PR descriptions from git changes |
 | [project-documentation](./project-documentation/SKILL.md) | Brownfield project documentation and analysis |
 
 ## How Skills Work

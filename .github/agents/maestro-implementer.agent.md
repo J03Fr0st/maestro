@@ -1,6 +1,6 @@
 ---
 description: 'Execute implementation phases using strict TDD: write failing tests first, then minimal code to pass.'
-model: 'Claude Sonnet 4'
+model: Gemini 3 Pro (Preview) (copilot)
 tools: ['read', 'edit', 'search', 'execute', 'todo']
 handoffs:
   - label: Request Review
