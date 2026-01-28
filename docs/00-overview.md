@@ -24,6 +24,9 @@ Custom agents for AI-assisted development (`.github/agents/`):
 | **maestro Planner** | Generate executable implementation plans |
 | **maestro Implementer** | Execute implementation tasks from plans |
 | **maestro Reviewer** | Code review with security and performance focus |
+| **alphabeast** | Autonomous problem-solving agent |
+| **betabeast** | Extended autonomous agent capabilities |
+| **research** | Research and information gathering |
 
 ### Instructions
 

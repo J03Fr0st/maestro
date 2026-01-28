@@ -4,7 +4,7 @@
 
 Agents are AI-powered assistants that can autonomously plan and execute complex development tasks. VS Code Copilot supports several agent types, each optimized for different workflows.
 
-Custom agents are located in `copilot/agents/`. Copy them to `.github/agents/` in your project for auto-discovery.
+Custom agents are located in `.github/agents/` and are auto-discovered by VS Code.
 
 ## Agent Types
 
@@ -36,11 +36,13 @@ VS Code supports four main agent categories:
 
 | Agent | Purpose |
 |-------|---------|
-| `beastmode.agent.md` | Autonomous problem-solving with research and testing |
-| `planner.agent.md` | Generate executable implementation plans |
-| `implementer.agent.md` | Execute implementation tasks from plans |
-| `reviewer.agent.md` | Code review with security and performance focus |
-| `docs.agent.md` | Documentation creation and updates |
+| `maestro-conductor.agent.md` | Orchestrates multi-agent workflows |
+| `maestro-planner.agent.md` | Generate executable implementation plans |
+| `maestro-implementer.agent.md` | Execute implementation tasks from plans |
+| `maestro-reviewer.agent.md` | Code review with security and performance focus |
+| `alphabeast.agent.md` | Autonomous problem-solving agent |
+| `betabeast.agent.md` | Extended autonomous agent capabilities |
+| `research.agent.md` | Research and information gathering |
 
 ## Agent File Format
 
@@ -176,8 +178,8 @@ Tools are resolved in this order:
 In VS Code Copilot Chat, type `@` followed by the agent name:
 
 ```
-@beastmode Fix the authentication bug in the login flow
-@planner Create a plan for implementing user notifications
+@alphabeast Fix the authentication bug in the login flow
+@maestro-planner Create a plan for implementing user notifications
 ```
 
 ## Storage Locations
@@ -190,11 +192,10 @@ In VS Code Copilot Chat, type `@` followed by the agent name:
 
 ## Creating New Agents
 
-1. Create a file in `copilot/agents/` with `.agent.md` extension
+1. Create a file in `.github/agents/` with `.agent.md` extension
 2. Add YAML frontmatter with `description` and `tools`
 3. Write clear instructions in the Markdown body
 4. Reference tools with `#tool:<tool-name>` syntax
-5. Copy to `.github/agents/` in your project
 
 ### Best Practices
 

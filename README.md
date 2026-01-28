@@ -35,50 +35,55 @@ cp -r .github /path/to/your/project/
 
 ```
 maestro/
-├── copilot/
-│   ├── .github/
-│   │   └── copilot-instructions.md    # Repository-level instructions
-│   ├── agents/                         # AI agent definitions
-│   │   ├── planner.agent.md           # Implementation planning
-│   │   ├── implementer.agent.md       # Code execution
-│   │   ├── reviewer.agent.md          # Code review
-│   │   ├── beastmode.agent.md         # Autonomous parallel tasks
-│   │   └── docs.agent.md              # Documentation
-│   ├── instructions/                   # Custom instructions
+├── .github/
+│   ├── copilot-instructions.md         # Repository-level instructions
+│   ├── agents/                          # AI agent definitions
+│   │   ├── maestro-conductor.agent.md   # Multi-agent orchestration
+│   │   ├── maestro-planner.agent.md     # Implementation planning
+│   │   ├── maestro-implementer.agent.md # Code execution
+│   │   ├── maestro-reviewer.agent.md    # Code review
+│   │   ├── alphabeast.agent.md          # Autonomous problem-solving
+│   │   ├── betabeast.agent.md           # Extended autonomous agent
+│   │   └── research.agent.md            # Research and information gathering
+│   ├── instructions/                    # Custom instructions
 │   │   ├── general.instructions.md
 │   │   ├── typescript.instructions.md
 │   │   ├── angular.instructions.md
 │   │   ├── dotnet.instructions.md
 │   │   ├── testing.instructions.md
-│   │   └── security.instructions.md
-│   ├── prompts/                        # Reusable prompts
-│   │   ├── dev/                        # Development prompts
-│   │   │   ├── commit.prompt.md
-│   │   │   ├── pr.prompt.md
-│   │   │   ├── review.prompt.md
-│   │   │   └── performance.prompt.md
-│   │   └── docs/                       # Documentation prompts
-│   │       ├── prd.prompt.md
-│   │       ├── planning.prompt.md
-│   │       ├── adr.prompt.md
-│   │       └── changelog.prompt.md
-│   └── skills/                         # Domain knowledge
+│   │   ├── security.instructions.md
+│   │   └── agents.instructions.md
+│   ├── prompts/                         # Reusable prompts
+│   │   ├── commit.prompt.md
+│   │   ├── review.prompt.md
+│   │   ├── project-docs.prompt.md
+│   │   ├── prd.prompt.md
+│   │   ├── planning.prompt.md
+│   │   ├── adr.prompt.md
+│   │   └── changelog.prompt.md
+│   └── skills/                          # Domain knowledge
 │       ├── azure-devops-cli/
 │       ├── code-review/
 │       ├── gh-cli/
-│       └── project-documentation/
-└── docs/                               # Documentation
+│       ├── git-commit/
+│       ├── pr-description/
+│       ├── project-documentation/
+│       └── skill-authoring/
+├── installer/                           # Installation scripts
+└── docs/                                # Documentation
 ```
 
 ## Agents
 
 | Agent | Purpose |
 |-------|---------|
+| **maestro Conductor** | Orchestrates multi-agent workflows |
 | **maestro Planner** | Generate structured implementation plans |
 | **maestro Implementer** | Execute plans and make code changes |
 | **maestro Reviewer** | Thorough code review with security checks |
-| **Beast Mode** | Autonomous parallel task execution |
-| **Docs** | Create and maintain documentation |
+| **alphabeast** | Autonomous problem-solving agent |
+| **betabeast** | Extended autonomous agent capabilities |
+| **research** | Research and information gathering |
 
 ## Documentation
 
