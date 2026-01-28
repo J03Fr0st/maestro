@@ -35,7 +35,7 @@ Automated installer for Maestro GitHub Copilot configuration files.
 | Scope | Description | Path |
 |-------|-------------|------|
 | `Workspace` (default) | Current project only | `./.github/` |
-| `User` | VS Code user profile | `%APPDATA%/Code/User/.github/` (Win) or `~/.config/Code/User/.github/` (Unix) |
+| `User` | VS Code user prompts | Agent files to `User/prompts/` (all workspaces) |
 | `Global` | All projects | `~/.github/` |
 
 ## Options
@@ -165,7 +165,8 @@ To remove Maestro configuration, simply delete the `.github` folder from your in
 rm -rf .github
 
 # User profile (macOS/Linux)
-rm -rf ~/.config/Code/User/.github
+# User profile - delete agent files from prompts folder
+rm -rf ~/.config/Code/User/prompts/*.agent.md
 
 # Global
 rm -rf ~/.github
