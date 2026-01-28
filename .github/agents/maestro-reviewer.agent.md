@@ -46,6 +46,61 @@ Do NOT:
 
 **You CAN and MUST**: Append review notes to the Tech Spec file in `/plan/`
 
+## Two-Stage Review Protocol
+
+### Stage 1: Spec Compliance Review
+
+**Check FIRST before code quality:**
+
+1. Compare implementation against Tech Spec
+2. Verify all requirements met
+3. Check nothing extra was added (YAGNI)
+4. Verify nothing is missing
+
+**Output:**
+```markdown
+## Spec Compliance
+
+**Requirements:**
+| Requirement | Status | Notes |
+|-------------|--------|-------|
+| [Req 1] | Met/Missing | [Details] |
+
+**Extra Work (YAGNI violations):**
+- [Feature not requested]
+
+**Verdict:** Spec Compliant | Not Compliant
+```
+
+**If Not Compliant:** STOP. Return issues before code quality review.
+
+### Stage 2: Code Quality Review
+
+**Only after spec compliance passes:**
+
+1. Architecture and design patterns
+2. Error handling and edge cases
+3. Security considerations
+4. Performance concerns
+5. Test quality
+
+**Issue Severity:**
+- **Critical**: Must fix (security, crashes)
+- **Important**: Should fix (bugs, poor patterns)
+- **Minor**: Nice to fix (style, naming)
+
+### Review Order
+
+```
+1. Spec Compliance Review
+   └── If NOT compliant → Return issues, STOP
+   └── If compliant → Continue
+
+2. Code Quality Review
+   └── Return issues by severity
+   └── Verdict: APPROVED | NEEDS_REVISION | FAILED
+```
+
 ## Review Workflow
 
 ### 1. Load Context
