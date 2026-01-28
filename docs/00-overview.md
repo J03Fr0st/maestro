@@ -65,13 +65,50 @@ Domain-specific knowledge following [Agent Skills spec](https://agentskills.io/s
 
 | Skill | Description |
 |-------|-------------|
-| **azure-devops-cli** | Azure DevOps CLI for projects, repos, pipelines, PRs |
-| **code-review** | Code review checklist covering correctness, security, performance |
-| **gh-cli** | GitHub CLI for repositories, issues, PRs, and Actions |
-| **git-commit** | Conventional commit messages with quality checks |
-| **pr-description** | Generate PR descriptions from git changes |
-| **project-documentation** | Brownfield project documentation and analysis |
-| **skill-authoring** | Create agent skills following the spec |
+| **azure-devops-cli** | Azure DevOps CLI operations |
+| **brainstorming** | Design exploration before implementation |
+| **code-review** | Code review (giving and requesting) |
+| **dispatching-parallel-agents** | Parallel agent workflows |
+| **executing-plans** | Batch execution with checkpoints |
+| **gh-cli** | GitHub CLI operations |
+| **git-commit** | Conventional commit messages |
+| **pr-description** | PR description templates |
+| **project-documentation** | Documentation guidelines |
+| **receiving-code-review** | Handling review feedback |
+| **skill-authoring** | Creating skills following spec |
+| **systematic-debugging** | Root cause debugging |
+| **test-driven-development** | TDD workflow enforcement |
+| **using-git-worktrees** | Isolated workspaces |
+| **verification-before-completion** | Evidence before claims |
+| **writing-plans** | Comprehensive implementation plans |
+
+## Skills Overview
+
+Maestro includes 16 skills covering:
+
+**Development Discipline:**
+- test-driven-development - TDD with RED-GREEN-REFACTOR
+- verification-before-completion - Evidence before claims
+- systematic-debugging - Root cause investigation
+
+**Collaboration:**
+- code-review - Giving and requesting reviews
+- receiving-code-review - Handling feedback
+- brainstorming - Design exploration
+
+**Workflow:**
+- dispatching-parallel-agents - Parallel agent execution
+- executing-plans - Batch execution with checkpoints
+- writing-plans - Comprehensive implementation plans
+- using-git-worktrees - Isolated workspaces
+- git-commit - Conventional commits
+- pr-description - PR templates
+
+**Platform:**
+- gh-cli - GitHub CLI
+- azure-devops-cli - Azure DevOps CLI
+- skill-authoring - Creating skills
+- project-documentation - Documentation
 
 ## Documentation
 

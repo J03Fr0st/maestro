@@ -91,6 +91,27 @@ maestro/
 | **maestro Mapper** | Explore codebase and create structured analysis documents |
 | **maestro Debugger** | Systematic debugging using scientific method |
 
+### Skills (16)
+
+| Skill | Purpose |
+|-------|---------|
+| azure-devops-cli | Azure DevOps CLI operations |
+| brainstorming | Design exploration before implementation |
+| code-review | Code review (giving and requesting) |
+| dispatching-parallel-agents | Parallel agent workflows |
+| executing-plans | Batch execution with checkpoints |
+| gh-cli | GitHub CLI operations |
+| git-commit | Conventional commit messages |
+| pr-description | PR description templates |
+| project-documentation | Documentation guidelines |
+| receiving-code-review | Handling review feedback |
+| skill-authoring | Creating skills following spec |
+| systematic-debugging | Root cause debugging |
+| test-driven-development | TDD workflow enforcement |
+| using-git-worktrees | Isolated workspaces |
+| verification-before-completion | Evidence before claims |
+| writing-plans | Comprehensive implementation plans |
+
 ## Documentation
 
 - [Overview](docs/00-overview.md)
