@@ -121,6 +121,58 @@ Patterns: "query(" without parameterization, "innerHTML",
 - No lint errors
 - No type errors
 
+## Goal-Backward Verification
+
+**Task completion ≠ Goal achievement**
+
+A task "create auth component" can be marked complete when the component is a placeholder. The task was done, but the goal "working auth" was not achieved.
+
+### Three-Level Artifact Verification
+
+For each required artifact:
+
+#### Level 1: Existence
+- Does the file exist?
+- If MISSING → FAILED
+
+#### Level 2: Substantive
+- Is it a real implementation or a stub?
+- Check line count (components: 15+, routes: 10+)
+- Check for stub patterns: TODO, FIXME, placeholder, return null, return {}
+- If STUB → FAILED
+
+#### Level 3: Wired
+- Is the artifact connected to the system?
+- Is it imported and used?
+- Are handlers calling real APIs (not just console.log)?
+- If ORPHANED → FAILED
+
+### Key Link Verification
+
+Check critical connections:
+
+| Pattern | Verification |
+|---------|-------------|
+| Component → API | fetch/axios call exists with response handling |
+| API → Database | Query exists AND result is returned |
+| Form → Handler | onSubmit has real implementation (not just preventDefault) |
+| State → Render | State variable is actually rendered in JSX |
+
+### Stub Detection Patterns
+
+```bash
+# RED FLAGS in components:
+return <div>Placeholder</div>
+return null
+onClick={() => {}}
+onSubmit={(e) => e.preventDefault())  # Only prevents default
+
+# RED FLAGS in routes:
+return Response.json({ message: "Not implemented" })
+return Response.json([])  # Empty with no DB query
+console.log(data); return { ok: true }  # Only logs
+```
+
 ### 6. Append Review Notes to Tech Spec (MANDATORY)
 
 **Always append your review to the Tech Spec file.** This creates a complete record of the implementation lifecycle.
@@ -237,6 +289,29 @@ Patterns: "query(" without parameterization, "innerHTML",
 |------|--------|--------|
 | `src/file.ts` | ⚠️ | ISSUE-001 |
 | `src/test.ts` | ✅ | None |
+
+## Goal Achievement
+
+### Observable Truths
+
+| Truth | Status | Evidence |
+|-------|--------|----------|
+| [User can X] | ✅ VERIFIED | [How verified] |
+| [User can Y] | ❌ FAILED | [What's missing] |
+
+### Artifact Verification
+
+| Artifact | Exists | Substantive | Wired | Status |
+|----------|--------|-------------|-------|--------|
+| `path/file.ts` | ✅ | ✅ | ✅ | VERIFIED |
+| `path/other.ts` | ✅ | ❌ stub | - | STUB |
+
+### Key Links
+
+| From | To | Via | Status |
+|------|-----|-----|--------|
+| Component | /api/x | fetch | ✅ WIRED |
+| Form | handler | onSubmit | ❌ STUB (only preventDefault) |
 
 ## Next Steps
 
