@@ -39,6 +39,48 @@ if (-not (Test-Path $SourceGitHub)) {
 
 Write-Success "Found maestro source at: $MaestroRoot"
 
+# Interactive mode if no parameters provided
+$isInteractive = -not $PSBoundParameters.ContainsKey('Scope') -and
+                 -not $PSBoundParameters.ContainsKey('VSCodeType') -and
+                 -not $WhatIfPreference
+
+if ($isInteractive -and $Host.UI.SupportsVirtualTerminal) {
+    Write-Host ""
+    Write-Info "Running in interactive mode. Use -Scope and -VSCodeType to skip prompts."
+    Write-Host ""
+
+    # Prompt for scope
+    Write-Host "Where would you like to install Maestro?"
+    Write-Host "  [1] Workspace - Current project only (recommended)"
+    Write-Host "  [2] User - VS Code user profile"
+    Write-Host "  [3] Global - All projects (~/.github)"
+    Write-Host ""
+    $scopeChoice = Read-Host "Enter choice (1-3, default=1)"
+
+    switch ($scopeChoice) {
+        '2' { $Scope = 'User' }
+        '3' { $Scope = 'Global' }
+        default { $Scope = 'Workspace' }
+    }
+
+    # Prompt for VS Code type
+    Write-Host ""
+    Write-Host "Which VS Code installation(s) to target?"
+    Write-Host "  [1] Both Standard and Insiders"
+    Write-Host "  [2] Standard only"
+    Write-Host "  [3] Insiders only"
+    Write-Host ""
+    $typeChoice = Read-Host "Enter choice (1-3, default=1)"
+
+    switch ($typeChoice) {
+        '2' { $VSCodeType = 'Standard' }
+        '3' { $VSCodeType = 'Insiders' }
+        default { $VSCodeType = 'Both' }
+    }
+
+    Write-Host ""
+}
+
 # Detect VS Code installations
 function Get-VSCodePaths {
     $paths = @{
