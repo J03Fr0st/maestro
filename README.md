@@ -42,6 +42,9 @@ maestro/
 │   │   ├── maestro-planner.agent.md     # Implementation planning
 │   │   ├── maestro-implementer.agent.md # Code execution
 │   │   ├── maestro-reviewer.agent.md    # Code review
+│   │   ├── maestro-verifier.agent.md    # Phase goal verification
+│   │   ├── maestro-mapper.agent.md      # Codebase exploration and analysis
+│   │   ├── maestro-debugger.agent.md    # Systematic debugging
 │   │   ├── alphabeast.agent.md          # Autonomous problem-solving
 │   │   ├── betabeast.agent.md           # Extended autonomous agent
 │   │   └── research.agent.md            # Research and information gathering
