@@ -127,3 +127,105 @@ if (-not $hasStandard -and -not $hasInsiders) {
     Write-Host "Please install VS Code or VS Code Insiders first."
     exit 1
 }
+
+# Get target installation paths based on scope
+function Get-TargetPaths {
+    param(
+        [string]$Scope,
+        [string]$VSCodeType,
+        [string]$WorkspacePath,
+        [hashtable]$UserDataPaths
+    )
+
+    $targets = @()
+
+    switch ($Scope) {
+        'Workspace' {
+            # Install to current workspace .github folder
+            $targets += @{
+                Type = 'Workspace'
+                Path = Join-Path $WorkspacePath ".github"
+                Description = "Workspace: $WorkspacePath"
+            }
+        }
+        'User' {
+            # Install to VS Code user snippets/settings area
+            if (($VSCodeType -eq 'Both' -or $VSCodeType -eq 'Standard') -and $UserDataPaths.Standard) {
+                $targets += @{
+                    Type = 'User-Standard'
+                    Path = Join-Path $UserDataPaths.Standard "User\.github"
+                    Description = "VS Code User Profile"
+                }
+            }
+            if (($VSCodeType -eq 'Both' -or $VSCodeType -eq 'Insiders') -and $UserDataPaths.Insiders) {
+                $targets += @{
+                    Type = 'User-Insiders'
+                    Path = Join-Path $UserDataPaths.Insiders "User\.github"
+                    Description = "VS Code Insiders User Profile"
+                }
+            }
+        }
+        'Global' {
+            # Install to global copilot settings location
+            $globalPath = Join-Path $env:USERPROFILE ".github"
+            $targets += @{
+                Type = 'Global'
+                Path = $globalPath
+                Description = "Global: $globalPath"
+            }
+        }
+    }
+
+    return $targets
+}
+
+# Copy maestro files to target
+function Install-MaestroFiles {
+    param(
+        [string]$SourcePath,
+        [string]$TargetPath,
+        [string]$Description,
+        [switch]$WhatIf
+    )
+
+    Write-Host ""
+    Write-Info "Installing to: $Description"
+    Write-Host "  Target: $TargetPath"
+
+    # Folders to copy
+    $folders = @('agents', 'instructions', 'prompts', 'skills')
+
+    foreach ($folder in $folders) {
+        $source = Join-Path $SourcePath $folder
+        $target = Join-Path $TargetPath $folder
+
+        if (Test-Path $source) {
+            if ($WhatIf) {
+                Write-Host "  [WhatIf] Would copy: $folder\"
+            } else {
+                if (Test-Path $target) {
+                    Remove-Item -Path $target -Recurse -Force
+                }
+                Copy-Item -Path $source -Destination $target -Recurse -Force
+                Write-Success "  [OK] Copied: $folder\"
+            }
+        } else {
+            Write-Warn "  [Skip] Not found: $folder\"
+        }
+    }
+
+    # Copy copilot-instructions.md if it exists
+    $copilotInstructions = Join-Path $SourcePath "copilot-instructions.md"
+    $targetInstructions = Join-Path $TargetPath "copilot-instructions.md"
+
+    if (Test-Path $copilotInstructions) {
+        if ($WhatIf) {
+            Write-Host "  [WhatIf] Would copy: copilot-instructions.md"
+        } else {
+            Copy-Item -Path $copilotInstructions -Destination $targetInstructions -Force
+            Write-Success "  [OK] Copied: copilot-instructions.md"
+        }
+    }
+
+    return $true
+}
