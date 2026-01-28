@@ -269,3 +269,59 @@ describe('calculateTotal', () => {
 1. Summarize findings
 2. Mark severity clearly
 3. Approve or request changes
+
+---
+
+## Requesting Code Review
+
+### When to Request Review
+
+**Mandatory:**
+- After completing major feature
+- Before merge to main
+- After fixing complex bug
+
+**Optional but valuable:**
+- When stuck (fresh perspective)
+- Before refactoring (baseline check)
+
+### How to Request
+
+**1. Get git SHAs:**
+```bash
+BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
+HEAD_SHA=$(git rev-parse HEAD)
+```
+
+**2. Provide context:**
+- What was implemented
+- What requirements/plan it follows
+- Commit range (BASE..HEAD)
+
+**3. Act on feedback:**
+- Fix Critical issues immediately
+- Fix Important issues before proceeding
+- Note Minor issues for later
+- Push back if reviewer is wrong (with reasoning)
+
+### Integration with Workflows
+
+**Task-based development:**
+- Review after EACH task
+- Catch issues before they compound
+- Fix before moving to next task
+
+**Batch development:**
+- Review after each batch (3 tasks)
+- Get feedback, apply, continue
+
+### Red Flags
+
+**Never:**
+- Skip review because "it's simple"
+- Ignore Critical issues
+- Proceed with unfixed Important issues
+
+**If reviewer wrong:**
+- Push back with technical reasoning
+- Show code/tests that prove it works
