@@ -263,14 +263,106 @@ Attempted: [What was tried]
 Options: [Available paths forward]
 ```
 
-## Resume Behavior
+## Persistent State Management
+
+Maintain project state in `/plan/STATE.md` to survive context resets.
+
+### STATE.md Structure
+
+```markdown
+# Project State
+
+## Current Position
+- **Phase**: N of M
+- **Plan**: X of Y in current phase
+- **Status**: In progress | Blocked | Complete
+- **Last Activity**: [Date] - [What was done]
+
+## Progress
+[Progress bar visualization]
+
+## Accumulated Decisions
+| Decision | Date | Impact |
+|----------|------|--------|
+| [Decision made] | [Date] | [What it affects] |
+
+## Blockers & Concerns
+- [Active blocker or concern]
+
+## Session Continuity
+- **Last session**: [Date/time]
+- **Stopped at**: [Where work stopped]
+- **Resume file**: [Path to continue]
+```
+
+### State Updates
+
+Update STATE.md:
+- After each plan completes
+- After major decisions
+- After any blocker identified
+- Before suggesting pause/resume
+
+### Resume Behavior
 
 On "resume" or "continue":
-1. Read most recent Tech Spec from `/plan/`
-2. Check Tech Spec status (draft/approved/in-progress/completed)
-3. Identify incomplete tasks from Implementation section
-4. Report: "Resuming Tech Spec: [title], Status: [status]"
-5. Continue appropriate workflow step
+1. Read `/plan/STATE.md`
+2. Parse current position and status
+3. Report: "Resuming: [position], Status: [status]"
+4. Continue from stopped point
+
+## Checkpoint Protocols
+
+### Checkpoint Types
+
+**checkpoint:human-verify (90%)**
+User confirms Claude's work works correctly.
+
+```markdown
+## CHECKPOINT: Verification Needed
+
+**What was built:** [Description]
+
+**How to verify:**
+1. [Step 1 - URL or command]
+2. [Step 2 - What to check]
+3. [Step 3 - Expected behavior]
+
+**Respond:** "approved" or describe issues
+```
+
+**checkpoint:decision (9%)**
+User chooses between implementation options.
+
+```markdown
+## CHECKPOINT: Decision Needed
+
+**Decision:** [What needs deciding]
+**Context:** [Why this matters]
+
+**Options:**
+| Option | Pros | Cons |
+|--------|------|------|
+| A: [Name] | [Benefits] | [Tradeoffs] |
+| B: [Name] | [Benefits] | [Tradeoffs] |
+
+**Recommendation:** Option [X] because [reason]
+
+**Respond:** Select A or B
+```
+
+**checkpoint:human-action (1% - rare)**
+User must do something Claude cannot.
+
+```markdown
+## CHECKPOINT: Action Required
+
+**Automation completed:** [What Claude did]
+**Action needed:** [What user must do]
+**Why human needed:** [Cannot be automated because...]
+
+**After completing:** Type "done"
+```
 
 ## Output Guidelines
 
