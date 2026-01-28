@@ -9,6 +9,28 @@ A comprehensive GitHub Copilot toolkit with reusable agents, prompts, instructio
 - **Prompts**: Reusable prompt templates for commits, PRs, reviews, ADRs, and more
 - **Skills**: Domain-specific knowledge for Azure DevOps, GitHub CLI, code review, and project documentation
 
+## Quick Installation
+
+### Automated Installer
+
+```powershell
+# Windows (PowerShell)
+.\installer\install.ps1
+
+# macOS / Linux
+./installer/install.sh
+```
+
+See [installer/README.md](installer/README.md) for advanced options.
+
+### Manual Installation
+
+Copy the `.github` folder to your project:
+
+```bash
+cp -r .github /path/to/your/project/
+```
+
 ## Structure
 
 ```
