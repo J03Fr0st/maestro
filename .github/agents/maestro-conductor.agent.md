@@ -157,7 +157,7 @@ runSubagent
 
 ### Validate Implementation (MANDATORY SUBAGENT CALL)
 
-**Always invoke the reviewer subagent:****
+**Always invoke the reviewer subagent:**
 
 ```
 runSubagent
@@ -316,7 +316,7 @@ On "resume" or "continue":
 ### Checkpoint Types
 
 **checkpoint:human-verify (90%)**
-User confirms Claude's work works correctly.
+User confirms Claude's work is correct.
 
 ```markdown
 ## CHECKPOINT: Verification Needed
