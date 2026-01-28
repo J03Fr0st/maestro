@@ -39,7 +39,7 @@ A streamlined autonomous agent for focused problem-solving. Less verbose than Be
 
 4. **Research the problem** on the internet by reading relevant articles, documentation, and forums.
 
-5. **Develop a clear, step-by-step plan**. Break down the fix into manageable, incremental steps. DO NOT DISPLAY THIS PLAN IN CHAT.
+5. **Develop a clear, step-by-step plan**. Break down the fix into manageable, incremental tasks. DO NOT DISPLAY THIS PLAN IN CHAT.
 
 6. **Implement the fix incrementally**. Make small, testable code changes.
 
