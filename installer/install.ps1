@@ -283,6 +283,35 @@ function Install-MaestroFiles {
         }
 
         Write-Host "  Total: $totalCount file(s) copied to VS Code prompts folder"
+
+        # Copy skills to ~/.copilot/skills/
+        $skillsSource = Join-Path $SourcePath "skills"
+        $skillsTarget = Join-Path $env:USERPROFILE ".copilot\skills"
+        if (Test-Path $skillsSource) {
+            Write-Host ""
+            Write-Info "Installing skills to: $skillsTarget"
+
+            if (-not $WhatIf) {
+                if (-not (Test-Path $skillsTarget)) {
+                    New-Item -ItemType Directory -Path $skillsTarget -Force | Out-Null
+                }
+            }
+
+            $skillFolders = Get-ChildItem -Path $skillsSource -Directory
+            foreach ($skill in $skillFolders) {
+                $targetSkill = Join-Path $skillsTarget $skill.Name
+                if ($WhatIf) {
+                    Write-Host "  [WhatIf] Would copy: $($skill.Name)\"
+                } else {
+                    if (Test-Path $targetSkill) {
+                        Remove-Item -Path $targetSkill -Recurse -Force
+                    }
+                    Copy-Item -Path $skill.FullName -Destination $targetSkill -Recurse -Force
+                    Write-Success "  [OK] Copied: $($skill.Name)\"
+                }
+            }
+            Write-Host "  Found $($skillFolders.Count) skill(s)"
+        }
     } else {
         # For Workspace/Global scope: copy full folder structure
         $folders = @('agents', 'instructions', 'prompts', 'skills')

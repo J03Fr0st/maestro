@@ -231,6 +231,35 @@ install_maestro_user_files() {
     fi
 
     echo "  Total: $total_count file(s) copied to VS Code prompts folder"
+
+    # Copy skills to ~/.copilot/skills/
+    local skills_source="$SOURCE_GITHUB/skills"
+    local skills_target="$HOME/.copilot/skills"
+    if [[ -d "$skills_source" ]]; then
+        echo ""
+        echo -e "${CYAN}Installing skills to: $skills_target${NC}"
+
+        if ! $DRY_RUN; then
+            mkdir -p "$skills_target"
+        fi
+
+        local skill_count=0
+        for skill_dir in "$skills_source"/*/; do
+            if [[ -d "$skill_dir" ]]; then
+                local skill_name=$(basename "$skill_dir")
+                local target_skill="$skills_target/$skill_name"
+                if $DRY_RUN; then
+                    echo "  [DryRun] Would copy: $skill_name/"
+                else
+                    rm -rf "$target_skill" 2>/dev/null || true
+                    cp -r "$skill_dir" "$target_skill"
+                    echo -e "  ${GREEN}[OK]${NC} Copied: $skill_name/"
+                fi
+                skill_count=$((skill_count + 1))
+            fi
+        done
+        echo "  Found $skill_count skill(s)"
+    fi
 }
 
 # Main execution
