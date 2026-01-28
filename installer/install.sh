@@ -124,7 +124,7 @@ if ! $HAS_STANDARD && ! $HAS_INSIDERS; then
     exit 1
 fi
 
-# Copy function
+# Copy function for workspace/global scope (full folder structure)
 install_maestro_files() {
     local target_path="$1"
     local description="$2"
@@ -172,6 +172,44 @@ install_maestro_files() {
     fi
 }
 
+# Copy function for user scope (flat agent files to prompts folder)
+install_maestro_user_agents() {
+    local target_path="$1"
+    local description="$2"
+
+    echo ""
+    echo -e "${CYAN}Installing to: $description${NC}"
+    echo "  Target: $target_path"
+
+    # Create target directory
+    if $DRY_RUN; then
+        echo "  [DryRun] Would create: $target_path"
+    else
+        mkdir -p "$target_path"
+    fi
+
+    # Copy agent files directly to prompts folder
+    local agents_source="$SOURCE_GITHUB/agents"
+    local count=0
+    if [[ -d "$agents_source" ]]; then
+        for agent_file in "$agents_source"/*.agent.md; do
+            if [[ -f "$agent_file" ]]; then
+                local filename=$(basename "$agent_file")
+                if $DRY_RUN; then
+                    echo "  [DryRun] Would copy: $filename"
+                else
+                    cp "$agent_file" "$target_path/$filename"
+                    echo -e "  ${GREEN}[OK]${NC} Copied: $filename"
+                fi
+                count=$((count + 1))
+            fi
+        done
+        echo "  Copied $count agent(s) to VS Code prompts folder"
+    else
+        echo -e "  ${YELLOW}[Skip]${NC} No agents folder found"
+    fi
+}
+
 # Main execution
 echo ""
 echo -e "${CYAN}Installation Configuration:${NC}"
@@ -188,11 +226,11 @@ case "$SCOPE" in
         ;;
     user)
         if [[ "$VSCODE_TYPE" == "both" || "$VSCODE_TYPE" == "standard" ]] && [[ -n "$STANDARD_USER_DATA" ]]; then
-            install_maestro_files "$STANDARD_USER_DATA/User/.github" "VS Code User Profile"
+            install_maestro_user_agents "$STANDARD_USER_DATA/User/prompts" "VS Code User Profile"
             SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
         fi
         if [[ "$VSCODE_TYPE" == "both" || "$VSCODE_TYPE" == "insiders" ]] && [[ -n "$INSIDERS_USER_DATA" ]]; then
-            install_maestro_files "$INSIDERS_USER_DATA/User/.github" "VS Code Insiders User Profile"
+            install_maestro_user_agents "$INSIDERS_USER_DATA/User/prompts" "VS Code Insiders User Profile"
             SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
         fi
         ;;
