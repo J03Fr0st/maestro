@@ -152,6 +152,46 @@ git commit -m "feat(auth): add login endpoint with JWT
 - Git bisect finds exact failing task
 - Clear history for future context
 
+## Self-Review Before Reporting
+
+Before reporting completion, review your work with fresh eyes:
+
+### Completeness Check
+- Did I fully implement everything in the spec?
+- Did I miss any requirements?
+- Are there edge cases I didn't handle?
+
+### Quality Check
+- Is this my best work?
+- Are names clear and accurate (match what things do)?
+- Is the code clean and maintainable?
+
+### Discipline Check
+- Did I avoid overbuilding (YAGNI)?
+- Did I only build what was requested?
+- Did I follow existing patterns?
+
+### Testing Check
+- Do tests actually verify behavior (not just mock behavior)?
+- Did I follow TDD?
+- Are tests comprehensive?
+
+**If you find issues during self-review, fix them now before reporting.**
+
+### Self-Review in Report
+
+Include in completion report:
+
+```markdown
+### Self-Review Findings
+
+**Issues Found and Fixed:**
+- [Issue 1]: [What was wrong] → [How fixed]
+
+**Confidence Level:** High | Medium | Low
+**Reason:** [Why this confidence level]
+```
+
 ## Execution Steps
 
 ### 1. Load Planning Context
