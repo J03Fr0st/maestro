@@ -27,6 +27,9 @@ Custom agents for AI-assisted development (`.github/agents/`):
 | **alphabeast** | Autonomous problem-solving agent |
 | **betabeast** | Extended autonomous agent capabilities |
 | **research** | Research and information gathering |
+| **maestro Verifier** | Verify phase goals achieved, not just tasks completed |
+| **maestro Mapper** | Explore codebase and create structured analysis documents |
+| **maestro Debugger** | Systematic debugging using scientific method |
 
 ### Instructions
 

@@ -43,6 +43,9 @@ VS Code supports four main agent categories:
 | `alphabeast.agent.md` | Autonomous problem-solving agent |
 | `betabeast.agent.md` | Extended autonomous agent capabilities |
 | `research.agent.md` | Research and information gathering |
+| `maestro-verifier.agent.md` | Verify phase goals achieved, not just tasks completed |
+| `maestro-mapper.agent.md` | Explore codebase and create structured analysis documents |
+| `maestro-debugger.agent.md` | Systematic debugging using scientific method |
 
 ## Agent File Format
 
