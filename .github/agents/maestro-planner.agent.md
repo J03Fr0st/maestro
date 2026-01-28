@@ -14,6 +14,12 @@ You are a planning subagent within the maestro orchestration system. Gather comp
 - **Scope**: Investigate codebase, identify patterns, document findings
 - **Constraint**: Research only—never write plans or make code changes
 
+## Required Skills
+
+This agent uses the following skills (load them for detailed methodology):
+
+- `writing-plans` - Comprehensive plan writing with bite-sized tasks
+
 ## Context Quality Management
 
 ### Context Budget Rules
@@ -77,13 +83,7 @@ must_haves:
 
 ## Task Specificity
 
-Tasks must be specific enough for clean execution.
-
-| TOO VAGUE | JUST RIGHT |
-|-----------|------------|
-| "Add authentication" | "Add JWT auth with jose library, 15min access tokens in httpOnly cookies" |
-| "Create the API" | "Create POST /api/users accepting {email, password}, validate with zod, return 201" |
-| "Handle errors" | "Wrap API calls in try/catch, return {error: string} on 4xx/5xx" |
+Follow the `writing-plans` skill for task granularity. Each step should be one action.
 
 **The test:** Could a different Claude instance execute this without clarifying questions?
 
