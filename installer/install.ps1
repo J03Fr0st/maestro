@@ -191,19 +191,21 @@ function Get-TargetPaths {
             }
         }
         'User' {
-            # Install to VS Code user snippets/settings area
+            # Install to VS Code user prompts folder (where VS Code stores user-level agents)
             if (($VSCodeType -eq 'Both' -or $VSCodeType -eq 'Standard') -and $UserDataPaths.Standard) {
                 $targets += @{
                     Type = 'User-Standard'
-                    Path = Join-Path $UserDataPaths.Standard "User\.github"
+                    Path = Join-Path $UserDataPaths.Standard "User\prompts"
                     Description = "VS Code User Profile"
+                    IsUserScope = $true
                 }
             }
             if (($VSCodeType -eq 'Both' -or $VSCodeType -eq 'Insiders') -and $UserDataPaths.Insiders) {
                 $targets += @{
                     Type = 'User-Insiders'
-                    Path = Join-Path $UserDataPaths.Insiders "User\.github"
+                    Path = Join-Path $UserDataPaths.Insiders "User\prompts"
                     Description = "VS Code Insiders User Profile"
+                    IsUserScope = $true
                 }
             }
         }
@@ -227,6 +229,7 @@ function Install-MaestroFiles {
         [string]$SourcePath,
         [string]$TargetPath,
         [string]$Description,
+        [switch]$IsUserScope,
         [switch]$WhatIf
     )
 
@@ -241,38 +244,58 @@ function Install-MaestroFiles {
         }
     }
 
-    # Folders to copy
-    $folders = @('agents', 'instructions', 'prompts', 'skills')
-
-    foreach ($folder in $folders) {
-        $source = Join-Path $SourcePath $folder
-        $target = Join-Path $TargetPath $folder
-
-        if (Test-Path $source) {
-            if ($WhatIf) {
-                Write-Host "  [WhatIf] Would copy: $folder\"
-            } else {
-                if (Test-Path $target) {
-                    Remove-Item -Path $target -Recurse -Force
+    if ($IsUserScope) {
+        # For User scope: copy agent files directly to prompts folder (flat structure)
+        $agentsSource = Join-Path $SourcePath "agents"
+        if (Test-Path $agentsSource) {
+            $agentFiles = Get-ChildItem -Path $agentsSource -Filter "*.agent.md"
+            foreach ($file in $agentFiles) {
+                $targetFile = Join-Path $TargetPath $file.Name
+                if ($WhatIf) {
+                    Write-Host "  [WhatIf] Would copy: $($file.Name)"
+                } else {
+                    Copy-Item -Path $file.FullName -Destination $targetFile -Force
+                    Write-Success "  [OK] Copied: $($file.Name)"
                 }
-                Copy-Item -Path $source -Destination $target -Recurse -Force
-                Write-Success "  [OK] Copied: $folder\"
             }
+            Write-Host "  Copied $($agentFiles.Count) agent(s) to VS Code prompts folder"
         } else {
-            Write-Warn "  [Skip] Not found: $folder\"
+            Write-Warn "  [Skip] No agents folder found"
         }
-    }
+    } else {
+        # For Workspace/Global scope: copy full folder structure
+        $folders = @('agents', 'instructions', 'prompts', 'skills')
 
-    # Copy copilot-instructions.md if it exists
-    $copilotInstructions = Join-Path $SourcePath "copilot-instructions.md"
-    $targetInstructions = Join-Path $TargetPath "copilot-instructions.md"
+        foreach ($folder in $folders) {
+            $source = Join-Path $SourcePath $folder
+            $target = Join-Path $TargetPath $folder
 
-    if (Test-Path $copilotInstructions) {
-        if ($WhatIf) {
-            Write-Host "  [WhatIf] Would copy: copilot-instructions.md"
-        } else {
-            Copy-Item -Path $copilotInstructions -Destination $targetInstructions -Force
-            Write-Success "  [OK] Copied: copilot-instructions.md"
+            if (Test-Path $source) {
+                if ($WhatIf) {
+                    Write-Host "  [WhatIf] Would copy: $folder\"
+                } else {
+                    if (Test-Path $target) {
+                        Remove-Item -Path $target -Recurse -Force
+                    }
+                    Copy-Item -Path $source -Destination $target -Recurse -Force
+                    Write-Success "  [OK] Copied: $folder\"
+                }
+            } else {
+                Write-Warn "  [Skip] Not found: $folder\"
+            }
+        }
+
+        # Copy copilot-instructions.md if it exists
+        $copilotInstructions = Join-Path $SourcePath "copilot-instructions.md"
+        $targetInstructions = Join-Path $TargetPath "copilot-instructions.md"
+
+        if (Test-Path $copilotInstructions) {
+            if ($WhatIf) {
+                Write-Host "  [WhatIf] Would copy: copilot-instructions.md"
+            } else {
+                Copy-Item -Path $copilotInstructions -Destination $targetInstructions -Force
+                Write-Success "  [OK] Copied: copilot-instructions.md"
+            }
         }
     }
 
@@ -309,14 +332,15 @@ if ($targets.Count -eq 0) {
 # Perform installation
 $successCount = 0
 foreach ($target in $targets) {
+    $isUserScope = $target.IsUserScope -eq $true
     if ($PSCmdlet.ShouldProcess($target.Path, "Install Maestro files")) {
-        $result = Install-MaestroFiles -SourcePath $SourceGitHub -TargetPath $target.Path -Description $target.Description
+        $result = Install-MaestroFiles -SourcePath $SourceGitHub -TargetPath $target.Path -Description $target.Description -IsUserScope:$isUserScope
         if ($result) {
             $successCount++
         }
     } else {
         # WhatIf mode
-        $null = Install-MaestroFiles -SourcePath $SourceGitHub -TargetPath $target.Path -Description $target.Description -WhatIf
+        $null = Install-MaestroFiles -SourcePath $SourceGitHub -TargetPath $target.Path -Description $target.Description -IsUserScope:$isUserScope -WhatIf
         $successCount++
     }
 }
