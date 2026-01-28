@@ -192,6 +192,13 @@ function Install-MaestroFiles {
     Write-Info "Installing to: $Description"
     Write-Host "  Target: $TargetPath"
 
+    # Ensure target directory exists
+    if (-not $WhatIf) {
+        if (-not (Test-Path $TargetPath)) {
+            New-Item -ItemType Directory -Path $TargetPath -Force | Out-Null
+        }
+    }
+
     # Folders to copy
     $folders = @('agents', 'instructions', 'prompts', 'skills')
 
@@ -229,3 +236,60 @@ function Install-MaestroFiles {
 
     return $true
 }
+
+# Main execution
+Write-Host ""
+Write-Info "Installation Configuration:"
+Write-Host "  Scope: $Scope"
+Write-Host "  VS Code Type: $VSCodeType"
+if ($Scope -eq 'Workspace') {
+    Write-Host "  Workspace: $WorkspacePath"
+}
+
+# Filter based on VSCodeType parameter
+if ($VSCodeType -eq 'Standard' -and -not $hasStandard) {
+    Write-Err "Error: VS Code Standard requested but not installed."
+    exit 1
+}
+if ($VSCodeType -eq 'Insiders' -and -not $hasInsiders) {
+    Write-Err "Error: VS Code Insiders requested but not installed."
+    exit 1
+}
+
+# Get target paths
+$targets = Get-TargetPaths -Scope $Scope -VSCodeType $VSCodeType -WorkspacePath $WorkspacePath -UserDataPaths $userDataPaths
+
+if ($targets.Count -eq 0) {
+    Write-Err "Error: No valid installation targets found for scope '$Scope'."
+    exit 1
+}
+
+# Perform installation
+$successCount = 0
+foreach ($target in $targets) {
+    if ($PSCmdlet.ShouldProcess($target.Path, "Install Maestro files")) {
+        $result = Install-MaestroFiles -SourcePath $SourceGitHub -TargetPath $target.Path -Description $target.Description
+        if ($result) {
+            $successCount++
+        }
+    } else {
+        # WhatIf mode
+        $null = Install-MaestroFiles -SourcePath $SourceGitHub -TargetPath $target.Path -Description $target.Description -WhatIf
+        $successCount++
+    }
+}
+
+Write-Host ""
+if ($WhatIfPreference -or $PSBoundParameters.ContainsKey('WhatIf')) {
+    Write-Info "WhatIf: Would have installed to $successCount location(s)."
+} else {
+    Write-Success "Installation complete! Installed to $successCount location(s)."
+}
+
+Write-Host ""
+Write-Info "Next steps:"
+Write-Host "  1. Open VS Code in your workspace"
+Write-Host "  2. Open GitHub Copilot Chat"
+Write-Host "  3. Type '@' to see available agents (e.g., @maestro-conductor)"
+Write-Host "  4. Use '/prompts' to see available prompts"
+Write-Host ""
