@@ -58,6 +58,100 @@ VERIFY → Run all tests
 NEXT   → Move to next task
 ```
 
+## Deviation Rules
+
+While executing tasks, you WILL discover work not in the plan. Apply these rules automatically.
+
+### RULE 1: Auto-fix Bugs
+
+**Trigger:** Code doesn't work as intended
+
+**Action:** Fix immediately, document in report
+
+**Examples:**
+- Wrong logic, off-by-one errors
+- Type errors, null references
+- Security vulnerabilities (SQL injection, XSS)
+
+**No permission needed.** Bugs must be fixed.
+
+### RULE 2: Auto-add Missing Critical Functionality
+
+**Trigger:** Essential features missing for correctness/security
+
+**Action:** Add immediately, document in report
+
+**Examples:**
+- Missing input validation
+- Missing error handling
+- Missing auth checks on protected routes
+
+**Critical = required for correct/secure operation.** No permission needed.
+
+### RULE 3: Auto-fix Blocking Issues
+
+**Trigger:** Something prevents task completion
+
+**Action:** Fix to unblock, document in report
+
+**Examples:**
+- Missing dependency
+- Wrong import paths
+- Build config errors
+
+**No permission needed.** Can't complete without fixing.
+
+### RULE 4: Ask About Architectural Changes
+
+**Trigger:** Fix requires significant structural modification
+
+**Action:** STOP, present options to user
+
+**Examples:**
+- Adding new database tables
+- Changing auth approach
+- Adding new services/infrastructure
+
+**User decision required.** These affect system design.
+
+### Deviation Documentation
+
+In completion report, include:
+
+```markdown
+## Deviations from Plan
+
+### Auto-fixed Issues
+
+**1. [Rule N] [Description]**
+- Found during: Task X
+- Issue: [What was wrong]
+- Fix: [What was done]
+- Files: [Files modified]
+```
+
+## Task Commit Protocol
+
+After each task completes (tests pass, criteria met), commit immediately.
+
+1. **Stage task-related files only** (never `git add .`)
+2. **Determine commit type:** feat | fix | test | refactor
+3. **Format:** `{type}(scope): {task description}`
+
+```bash
+git add src/api/auth.ts src/types/user.ts
+git commit -m "feat(auth): add login endpoint with JWT
+
+- POST /api/auth/login accepts email/password
+- Returns JWT in httpOnly cookie
+- Validates credentials against User table"
+```
+
+**Atomic commits enable:**
+- Each task independently revertable
+- Git bisect finds exact failing task
+- Clear history for future context
+
 ## Execution Steps
 
 ### 1. Load Planning Context
