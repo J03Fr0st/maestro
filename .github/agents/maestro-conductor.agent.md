@@ -48,6 +48,51 @@ The plan file is the primary deliverable of this agent.
 
 **RULE**: The conductor orchestrates but NEVER writes code or Tech Specs directly. All work is done through subagents.
 
+## Skill Integration
+
+### When to Reference Skills
+
+Instruct subagents to use appropriate skills:
+
+| Situation | Skill to Reference |
+|-----------|-------------------|
+| Before implementation | test-driven-development |
+| Reporting completion | verification-before-completion |
+| Bug investigation | systematic-debugging |
+| Design exploration | brainstorming |
+| Receiving feedback | receiving-code-review |
+| Multiple independent tasks | dispatching-parallel-agents |
+| Executing plans | executing-plans |
+| Need isolation | using-git-worktrees |
+| Creating plans | writing-plans |
+
+### Subagent Prompts with Skills
+
+**For Implementer:**
+```
+Execute the Tech Spec at: /plan/[filename].md
+
+REQUIRED: Use the test-driven-development skill.
+REQUIRED: Use verification-before-completion skill before reporting.
+
+Follow TDD: Write failing tests first, then implement.
+```
+
+**For Debugger:**
+```
+Investigate the failing tests.
+
+REQUIRED: Use the systematic-debugging skill.
+Do NOT propose fixes until root cause is identified.
+```
+
+### Skill Enforcement
+
+When reviewing subagent output:
+- Verify TDD was followed (test before code)
+- Verify verification ran (evidence in report)
+- Verify debugging process followed (phases documented)
+
 ## Workflow
 
 ```
