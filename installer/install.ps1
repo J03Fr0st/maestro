@@ -282,6 +282,23 @@ function Install-MaestroFiles {
             Write-Host "  Found $($promptFiles.Count) prompt(s)"
         }
 
+        # Copy instructions
+        $instructionsSource = Join-Path $SourcePath "instructions"
+        if (Test-Path $instructionsSource) {
+            $instructionFiles = Get-ChildItem -Path $instructionsSource -Filter "*.instructions.md"
+            foreach ($file in $instructionFiles) {
+                $targetFile = Join-Path $TargetPath $file.Name
+                if ($WhatIf) {
+                    Write-Host "  [WhatIf] Would copy: $($file.Name)"
+                } else {
+                    Copy-Item -Path $file.FullName -Destination $targetFile -Force
+                    Write-Success "  [OK] Copied: $($file.Name)"
+                }
+            }
+            $totalCount += $instructionFiles.Count
+            Write-Host "  Found $($instructionFiles.Count) instruction(s)"
+        }
+
         Write-Host "  Total: $totalCount file(s) copied to VS Code prompts folder"
 
         # Copy skills to ~/.copilot/skills/

@@ -230,6 +230,26 @@ install_maestro_user_files() {
         total_count=$((total_count + prompt_count))
     fi
 
+    # Copy instruction files
+    local instructions_source="$SOURCE_GITHUB/instructions"
+    local instruction_count=0
+    if [[ -d "$instructions_source" ]]; then
+        for instruction_file in "$instructions_source"/*.instructions.md; do
+            if [[ -f "$instruction_file" ]]; then
+                local filename=$(basename "$instruction_file")
+                if $DRY_RUN; then
+                    echo "  [DryRun] Would copy: $filename"
+                else
+                    cp "$instruction_file" "$target_path/$filename"
+                    echo -e "  ${GREEN}[OK]${NC} Copied: $filename"
+                fi
+                instruction_count=$((instruction_count + 1))
+            fi
+        done
+        echo "  Found $instruction_count instruction(s)"
+        total_count=$((total_count + instruction_count))
+    fi
+
     echo "  Total: $total_count file(s) copied to VS Code prompts folder"
 
     # Copy skills to ~/.copilot/skills/
