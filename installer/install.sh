@@ -172,8 +172,8 @@ install_maestro_files() {
     fi
 }
 
-# Copy function for user scope (flat agent files to prompts folder)
-install_maestro_user_agents() {
+# Copy function for user scope (flat agent and prompt files to prompts folder)
+install_maestro_user_files() {
     local target_path="$1"
     local description="$2"
 
@@ -188,9 +188,11 @@ install_maestro_user_agents() {
         mkdir -p "$target_path"
     fi
 
-    # Copy agent files directly to prompts folder
+    local total_count=0
+
+    # Copy agent files
     local agents_source="$SOURCE_GITHUB/agents"
-    local count=0
+    local agent_count=0
     if [[ -d "$agents_source" ]]; then
         for agent_file in "$agents_source"/*.agent.md; do
             if [[ -f "$agent_file" ]]; then
@@ -201,13 +203,34 @@ install_maestro_user_agents() {
                     cp "$agent_file" "$target_path/$filename"
                     echo -e "  ${GREEN}[OK]${NC} Copied: $filename"
                 fi
-                count=$((count + 1))
+                agent_count=$((agent_count + 1))
             fi
         done
-        echo "  Copied $count agent(s) to VS Code prompts folder"
-    else
-        echo -e "  ${YELLOW}[Skip]${NC} No agents folder found"
+        echo "  Found $agent_count agent(s)"
+        total_count=$((total_count + agent_count))
     fi
+
+    # Copy prompt files
+    local prompts_source="$SOURCE_GITHUB/prompts"
+    local prompt_count=0
+    if [[ -d "$prompts_source" ]]; then
+        for prompt_file in "$prompts_source"/*.prompt.md; do
+            if [[ -f "$prompt_file" ]]; then
+                local filename=$(basename "$prompt_file")
+                if $DRY_RUN; then
+                    echo "  [DryRun] Would copy: $filename"
+                else
+                    cp "$prompt_file" "$target_path/$filename"
+                    echo -e "  ${GREEN}[OK]${NC} Copied: $filename"
+                fi
+                prompt_count=$((prompt_count + 1))
+            fi
+        done
+        echo "  Found $prompt_count prompt(s)"
+        total_count=$((total_count + prompt_count))
+    fi
+
+    echo "  Total: $total_count file(s) copied to VS Code prompts folder"
 }
 
 # Main execution
@@ -226,11 +249,11 @@ case "$SCOPE" in
         ;;
     user)
         if [[ "$VSCODE_TYPE" == "both" || "$VSCODE_TYPE" == "standard" ]] && [[ -n "$STANDARD_USER_DATA" ]]; then
-            install_maestro_user_agents "$STANDARD_USER_DATA/User/prompts" "VS Code User Profile"
+            install_maestro_user_files "$STANDARD_USER_DATA/User/prompts" "VS Code User Profile"
             SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
         fi
         if [[ "$VSCODE_TYPE" == "both" || "$VSCODE_TYPE" == "insiders" ]] && [[ -n "$INSIDERS_USER_DATA" ]]; then
-            install_maestro_user_agents "$INSIDERS_USER_DATA/User/prompts" "VS Code Insiders User Profile"
+            install_maestro_user_files "$INSIDERS_USER_DATA/User/prompts" "VS Code Insiders User Profile"
             SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
         fi
         ;;

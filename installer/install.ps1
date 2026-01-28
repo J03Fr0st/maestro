@@ -245,7 +245,10 @@ function Install-MaestroFiles {
     }
 
     if ($IsUserScope) {
-        # For User scope: copy agent files directly to prompts folder (flat structure)
+        # For User scope: copy agent and prompt files directly to prompts folder (flat structure)
+        $totalCount = 0
+
+        # Copy agents
         $agentsSource = Join-Path $SourcePath "agents"
         if (Test-Path $agentsSource) {
             $agentFiles = Get-ChildItem -Path $agentsSource -Filter "*.agent.md"
@@ -258,10 +261,28 @@ function Install-MaestroFiles {
                     Write-Success "  [OK] Copied: $($file.Name)"
                 }
             }
-            Write-Host "  Copied $($agentFiles.Count) agent(s) to VS Code prompts folder"
-        } else {
-            Write-Warn "  [Skip] No agents folder found"
+            $totalCount += $agentFiles.Count
+            Write-Host "  Found $($agentFiles.Count) agent(s)"
         }
+
+        # Copy prompts
+        $promptsSource = Join-Path $SourcePath "prompts"
+        if (Test-Path $promptsSource) {
+            $promptFiles = Get-ChildItem -Path $promptsSource -Filter "*.prompt.md"
+            foreach ($file in $promptFiles) {
+                $targetFile = Join-Path $TargetPath $file.Name
+                if ($WhatIf) {
+                    Write-Host "  [WhatIf] Would copy: $($file.Name)"
+                } else {
+                    Copy-Item -Path $file.FullName -Destination $targetFile -Force
+                    Write-Success "  [OK] Copied: $($file.Name)"
+                }
+            }
+            $totalCount += $promptFiles.Count
+            Write-Host "  Found $($promptFiles.Count) prompt(s)"
+        }
+
+        Write-Host "  Total: $totalCount file(s) copied to VS Code prompts folder"
     } else {
         # For Workspace/Global scope: copy full folder structure
         $folders = @('agents', 'instructions', 'prompts', 'skills')
