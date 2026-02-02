@@ -1,5 +1,5 @@
 ---
-name: using-superpowers
+name: using-skills
 description: Use when starting any conversation - establishes mandatory skill checking before any response
 ---
 

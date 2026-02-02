@@ -120,23 +120,6 @@ Use this checklist to validate generated documentation quality and completeness.
 - [ ] Tables render correctly
 - [ ] Mermaid diagrams valid (if used)
 
-## Deep-Dive Validation (if applicable)
-
-- [ ] Target area correctly scoped
-- [ ] All files in scope analyzed
-- [ ] Complete exports documented
-- [ ] All dependencies mapped
-- [ ] Dependents identified
-- [ ] Key code snippets included
-- [ ] Patterns documented
-- [ ] Side effects captured
-- [ ] Error handling documented
-- [ ] Test coverage noted
-- [ ] TODOs extracted
-- [ ] Dependency graph created
-- [ ] Data flow traced
-- [ ] Modification guidance clear
-
 ## AI-Readiness
 
 - [ ] Documentation provides sufficient context for AI to understand system

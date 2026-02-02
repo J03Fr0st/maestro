@@ -235,41 +235,6 @@ Look for integration points:
 
 ---
 
-## Pattern Matching Strategy
-
-### Quick Scan (Pattern-Only)
-
-```
-1. List root directory files
-2. Match against key_file_patterns
-3. Score each project type by matches
-4. Select highest scoring type(s)
-5. Identify critical directories via glob
-6. Generate documentation from patterns alone
-```
-
-### Deep Scan (Selective Reading)
-
-```
-1. Perform quick scan first
-2. Load critical_directories for detected type
-3. Read files in critical directories only
-4. Extract detailed information
-5. Generate comprehensive documentation
-```
-
-### Exhaustive Scan (Full Reading)
-
-```
-1. Perform quick scan first
-2. List ALL source files (excluding node_modules, dist, etc.)
-3. Read every file
-4. Build complete dependency graph
-5. Generate detailed documentation with code snippets
-```
-
----
-
 ## Exclusion Patterns
 
 Always exclude from scanning:

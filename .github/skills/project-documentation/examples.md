@@ -6,11 +6,7 @@ This document provides example prompts for using the project-documentation skill
 
 ### Full Documentation Request
 
-> Document this entire project for AI-assisted development. I need comprehensive documentation including architecture, source tree analysis, API contracts, and development guides. Use a deep scan level to analyze critical directories.
-
-### Quick Overview Request
-
-> Do a quick scan of this codebase and give me a project overview. I just need to understand the basic structure, tech stack, and where things are located.
+> Document this entire project for AI-assisted development. I need comprehensive documentation including architecture, source tree analysis, API contracts, and development guides.
 
 ### Specific Output Location
 
@@ -29,20 +25,6 @@ This document provides example prompts for using the project-documentation skill
 ### Data Models
 
 > Document all the data models in this project. Include database schemas, entity relationships, and how data flows through the system.
-
-## Deep-Dive Analysis
-
-### Specific Directory
-
-> Perform an exhaustive deep-dive analysis of the `src/api/` directory. I need to understand every file, all exports, dependencies, and how they integrate with the rest of the system.
-
-### Feature Analysis
-
-> Deep-dive into the authentication system. Find all related files across the codebase and document how authentication works end-to-end.
-
-### Module Understanding
-
-> I need to understand the `utils/` module completely. Analyze all utility functions, their purposes, who uses them, and any patterns I should follow when adding new utilities.
 
 ## Update Existing Documentation
 
@@ -98,17 +80,13 @@ This document provides example prompts for using the project-documentation skill
 
 ### Refactoring Analysis
 
-> I want to refactor the state management. Deep-dive into all state-related code and document the current patterns, issues, and dependencies so I can plan the refactor.
+> I want to refactor the state management. Analyze all state-related code and document the current patterns, issues, and dependencies so I can plan the refactor.
 
 ## Output Customization
 
 ### Minimal Documentation
 
 > Create minimal documentation - just an index, architecture overview, and development guide. Skip the detailed component inventories and API contracts.
-
-### Maximum Detail
-
-> I need exhaustive documentation. Use the exhaustive scan level and document everything including all file inventories, dependency graphs, and code patterns.
 
 ### Specific Templates
 
@@ -129,10 +107,9 @@ When the skill is activated, expect:
 ## Tips for Best Results
 
 1. **Be Specific** - The more specific your request, the more targeted the output
-2. **Specify Scan Level** - Quick for overview, deep for comprehensive, exhaustive for complete
-3. **Mention Output Location** - Specify where you want docs saved
-4. **Request Validation** - Ask for validation against the checklist
-5. **Iterative Refinement** - Start with an overview, then request deep-dives on specific areas
+2. **Mention Output Location** - Specify where you want docs saved
+3. **Request Validation** - Ask for validation against the checklist
+4. **Iterative Refinement** - Start with an overview, then request focused analysis on specific areas
 
 ---
 
