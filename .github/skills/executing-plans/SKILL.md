@@ -7,6 +7,19 @@ description: Execute implementation plans with batch execution and review checkp
 
 Load plan, review critically, execute tasks in batches, report for review.
 
+## When to Use
+
+- You have a written implementation plan ready to execute
+- After using `writing-plans` skill to create a plan
+- When you want checkpoints between task batches for feedback
+- When working without subagents (single-agent execution)
+
+## Plan Location
+
+Plans are typically saved at: `docs/plans/YYYY-MM-DD-<feature-name>.md`
+
+Created by the `writing-plans` skill.
+
 ## The Process
 
 ### Step 1: Load and Review Plan
@@ -63,3 +76,27 @@ After all tasks complete:
 - Don't skip verifications
 - Between batches: report and wait
 - Stop when blocked, don't guess
+
+## Example Batch Report
+
+```
+## Batch 1 Complete (Tasks 1-3)
+
+**Task 1: Email Validator** ✅
+- Created `src/validators/email.py`
+- Test passes: `pytest tests/validators/test_email.py -v`
+
+**Task 2: Integrate Validator** ✅
+- Modified `src/api/users.py:45-52`
+- Test passes: `pytest tests/api/test_users.py -v`
+
+**Task 3: Error Response** ✅
+- Added validation error handling
+- All tests pass
+
+**Ready for feedback before Tasks 4-6.**
+```
+
+## Related Skills
+
+- `writing-plans` - Create implementation plans (use first)

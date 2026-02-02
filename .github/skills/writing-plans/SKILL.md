@@ -7,9 +7,20 @@ description: Write comprehensive implementation plans with bite-sized tasks. Use
 
 Write comprehensive implementation plans assuming the reader has zero context.
 
+## When to Use
+
+- Before implementing any multi-step feature
+- When requirements are clear and you're ready to plan implementation
+- Before touching code — plan first, execute second
+- When handing off work to another agent or developer
+
 ## Plan Location
 
 Save plans to: `docs/plans/YYYY-MM-DD-<feature-name>.md`
+
+## Template
+
+See: `templates/plan-template.md` for the full plan template.
 
 ## Bite-Sized Task Granularity
 
@@ -20,57 +31,20 @@ Save plans to: `docs/plans/YYYY-MM-DD-<feature-name>.md`
 - "Run tests to verify pass" - step
 - "Commit" - step
 
-## Plan Document Header
+## Plan Structure Summary
 
-**Every plan MUST start with:**
+### Header (Required)
+- **Goal:** One sentence
+- **Architecture:** 2-3 sentences
+- **Tech Stack:** Key technologies
 
-```markdown
-# [Feature Name] Implementation Plan
-
-**Goal:** [One sentence describing what this builds]
-
-**Architecture:** [2-3 sentences about approach]
-
-**Tech Stack:** [Key technologies]
-
----
-```
-
-## Task Structure
-
-```markdown
-### Task N: [Component Name]
-
-**Files:**
-- Create: `exact/path/to/file.py`
-- Modify: `exact/path/to/existing.py:123-145`
-- Test: `tests/exact/path/to/test.py`
-
-**Step 1: Write the failing test**
-
-[Code block with complete test]
-
-**Step 2: Run test to verify it fails**
-
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: FAIL with "function not defined"
-
-**Step 3: Write minimal implementation**
-
-[Code block with complete implementation]
-
-**Step 4: Run test to verify it passes**
-
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: PASS
-
-**Step 5: Commit**
-
-```bash
-git add tests/path/test.py src/path/file.py
-git commit -m "feat: add specific feature"
-```
-```
+### Each Task
+- **Files:** Create/Modify/Test with exact paths
+- **Step 1:** Write failing test (complete code)
+- **Step 2:** Run test, verify fails
+- **Step 3:** Write implementation (complete code)
+- **Step 4:** Run test, verify passes
+- **Step 5:** Commit with conventional message
 
 ## Remember
 
@@ -79,13 +53,38 @@ git commit -m "feat: add specific feature"
 - Exact commands with expected output
 - DRY, YAGNI, TDD, frequent commits
 
+## Example Mini-Plan
+
+```markdown
+# Add User Validation
+
+**Goal:** Validate email format before user creation.
+**Architecture:** Add validator function, integrate into create endpoint.
+**Tech Stack:** Python, pytest
+
+---
+
+## Task 1: Email Validator
+
+**Files:**
+- Create: `src/validators/email.py`
+- Test: `tests/validators/test_email.py`
+
+**Step 1:** Write failing test
+**Step 2:** Run `pytest tests/validators/test_email.py -v` → FAIL
+**Step 3:** Implement `is_valid_email()` function
+**Step 4:** Run test → PASS
+**Step 5:** `git commit -m "feat: add email validator"`
+```
+
 ## Execution Handoff
 
 After saving the plan:
 
-**"Plan complete and saved. Two execution options:**
+**"Plan complete and saved to `docs/plans/YYYY-MM-DD-<feature-name>.md`."**
 
-1. **Subagent-Driven** - Fresh subagent per task, review between tasks
-2. **Batch Execution** - Execute in batches with checkpoints
+→ Use skill: `executing-plans` to execute tasks in batches with review checkpoints.
 
-**Which approach?"**
+## Related Skills
+
+- `executing-plans` - Execute plans with batch processing and review checkpoints
