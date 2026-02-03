@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: Strict Test-Driven Development with RED-GREEN-REFACTOR cycle. Use when implementing any feature, fixing bugs, or modifying behavior. Enforces test-first discipline.
+description: Strict Test-Driven Development with RED-GREEN-REFACTOR cycle. Use for new features, bug fixes, refactoring, or behavior changes; ask before skipping for throwaway prototypes, generated code, or configuration-only changes.
 ---
 
 # Test-Driven Development (TDD)
@@ -14,19 +14,6 @@ NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
 ```
 
 If you wrote code before the test, delete it. Start over. No exceptions.
-
-## When to Use
-
-**Always:**
-- New features
-- Bug fixes
-- Refactoring
-- Behavior changes
-
-**Ask before skipping:**
-- Throwaway prototypes
-- Generated code
-- Configuration files
 
 ## Red-Green-Refactor Cycle
 

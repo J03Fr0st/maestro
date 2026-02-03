@@ -2,6 +2,14 @@
 
 Complete rule catalog for C# and .NET.
 
+## Table of Contents
+
+- [C#-Specific Examples](#c-specific-examples)
+- [Bugs](#bugs)
+- [Quality Profile Recommendations](#quality-profile-recommendations)
+- [Integration with CI/CD](#integration-with-cicd)
+- [Severity Mapping](#severity-mapping)
+
 ---
 
 ## C#-Specific Examples

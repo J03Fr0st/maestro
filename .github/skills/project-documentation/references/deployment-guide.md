@@ -409,7 +409,7 @@ Content-Security-Policy: {policy}
 ### RTO/RPO
 
 | Metric | Target | Current |
-|--------|--------|---------|
+|--------|--------|
 | RTO (Recovery Time) | {target} | {current} |
 | RPO (Recovery Point) | {target} | {current} |
 

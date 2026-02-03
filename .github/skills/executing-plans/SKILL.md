@@ -1,18 +1,11 @@
 ---
 name: executing-plans
-description: Execute implementation plans with batch execution and review checkpoints. Use when you have a written plan to implement task-by-task.
+description: Execute implementation plans with batch execution and review checkpoints. Use when you have a written plan to implement task-by-task and want checkpoints between batches or single-agent execution.
 ---
 
 # Executing Plans
 
 Load plan, review critically, execute tasks in batches, report for review.
-
-## When to Use
-
-- You have a written implementation plan ready to execute
-- After using `writing-plans` skill to create a plan
-- When you want checkpoints between task batches for feedback
-- When working without subagents (single-agent execution)
 
 ## Plan Location
 

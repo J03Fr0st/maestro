@@ -1,19 +1,11 @@
 ---
 name: azure-devops-cli
-description: Azure DevOps CLI for projects, repos, pipelines, PRs, and work items. Use when working with Azure DevOps from command line, managing pipelines, creating PRs, or automating DevOps workflows.
+description: Azure DevOps CLI for projects, repos, pipelines, PRs, and work items. Use when working with Azure DevOps from the command line to manage PRs, pipelines, work items/boards, repos, and variable groups, or to automate DevOps workflows.
 ---
 
 # Azure DevOps CLI
 
 Manage Azure DevOps resources via command line. See [full reference](references/REFERENCE.md) for complete documentation.
-
-## When to Use
-
-- Creating and managing pull requests in Azure Repos
-- Running and monitoring Azure Pipelines
-- Managing work items and boards
-- Automating DevOps workflows
-- Working with variable groups and secrets
 
 ## Prerequisites
 
@@ -22,10 +14,13 @@ Manage Azure DevOps resources via command line. See [full reference](references/
 brew install azure-cli              # macOS
 winget install Microsoft.AzureCLI   # Windows
 
-# Install DevOps extension
+# Install DevOps extension (auto-installs on first use)
 az extension add --name azure-devops
+# Update extension
+az extension update --name azure-devops
 
-# Login
+# Login (interactive or PAT)
+az login
 az devops login --organization https://dev.azure.com/{org}
 
 # Configure defaults
@@ -187,8 +182,9 @@ az pipelines list --query "[].{Name:name, ID:id}"
 - Use `--detect` to auto-detect organization from git config
 - Store PAT in `AZURE_DEVOPS_EXT_PAT` environment variable
 - Use `--skip-run true` when creating pipelines to skip first run
+- Azure DevOps CLI extension works with Azure DevOps Services (cloud) only, not Azure DevOps Server (on-prem)
 
 ## References
 
 - [Full Command Reference](references/REFERENCE.md)
-- [Azure DevOps CLI Docs](https://docs.microsoft.com/en-us/cli/azure/devops)
+- [Azure DevOps CLI Docs](https://learn.microsoft.com/en-us/cli/azure/devops)

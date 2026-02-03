@@ -1,19 +1,11 @@
 ---
 name: gh-cli
-description: GitHub CLI (gh) for repositories, issues, pull requests, Actions, and GitHub operations. Use when working with GitHub from command line, creating PRs, managing issues, or automating GitHub workflows.
+description: GitHub CLI (gh) for repositories, issues, pull requests, Actions, and releases. Use when working with GitHub from the command line to create PRs, manage issues/projects, monitor Actions, or automate GitHub workflows.
 ---
 
 # GitHub CLI (gh)
 
 Work with GitHub from the command line. See [full reference](references/REFERENCE.md) for complete documentation.
-
-## When to Use
-
-- Creating and managing pull requests
-- Working with issues and projects
-- Running and monitoring GitHub Actions
-- Managing repositories and releases
-- Automating GitHub workflows
 
 ## Prerequisites
 

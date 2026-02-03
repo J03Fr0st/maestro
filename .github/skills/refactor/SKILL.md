@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: 'Surgical code refactoring to improve maintainability without changing behavior. Covers extracting functions, renaming variables, breaking down god functions, improving type safety, eliminating code smells, and applying design patterns. Less drastic than repo-rebuilder; use for gradual improvements.'
+description: 'Surgical code refactoring to improve maintainability without changing behavior. Use when code is hard to maintain, functions/classes are too large, code smells need addressing, or users ask to refactor/clean up. Less drastic than repo-rebuilder; use for gradual improvements.'
 license: MIT
 ---
 
@@ -9,18 +9,6 @@ license: MIT
 ## Overview
 
 Improve code structure and readability without changing external behavior. Refactoring is gradual evolution, not revolution. Use this for improving existing code, not rewriting from scratch.
-
-## When to Use
-
-Use this skill when:
-
-- Code is hard to understand or maintain
-- Functions/classes are too large
-- Code smells need addressing
-- Adding features is difficult due to code structure
-- User asks "clean up this code", "refactor this", "improve this"
-
----
 
 ## Refactoring Principles
 

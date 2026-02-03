@@ -2,6 +2,28 @@
 
 **CLI Version:** 2.81.0 (2025)
 
+## Table of Contents
+
+- [CLI Structure](#cli-structure)
+- [Authentication](#authentication)
+- [Projects](#projects)
+- [Repositories](#repositories)
+- [Pull Requests](#pull-requests)
+- [Pipelines](#pipelines)
+- [Builds](#builds)
+- [Pipeline Variables](#pipeline-variables)
+- [Work Items (Boards)](#work-items-boards)
+- [Branch Policies](#branch-policies)
+- [Service Endpoints](#service-endpoints)
+- [Teams and Users](#teams-and-users)
+- [Universal Packages (Artifacts)](#universal-packages-artifacts)
+- [Output Formats](#output-formats)
+- [JMESPath Queries](#jmespath-queries)
+- [Common Workflows](#common-workflows)
+- [Best Practices](#best-practices)
+- [Global Arguments](#global-arguments)
+- [Common Parameters](#common-parameters)
+
 ## CLI Structure
 
 ```
@@ -45,14 +67,24 @@ az artifacts           # Azure Artifacts
 └── universal          # Universal Packages
 ```
 
+> Note: The Azure DevOps CLI extension works with Azure DevOps Services (cloud) only, not Azure DevOps Server (on-prem).
+
 ## Authentication
 
 ```bash
-# Interactive login (prompts for PAT)
+# Interactive login (Microsoft Entra ID)
+az login
+
+# Login with PAT prompt
 az devops login --organization https://dev.azure.com/{org}
 
-# Login with PAT token
-az devops login --organization https://dev.azure.com/{org} --token YOUR_PAT_TOKEN
+# Login with PAT via stdin
+echo "YOUR_PAT_TOKEN" | az devops login --organization https://dev.azure.com/{org}
+
+# Login with PAT via environment variable (non-interactive)
+export AZURE_DEVOPS_EXT_PAT="YOUR_PAT_TOKEN"
+# PowerShell
+$env:AZURE_DEVOPS_EXT_PAT = "YOUR_PAT_TOKEN"
 
 # Logout
 az devops logout --organization https://dev.azure.com/{org}
@@ -66,6 +98,8 @@ az devops configure --list
 # Enable Git aliases
 az devops configure --use-git-aliases true
 ```
+
+> Note: The Azure DevOps CLI extension supports interactive auth and PATs. For service principals or managed identities, use REST APIs or client libraries.
 
 ## Projects
 
@@ -517,9 +551,9 @@ az repos pr update --id {pr-id} --status completed
 ### Authentication
 
 ```bash
-# Use PAT from environment variable (most secure)
+# Prefer Microsoft Entra ID for new apps/integrations. Use PATs for personal scripts only.
+# Set PAT from environment variable for automation
 export AZURE_DEVOPS_EXT_PAT=$MY_PAT
-az devops login --organization $ORG_URL
 
 # Set defaults to avoid repetition
 az devops configure --defaults organization=$ORG_URL project=$PROJECT

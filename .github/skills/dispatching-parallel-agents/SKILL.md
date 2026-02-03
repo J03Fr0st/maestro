@@ -1,24 +1,11 @@
 ---
 name: dispatching-parallel-agents
-description: Dispatch multiple agents in parallel for independent tasks. Use when facing 2+ independent problems without shared state or sequential dependencies.
+description: Dispatch multiple agents in parallel for independent tasks. Use when facing 2+ independent problems without shared state or sequential dependencies (e.g., multiple failing test files), and avoid when failures are related or shared state matters.
 ---
 
 # Dispatching Parallel Agents
 
 When you have multiple unrelated failures, investigating them sequentially wastes time.
-
-## When to Use
-
-**Use when:**
-- 3+ test files failing with different root causes
-- Multiple subsystems broken independently
-- Each problem can be understood without context from others
-- No shared state between investigations
-
-**Don't use when:**
-- Failures are related (fix one might fix others)
-- Need to understand full system state
-- Agents would interfere (editing same files)
 
 ## The Pattern
 

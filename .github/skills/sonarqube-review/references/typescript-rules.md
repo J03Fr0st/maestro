@@ -2,6 +2,16 @@
 
 Complete rule catalog for TypeScript and JavaScript.
 
+## Table of Contents
+
+- [React-Specific Examples](#react-specific-examples)
+- [Bugs](#bugs)
+- [Vulnerabilities](#vulnerabilities)
+- [Code Smells](#code-smells)
+- [Quality Profile Recommendations](#quality-profile-recommendations)
+- [Integration with CI/CD](#integration-with-cicd)
+- [Severity Mapping](#severity-mapping)
+
 ---
 
 ## React-Specific Examples

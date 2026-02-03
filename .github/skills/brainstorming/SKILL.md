@@ -1,19 +1,11 @@
 ---
 name: brainstorming
-description: Interactive design exploration before implementation. Use before any creative work - creating features, building components, or modifying behavior.
+description: Interactive design exploration before implementation. Use when starting any creative or product/design work (e.g., defining new features, building components, or changing behavior) before implementation planning.
 ---
 
 # Brainstorming Ideas Into Designs
 
 Help turn ideas into fully formed designs through collaborative dialogue.
-
-## When to Use
-
-**Always before:**
-- Creating new features
-- Building new components
-- Modifying existing behavior
-- Any creative work
 
 ## The Process
 
@@ -41,7 +33,7 @@ Help turn ideas into fully formed designs through collaborative dialogue.
 
 **Documentation:**
 - Write validated design to `docs/plans/YYYY-MM-DD-<topic>-design.md`
-- Commit the design document
+- Commit the design document if the user asks
 
 **Implementation (if continuing):**
 - Ask: "Ready to set up for implementation?"

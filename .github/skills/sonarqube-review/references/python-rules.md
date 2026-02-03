@@ -2,6 +2,13 @@
 
 Complete rule catalog for Python.
 
+## Table of Contents
+
+- [Python-Specific Examples](#python-specific-examples)
+- [Bugs](#bugs)
+- [Vulnerabilities](#vulnerabilities)
+- [Code Smells](#code-smells)
+
 ---
 
 ## Python-Specific Examples

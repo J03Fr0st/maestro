@@ -1,18 +1,11 @@
 ---
 name: pr-description
-description: Generate pull request descriptions from git changes with summary, categorized changes, and risk assessment. Supports both GitHub and Azure DevOps. Use when creating PRs, preparing descriptions, or documenting changes.
+description: Generate pull request descriptions from git changes with summary, categorized changes, and risk assessment. Supports both GitHub and Azure DevOps. Use when creating PRs, preparing descriptions, documenting changes, or generating release notes from commits.
 ---
 
 # PR Description Generator
 
 Generate comprehensive pull request descriptions by analyzing git changes. Works with both **GitHub** and **Azure DevOps**.
-
-## When to Use
-
-- Creating a new pull request
-- Preparing PR descriptions before submission
-- Documenting changes for team review
-- Generating release notes from commits
 
 ## Workflow
 

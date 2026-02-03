@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: Scientific method debugging with root cause investigation. Use when encountering bugs, test failures, or unexpected behavior. Prevents random fix attempts.
+description: Scientific method debugging with root cause investigation. Use when encountering test failures, bugs, unexpected behavior, performance problems, or build failures. Prevents random fix attempts.
 ---
 
 # Systematic Debugging
@@ -14,20 +14,6 @@ NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST
 ```
 
 If you haven't completed Phase 1, you cannot propose fixes.
-
-## When to Use
-
-Use for ANY technical issue:
-- Test failures
-- Bugs in production
-- Unexpected behavior
-- Performance problems
-- Build failures
-
-**Use ESPECIALLY when:**
-- Under time pressure
-- "Just one quick fix" seems obvious
-- You've tried multiple fixes already
 
 ## The Four Phases
 

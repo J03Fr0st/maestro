@@ -2,6 +2,28 @@
 
 **Version:** 2.85.0 (January 2026)
 
+## Table of Contents
+
+- [CLI Structure](#cli-structure)
+- [Authentication (gh auth)](#authentication-gh-auth)
+- [Repositories (gh repo)](#repositories-gh-repo)
+- [Issues (gh issue)](#issues-gh-issue)
+- [Pull Requests (gh pr)](#pull-requests-gh-pr)
+- [GitHub Actions](#github-actions)
+- [Releases (gh release)](#releases-gh-release)
+- [Gists (gh gist)](#gists-gh-gist)
+- [Projects (gh project)](#projects-gh-project)
+- [Search (gh search)](#search-gh-search)
+- [API Requests (gh api)](#api-requests-gh-api)
+- [Configuration (gh config)](#configuration-gh-config)
+- [Environment Variables](#environment-variables)
+- [Global Flags](#global-flags)
+- [Output Formatting](#output-formatting)
+- [Common Workflows](#common-workflows)
+- [Extensions](#extensions)
+- [Aliases](#aliases)
+- [References](#references)
+
 ## CLI Structure
 
 ```

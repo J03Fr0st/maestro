@@ -1,6 +1,6 @@
 ---
 name: project-documentation
-description: Deep scan and document brownfield codebases with full architecture analysis and source tree mapping. Always performs exhaustive analysis - no partial scans. Use when documenting existing projects, analyzing architecture, generating technical docs, or preparing codebases for AI-assisted development.
+description: Deep scan and document brownfield codebases with full architecture analysis and source tree mapping. Always performs exhaustive analysis - no partial scans. Use when documenting existing codebases, analyzing architecture, generating technical docs, or preparing projects for AI-assisted development.
 ---
 
 # Project Documentation Skill
@@ -8,17 +8,6 @@ description: Deep scan and document brownfield codebases with full architecture 
 A comprehensive workflow for analyzing and documenting existing (brownfield) codebases to enable AI-assisted development. This skill systematically scans projects, detects architecture patterns, and generates structured documentation that helps both humans and AI agents understand how to extend the codebase.
 
 > **CRITICAL: This skill ALWAYS performs a FULL DEEP SCAN. There is no quick, partial, or surface-level mode. Every file is read, every pattern is analyzed, every component is documented. Do not skip steps or abbreviate the process.**
-
-## When to Use This Skill
-
-Use this skill when you need to:
-
-- Document an existing codebase for AI-assisted development
-- Understand a brownfield project's architecture and patterns
-- Create comprehensive technical documentation from source code
-- Generate a project index for AI context and retrieval
-- Analyze multi-part projects (monorepos, microservices)
-- Prepare documentation before planning new features
 
 ## Workflow Overview
 
@@ -215,22 +204,22 @@ docs/
 
 ## Documentation Templates
 
-All templates are located in `templates/` directory. Use these templates when generating documentation:
+All templates are located in `references/`. Use these templates when generating documentation:
 
 | Document | Template File | Purpose |
 |----------|---------------|---------|
-| index.md | [templates/index.md](./templates/index.md) | Master navigation index |
-| project-overview.md | [templates/project-overview.md](./templates/project-overview.md) | Executive summary |
-| source-tree-analysis.md | [templates/source-tree-analysis.md](./templates/source-tree-analysis.md) | Directory structure |
-| architecture.md | [templates/architecture.md](./templates/architecture.md) | Technical architecture |
-| component-inventory.md | [templates/component-inventory.md](./templates/component-inventory.md) | UI components |
-| development-guide.md | [templates/development-guide.md](./templates/development-guide.md) | Setup and workflow |
-| api-contracts.md | [templates/api-contracts.md](./templates/api-contracts.md) | API documentation |
-| data-models.md | [templates/data-models.md](./templates/data-models.md) | Database schemas |
-| state-management.md | [templates/state-management.md](./templates/state-management.md) | State patterns |
-| testing-guide.md | [templates/testing-guide.md](./templates/testing-guide.md) | Test structure |
-| configuration.md | [templates/configuration.md](./templates/configuration.md) | Environment config |
-| deployment-guide.md | [templates/deployment-guide.md](./templates/deployment-guide.md) | Deployment process |
+| index.md | [references/index.md](./references/index.md) | Master navigation index |
+| project-overview.md | [references/project-overview.md](./references/project-overview.md) | Executive summary |
+| source-tree-analysis.md | [references/source-tree-analysis.md](./references/source-tree-analysis.md) | Directory structure |
+| architecture.md | [references/architecture.md](./references/architecture.md) | Technical architecture |
+| component-inventory.md | [references/component-inventory.md](./references/component-inventory.md) | UI components |
+| development-guide.md | [references/development-guide.md](./references/development-guide.md) | Setup and workflow |
+| api-contracts.md | [references/api-contracts.md](./references/api-contracts.md) | API documentation |
+| data-models.md | [references/data-models.md](./references/data-models.md) | Database schemas |
+| state-management.md | [references/state-management.md](./references/state-management.md) | State patterns |
+| testing-guide.md | [references/testing-guide.md](./references/testing-guide.md) | Test structure |
+| configuration.md | [references/configuration.md](./references/configuration.md) | Environment config |
+| deployment-guide.md | [references/deployment-guide.md](./references/deployment-guide.md) | Deployment process |
 
 ### Template Usage
 
@@ -243,7 +232,13 @@ All templates are located in `templates/` directory. Use these templates when ge
 
 | Document | Template File | Purpose |
 |----------|---------------|---------|
-| adr.md | [templates/adr.md](./templates/adr.md) | Architecture Decision Records (optional) |
+| adr.md | [references/adr.md](./references/adr.md) | Architecture Decision Records (optional) |
+
+## Additional References
+
+- [Project Type Detection](./references/project-types.md)
+- [Example Prompts](./references/examples.md)
+- [Validation Checklist](./references/validation-checklist.md)
 
 ## Best Practices
 

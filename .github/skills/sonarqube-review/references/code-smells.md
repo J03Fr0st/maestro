@@ -2,6 +2,15 @@
 
 Code smells are maintainability issues that make code harder to understand or modify.
 
+## Table of Contents
+
+- [Complexity](#complexity)
+- [Function Design](#function-design)
+- [Naming](#naming)
+- [Duplication](#duplication)
+- [Dead Code](#dead-code)
+- [Comments](#comments)
+
 ## Complexity
 
 ### S3776: Cognitive complexity should not be too high

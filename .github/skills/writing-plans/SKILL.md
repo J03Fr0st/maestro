@@ -1,18 +1,11 @@
 ---
 name: writing-plans
-description: Write comprehensive implementation plans with bite-sized tasks. Use when you have requirements for a multi-step task, before touching code.
+description: Write comprehensive implementation plans with bite-sized tasks. Use when you have requirements for a multi-step task and need to plan before touching code.
 ---
 
 # Writing Plans
 
 Write comprehensive implementation plans assuming the reader has zero context.
-
-## When to Use
-
-- Before implementing any multi-step feature
-- When requirements are clear and you're ready to plan implementation
-- Before touching code — plan first, execute second
-- When handing off work to another agent or developer
 
 ## Plan Location
 
@@ -20,11 +13,11 @@ Save plans to: `docs/plans/YYYY-MM-DD-<feature-name>.md`
 
 ## Template
 
-See: `templates/plan-template.md` for the full plan template.
+See: `references/plan-template.md` for the full plan template.
 
 ## Bite-Sized Task Granularity
 
-**Each step is one action:**
+**Each step is one action:*
 - "Write the failing test" - step
 - "Run it to make sure it fails" - step
 - "Implement minimal code" - step
