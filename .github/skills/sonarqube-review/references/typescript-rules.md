@@ -1,22 +1,45 @@
-# SonarQube Rules Reference
-
-Complete rule catalog organized by language and category.
-
----
-
-## Rule Index by Language
-
-| Language | Bugs | Vulnerabilities | Code Smells | Security Hotspots |
-|----------|------|-----------------|-------------|-------------------|
-| TypeScript/JavaScript | 45+ | 30+ | 80+ | 25+ |
-| Python | 35+ | 25+ | 60+ | 20+ |
-| C# | 40+ | 25+ | 70+ | 20+ |
-| Java | 50+ | 35+ | 90+ | 30+ |
-| Go | 25+ | 20+ | 40+ | 15+ |
-
----
-
 # TypeScript/JavaScript Rules
+
+Complete rule catalog for TypeScript and JavaScript.
+
+---
+
+## React-Specific Examples
+
+### S6754: React hooks should be called correctly
+```typescript
+// Non-compliant
+function Component({ condition }) {
+  if (condition) {
+    const [state, setState] = useState(); // Conditional hook!
+  }
+}
+
+// Compliant
+function Component({ condition }) {
+  const [state, setState] = useState();
+}
+```
+
+### S6582: Optional chaining should be preferred
+```typescript
+// Non-compliant
+const name = user && user.profile && user.profile.name;
+
+// Compliant
+const name = user?.profile?.name;
+```
+
+### S6598: Arrow functions should be preferred for callbacks
+```typescript
+// Non-compliant
+items.map(function(item) { return item.name; });
+
+// Compliant
+items.map(item => item.name);
+```
+
+---
 
 ## Bugs
 
@@ -438,421 +461,3 @@ Complete rule catalog organized by language and category.
 | S6774 | Type predicates should be accurate | Major |
 | S6788 | Type guards should use correct types | Major |
 | S6793 | Map and Set constructors should accept iterables | Major |
-
----
-
-# Python Rules
-
-## Bugs
-
-| Rule | Name | Severity |
-|------|------|----------|
-| S930 | Functions should be called with the correct number of arguments | Blocker |
-| S1481 | Unused local variables should be removed | Minor |
-| S1763 | All code should be reachable | Major |
-| S1764 | Identical expressions should not be used on both sides of operators | Major |
-| S2159 | Silly identity should not be tested | Major |
-| S2190 | Recursion should not be infinite | Blocker |
-| S2201 | Return values should not be ignored | Major |
-| S2734 | "else" should not be used after "return" | Minor |
-| S2757 | "=+" should not be used instead of "+=" | Critical |
-| S3403 | Strict equality operators should not be used with dissimilar types | Minor |
-| S3516 | Functions returns should not be invariant | Major |
-| S3699 | The output of functions that don't return anything should not be used | Major |
-| S3862 | "iteritems()" should not be called directly on dict keys | Major |
-| S5607 | Packages should not be imported with "*" | Minor |
-| S5632 | Arguments to "assert" should not be tuples | Blocker |
-| S5704 | The "self" argument should be the first argument of instance methods | Major |
-| S5707 | Exceptions should derive from BaseException | Critical |
-| S5708 | Only legal exceptions should be caught | Critical |
-| S5709 | Exception chaining should be used | Minor |
-| S5714 | Boolean values should not be used in exception raising | Major |
-| S5719 | Instance and class methods should have at least one positional parameter | Critical |
-| S5722 | "__init__" should not return value | Major |
-| S5724 | Bare "except" clauses should not be used | Major |
-| S5727 | Comparison to None should use the "is" operator | Major |
-| S5754 | Exceptions should not be silently swallowed | Major |
-| S5756 | Non-empty containers should be evaluated as true | Major |
-| S5781 | Iterable unpacking should match target variables | Major |
-| S5795 | "TypedDict" keys should be valid | Major |
-| S5796 | "TypedDict" definitions should be valid | Major |
-| S5799 | Instance methods should access "self" | Major |
-| S5806 | "cls" should be the first argument for class methods | Major |
-| S5807 | "cls" should not be reassigned | Major |
-| S5841 | File descriptors should be explicitly closed | Major |
-| S5842 | Regular expressions should be syntactically valid | Blocker |
-| S5845 | Arguments should not be unpacked into "pass" | Major |
-| S5855 | Walrus operator should not be used in comprehensions | Major |
-| S5856 | Regular expressions should be syntactically valid | Blocker |
-| S5857 | Mutable objects should not be default arguments | Major |
-| S5864 | Unhashable objects should not be added to sets | Major |
-| S5868 | Regex flags should not be nested | Minor |
-| S5886 | "asyncio.sleep(0)" should not be used | Minor |
-| S5905 | All branches of an assertion should be tested | Major |
-| S5914 | Comparisons involving length should not be written with negative numbers | Major |
-| S5915 | Range should not be empty | Major |
-| S6540 | ClassVar should be used | Minor |
-
-## Vulnerabilities
-
-| Rule | Name | Severity |
-|------|------|----------|
-| S1523 | Code should not be dynamically evaluated | Critical |
-| S2068 | Credentials should not be hard-coded | Blocker |
-| S2076 | OS commands should not be vulnerable to injection attacks | Blocker |
-| S2077 | SQL queries should not be vulnerable to injection attacks | Blocker |
-| S2245 | Pseudorandom number generators should not be used in security contexts | Critical |
-| S2631 | Regular expressions should not be vulnerable to denial of service attacks | Critical |
-| S3649 | Database queries should not be vulnerable to injection attacks | Blocker |
-| S4423 | Weak SSL protocols should not be used | Critical |
-| S4426 | Cryptographic keys should be robust | Critical |
-| S4502 | CSRF protections should not be disabled | Critical |
-| S4507 | Debug features should not be activated in production | Critical |
-| S4787 | Encrypting data is security-sensitive | Critical |
-| S4790 | Hashing data is security-sensitive | Critical |
-| S4792 | Configuring logging is security-sensitive | Minor |
-| S4830 | Server certificates should be verified | Critical |
-| S5042 | Expanding archives is security-sensitive | Critical |
-| S5144 | Server-side requests should not be vulnerable to forging attacks | Critical |
-| S5146 | Open redirects are security-sensitive | Major |
-| S5247 | Cross-site scripting should be prevented | Critical |
-| S5334 | DOM updates should be sanitized | Critical |
-| S5445 | Insecure temporary file creation is security-sensitive | Major |
-| S5527 | Server certificates should be verified | Critical |
-| S5547 | Cipher algorithms should be robust | Critical |
-| S5659 | JWT signatures should be verified | Critical |
-| S5689 | HTTP response headers should not reveal server information | Minor |
-| S5713 | Bad syntax in "assert" should not be used | Major |
-| S5720 | "os.chmod" should not set unsafe permissions | Major |
-| S5725 | "xml" libraries should be used carefully | Critical |
-| S5732 | Cookies should be secure | Major |
-| S5734 | Referer policy should be restrictive | Minor |
-| S5739 | Secure protocol should be used | Major |
-| S5753 | Allowing browsers to sniff MIME types is security-sensitive | Minor |
-| S5757 | Sensitive data should not be logged | Major |
-| S5852 | Regular expressions should not be vulnerable to denial of service | Critical |
-| S6105 | Disabling certificate validation is security-sensitive | Critical |
-
-## Code Smells
-
-| Rule | Name | Severity |
-|------|------|----------|
-| S100 | Function names should comply with a naming convention | Minor |
-| S101 | Class names should comply with a naming convention | Minor |
-| S103 | Lines should not be too long | Minor |
-| S104 | Files should not have too many lines of code | Major |
-| S107 | Functions should not have too many parameters | Major |
-| S108 | Nested blocks of code should not be left empty | Major |
-| S112 | Generic exceptions should not be raised | Major |
-| S113 | Files should contain trailing newlines | Minor |
-| S117 | Local variable names should comply with a naming convention | Minor |
-| S125 | Sections of code should not be commented out | Major |
-| S134 | Control flow statements should not be nested too deep | Critical |
-| S139 | Comments should not be located at the end of lines of code | Minor |
-| S905 | Non-empty statements should change control flow | Major |
-| S930 | Functions should be called with the correct number of arguments | Blocker |
-| S1066 | Collapsible "if" statements should be merged | Major |
-| S1110 | Redundant pairs of parentheses should be removed | Minor |
-| S1116 | Empty statements should be removed | Minor |
-| S1134 | Track uses of "FIXME" tags | Major |
-| S1135 | Track uses of "TODO" tags | Info |
-| S1144 | Unused functions should be removed | Major |
-| S1172 | Unused function parameters should be removed | Major |
-| S1186 | Functions should not be empty | Major |
-| S1192 | String literals should not be duplicated | Critical |
-| S1481 | Unused local variables should be removed | Minor |
-| S1542 | Functions should not be named "lambda" | Major |
-| S1656 | "==" should not be used instead of "=" | Blocker |
-| S1716 | "pass" should not be used needlessly | Minor |
-| S1763 | All code should be reachable | Major |
-| S1764 | Identical expressions should not be used on both sides of operators | Major |
-| S1854 | Dead stores should be removed | Major |
-| S1871 | Two branches in a conditional structure should not have the same implementation | Major |
-| S1940 | Boolean checks should not be inverted | Minor |
-| S2159 | Silly identity should not be tested | Major |
-| S2190 | Recursion should not be infinite | Blocker |
-| S2201 | Return values should not be ignored | Major |
-| S2208 | Wildcard imports should not be used | Major |
-| S2589 | Boolean expressions should not be gratuitous | Major |
-| S2711 | "yield" statement should not return values | Major |
-| S2712 | "yield from" should only be used with iterables | Major |
-| S2734 | "else" should not be used after "return" | Minor |
-| S2757 | "=+" should not be used instead of "+=" | Critical |
-| S3257 | Redundant statements should not be used | Minor |
-| S3358 | Ternary operators should not be nested | Major |
-| S3403 | Strict equality operators should not be used with dissimilar types | Minor |
-| S3516 | Functions returns should not be invariant | Major |
-| S3626 | Jump statements should not be redundant | Minor |
-| S3699 | The output of functions that don't return anything should not be used | Major |
-| S3776 | Cognitive Complexity of functions should not be too high | Critical |
-| S3862 | "iteritems()" should not be called directly on dict keys | Major |
-| S4144 | Functions should not have identical implementations | Major |
-| S5445 | Insecure temporary file creation is security-sensitive | Major |
-| S5603 | "staticmethod" should not be used | Minor |
-| S5607 | Packages should not be imported with "*" | Minor |
-| S5632 | Arguments to "assert" should not be tuples | Blocker |
-| S5704 | The "self" argument should be the first argument of instance methods | Major |
-| S5707 | Exceptions should derive from BaseException | Critical |
-| S5708 | Only legal exceptions should be caught | Critical |
-| S5709 | Exception chaining should be used | Minor |
-| S5714 | Boolean values should not be used in exception raising | Major |
-| S5717 | Default argument values should not be changed | Major |
-| S5719 | Instance and class methods should have at least one positional parameter | Critical |
-| S5720 | "os.chmod" should not set unsafe permissions | Major |
-| S5722 | "__init__" should not return value | Major |
-| S5724 | Bare "except" clauses should not be used | Major |
-| S5727 | Comparison to None should use the "is" operator | Major |
-| S5754 | Exceptions should not be silently swallowed | Major |
-| S5756 | Non-empty containers should be evaluated as true | Major |
-| S5781 | Iterable unpacking should match target variables | Major |
-| S5795 | "TypedDict" keys should be valid | Major |
-| S5796 | "TypedDict" definitions should be valid | Major |
-| S5797 | Methods of type stubs should not have implementations | Minor |
-| S5799 | Instance methods should access "self" | Major |
-| S5806 | "cls" should be the first argument for class methods | Major |
-| S5807 | "cls" should not be reassigned | Major |
-| S5841 | File descriptors should be explicitly closed | Major |
-| S5842 | Regular expressions should be syntactically valid | Blocker |
-| S5843 | Regular expressions should not be too complicated | Critical |
-| S5845 | Arguments should not be unpacked into "pass" | Major |
-| S5850 | Alternatives in regular expressions should be grouped | Minor |
-| S5852 | Regular expressions should not be vulnerable to denial of service | Critical |
-| S5855 | Walrus operator should not be used in comprehensions | Major |
-| S5856 | Regular expressions should be syntactically valid | Blocker |
-| S5857 | Mutable objects should not be default arguments | Major |
-| S5864 | Unhashable objects should not be added to sets | Major |
-| S5868 | Regex flags should not be nested | Minor |
-| S5886 | "asyncio.sleep(0)" should not be used | Minor |
-| S5905 | All branches of an assertion should be tested | Major |
-| S5914 | Comparisons involving length should not be written with negative numbers | Major |
-| S5915 | Range should not be empty | Major |
-| S6327 | Union types should not include redundant types | Minor |
-| S6540 | ClassVar should be used | Minor |
-
----
-
-# C# Rules
-
-## Bugs
-
-| Rule | Name | Severity |
-|------|------|----------|
-| S1048 | Virtual events should not be raised | Major |
-| S1656 | Property assignments should be correct | Blocker |
-| S1751 | Loops should have at least one iteration | Major |
-| S1764 | Identical expressions should not be used on both sides of operators | Major |
-| S1854 | Dead stores should be removed | Major |
-| S1862 | Related "if/else if" statements should not have the same condition | Major |
-| S1871 | Branches should have different implementations | Major |
-| S2123 | Values should not be uselessly incremented | Critical |
-| S2178 | Short-circuit logic should be used in boolean contexts | Major |
-| S2183 | Integral numbers should not be shifted by values outside the valid range | Major |
-| S2184 | Results of integer division should not be assigned to floating point variables | Major |
-| S2190 | Recursion should not be infinite | Blocker |
-| S2201 | Return values should not be ignored | Major |
-| S2219 | Runtime type checking should be simplified | Major |
-| S2222 | Locks should be released | Blocker |
-| S2223 | Non-constant static fields should not be visible | Major |
-| S2225 | "ToString()" should not throw | Major |
-| S2234 | Parameters should be passed in the right order | Major |
-| S2251 | Loop counters should move in the right direction | Blocker |
-| S2252 | Loop conditions should be true at least once | Major |
-| S2259 | Null pointers should not be dereferenced | Major |
-| S2275 | Format strings should be passed the correct number of arguments | Major |
-| S2278 | Neither DES (Data Encryption Standard) nor DESede (3DES) should be used | Critical |
-| S2291 | Enumerable.Sum should not be called on infinite sequences | Blocker |
-| S2302 | Loop conditions should be invariant | Major |
-| S2306 | Method parameters should not be reassigned | Minor |
-| S2328 | GetHashCode should not return mutable | Major |
-| S2344 | Enumeration type names should not have "Flag" or "Flags" suffixes | Minor |
-| S2345 | Flags enumerations should explicitly initialize all their members | Major |
-| S2357 | Fields should be private | Major |
-| S2365 | Properties should not be based on array | Major |
-| S2386 | Mutable fields should not be "public static" | Critical |
-| S2437 | Silly bit operations should not be performed | Major |
-| S2551 | Shared resources should not be used for locking | Major |
-| S2583 | Conditionally executed code should be reachable | Major |
-| S2589 | Boolean expressions should not be gratuitous | Major |
-| S2674 | The stream reading should not return a value smaller than the minimum expected | Blocker |
-| S2681 | Multiline blocks should be enclosed in curly braces | Major |
-| S2688 | "NaN" should not be used in comparisons | Major |
-| S2696 | Instance members should not write to "static" fields | Critical |
-| S2757 | "=+" should not be used instead of "+=" | Critical |
-| S2925 | Thread.Sleep should not be used for timing | Major |
-| S2930 | "IDisposable" resources should be properly disposed | Major |
-| S2931 | Classes with "IDisposable" members should implement "IDisposable" | Major |
-| S2933 | Fields that are only assigned in constructor should be readonly | Minor |
-| S2934 | Property assignments should not be used in boolean expressions | Minor |
-| S2953 | Methods named "Dispose" should implement "IDisposable.Dispose" | Major |
-| S2955 | Generic parameters not constrained to reference types should not be compared to "null" | Major |
-| S2971 | "IEnumerable" LINQs should be simplified | Major |
-| S2995 | "Object.ReferenceEquals" should not be used for value types | Major |
-| S2996 | "ThreadStatic" fields should not be initialized | Major |
-| S2997 | "IDisposables" created in a "using" statement should not be returned | Blocker |
-| S3005 | "ThreadStatic" should not be used on non-static fields | Major |
-| S3010 | Static fields should not be updated in constructors | Major |
-| S3168 | "async" methods should not return "void" | Major |
-| S3172 | Delegates should not be subtracted | Major |
-| S3217 | "Explicit" conversions of "foreach" loops should not fail | Major |
-| S3237 | Exception properties should be accessible | Major |
-| S3249 | Classes directly extending "object" should not call "base" methods | Major |
-| S3256 | "string.IsNullOrEmpty" should be used | Minor |
-| S3264 | Events should be invoked | Major |
-| S3265 | Non-flags enums should not be used in bitwise operations | Major |
-| S3329 | Cryptographic operations should not use weak IVs | Critical |
-| S3346 | Exceptions should not be explicitly rethrown | Minor |
-| S3353 | Unchanged local variables should be readonly | Minor |
-| S3358 | Ternary operators should not be nested | Major |
-| S3376 | "partial" method parameter names should match | Minor |
-| S3397 | "base.Equals" should not be used | Major |
-| S3427 | Method overloads with default parameter values should not overlap | Major |
-| S3433 | Test method signatures should be correct | Minor |
-| S3451 | Sensitive API keys should not be hard-coded | Blocker |
-| S3453 | Classes should not have only "private" constructors | Major |
-| S3458 | Empty "case" clauses should be merged with the "default" one | Minor |
-| S3466 | Optional parameters should be passed explicitly | Minor |
-| S3532 | Empty "default" clause should do nothing | Minor |
-| S3598 | One-way "OperationContract" should not return value | Major |
-| S3600 | "params" should be used on overrides | Minor |
-| S3603 | Methods should not check their own calls | Minor |
-| S3604 | Collection and array contents should be used | Major |
-| S3610 | "this" or "base" should not be called in constructor parameters | Major |
-| S3655 | Nullable value types should be properly accessed | Major |
-| S3717 | Track lack of copyright and license headers | Info |
-| S3776 | Cognitive Complexity of functions should not be too high | Critical |
-| S3869 | "SafeHandle.DangerousGetHandle" should not be called | Critical |
-| S3871 | Exception types should be "public" | Major |
-| S3874 | "out" and "ref" parameters should not be used | Minor |
-| S3875 | "==" should not be used with a value type | Major |
-| S3876 | Strings or integral types should be used for indexers | Minor |
-| S3877 | Exceptions should not be thrown from unexpected methods | Major |
-| S3880 | Finalizers should call "base.Finalize()" | Critical |
-| S3884 | "CoSetProxyBlanket" and "CoInitializeSecurity" should not be used | Blocker |
-| S3885 | "Assembly.Load" should be used | Minor |
-| S3889 | "Thread.Suspend" and "Thread.Resume" should not be used | Major |
-| S3897 | Classes that provide "Equals(<T>)" or "Equals(Object)" should also implement "IEquatable<T>" | Major |
-| S3898 | Value types should implement "IEquatable<T>" | Minor |
-| S3900 | Arguments of public methods should be validated | Major |
-| S3902 | "assembly" or "type" attributes should be declared | Minor |
-| S3903 | Types should be defined in named namespaces | Major |
-| S3904 | Assemblies should have version information | Minor |
-| S3908 | Generic event handlers should be used | Minor |
-| S3909 | Collections should implement the generic interface | Minor |
-| S3923 | All branches in a conditional structure should not have exactly the same implementation | Major |
-| S3925 | "ISerializable" should be implemented correctly | Critical |
-| S3926 | Deserialization methods should be provided | Critical |
-| S3927 | Serialization event handlers should be implemented correctly | Critical |
-| S3928 | Parameter names should match with "ArgumentException" | Minor |
-| S3937 | Number patterns should be regular | Minor |
-| S3949 | Calculations should not overflow | Major |
-| S3956 | "GenericType.IEnumerable" should not be used | Minor |
-| S3962 | "static readonly" constants should be "const" instead | Minor |
-| S3963 | "static" fields should be initialized inline | Minor |
-| S3966 | Objects should not be disposed more than once | Major |
-| S3967 | Multi-dimensional arrays should not be used | Minor |
-| S3971 | "GC.SuppressFinalize" should not be called | Major |
-| S3972 | Conditionals should start on new lines | Major |
-| S3973 | A conditionally executed single line should be denoted by indentation | Minor |
-| S3981 | Collection sizes should be compared correctly | Major |
-| S3984 | Exception should not be created without being thrown | Major |
-| S3990 | Assemblies should be marked as CLS-compliant | Minor |
-| S3992 | Assemblies should explicitly specify COM visibility | Minor |
-| S3993 | Custom attributes should be marked with "System.AttributeUsageAttribute" | Minor |
-| S3994 | URI properties should not be strings | Minor |
-| S3995 | URI return values should not be strings | Minor |
-| S3996 | URI properties should not be strings | Minor |
-| S3997 | String URI overloads should call "System.Uri" overloads | Minor |
-| S3998 | Threads should not lock on objects with weak identity | Critical |
-| S4000 | Pointers to unmanaged memory should not be visible | Critical |
-| S4002 | Disposable types should declare finalizers | Major |
-| S4004 | Collection properties should be readonly | Major |
-| S4005 | "System.Uri" arguments should be used instead of strings | Minor |
-| S4015 | Inherited member visibility should not be decreased | Critical |
-| S4016 | Enumeration members should not be named "Reserved" | Minor |
-| S4017 | Type names should not match namespaces | Minor |
-| S4018 | Generic methods should provide type parameters | Minor |
-| S4019 | Base class methods should not be hidden | Major |
-| S4022 | Enumerations should have "Int32" storage | Minor |
-| S4023 | Interfaces should not be empty | Minor |
-| S4025 | Child class fields should not shadow parent class fields | Major |
-| S4026 | Assemblies should be marked with "NeutralResourcesLanguageAttribute" | Minor |
-| S4027 | Exceptions should provide standard constructors | Minor |
-| S4035 | Classes implementing "IEquatable<T>" should be sealed | Major |
-| S4036 | Path delimiters should not be hardcoded | Major |
-| S4039 | Interface methods should be callable by derived types | Major |
-| S4041 | Type names should not match keywords | Minor |
-| S4047 | Generic "KeyValuePair" should be used | Minor |
-| S4049 | Consider using "readonly" keyword | Minor |
-| S4050 | Operators should be overloaded consistently | Minor |
-| S4052 | Types should not extend outdated base types | Minor |
-| S4055 | Literals should not be passed as localized parameters | Minor |
-| S4056 | Overloads with "CultureInfo", "IFormatProvider" or string comparison parameters should be preferred | Minor |
-| S4057 | Localization should be done properly | Minor |
-| S4058 | Overloads with "StringComparison" parameter should be used | Minor |
-| S4059 | Property names should not match get methods | Minor |
-| S4060 | Non-abstract attributes should be sealed | Minor |
-| S4061 | "params" should be used | Minor |
-
----
-
-# Quality Profile Recommendations
-
-## Sonar Way Profile (Default)
-
-The "Sonar Way" profile is the default quality profile that includes:
-- All Blocker rules
-- All Critical rules
-- Most Major rules
-- Selected Minor rules for common issues
-
-## Recommended Custom Profile
-
-For strict code quality, enable these additional rules:
-
-### Enable
-- All unused code detection
-- Cognitive complexity checks
-- Naming convention rules
-- Security hotspot rules
-
-### Disable (if noise is too high)
-- S1135 (TODO tracking) - Info level
-- S109 (Magic numbers) - If constants are impractical
-- S1451 (Copyright headers) - If not required
-
----
-
-# Integration with CI/CD
-
-## Quality Gate Configuration
-
-```yaml
-# Example quality gate
-quality_gate:
-  conditions:
-    - metric: blocker_violations
-      operator: GT
-      threshold: 0
-    - metric: critical_violations
-      operator: GT
-      threshold: 0
-    - metric: major_violations
-      operator: GT
-      threshold: 3
-    - metric: coverage
-      operator: LT
-      threshold: 80
-    - metric: duplicated_lines_density
-      operator: GT
-      threshold: 3
-```
-
-## Severity Mapping
-
-| SonarQube Severity | GitHub Actions | Azure DevOps |
-|--------------------|----------------|--------------|
-| Blocker | error | Error |
-| Critical | error | Error |
-| Major | warning | Warning |
-| Minor | notice | Note |
-| Info | notice | Note |

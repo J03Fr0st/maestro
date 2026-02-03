@@ -1,243 +1,127 @@
 ---
 name: git-commit
-description: Create git commits with conventional commit messages and quality checks. Use when committing changes, generating commit messages, or running pre-commit validations.
+description: 'Execute git commit with conventional commit message analysis, intelligent staging, and message generation. Use when user asks to commit changes, create a git commit, or mentions "/commit". Supports: (1) Auto-detecting type and scope from changes, (2) Generating conventional commit messages from diff, (3) Interactive commit with optional type/scope/description overrides, (4) Intelligent file staging for logical grouping'
+license: MIT
+
 ---
 
-# Smart Git Commit
+# Git Commit with Conventional Commits
 
-Create meaningful git commits with conventional commit messages and quality checks.
+## Overview
 
-## When to Use
+Create standardized, semantic git commits using the Conventional Commits specification. Analyze the actual diff to determine appropriate type, scope, and message.
 
-- Committing staged or unstaged changes
-- Generating conventional commit messages
-- Running pre-commit quality checks
-- Ensuring consistent commit message format
+## Conventional Commit Format
 
-## Pre-Commit Quality Checks
+```
+<type>[optional scope]: <description>
 
-Before committing, verify:
+[optional body]
 
-| Check | Command | Purpose |
-|-------|---------|---------|
-| Build | `npm run build` / `dotnet build` | Ensure code compiles |
-| Tests | `npm test` / `dotnet test` | Verify functionality |
-| Lint | `npm run lint` / `eslint .` | Check code style |
-| Types | `tsc --noEmit` | Validate TypeScript |
+[optional footer(s)]
+```
+
+## Commit Types
+
+| Type       | Purpose                        |
+| ---------- | ------------------------------ |
+| `feat`     | New feature                    |
+| `fix`      | Bug fix                        |
+| `docs`     | Documentation only             |
+| `style`    | Formatting/style (no logic)    |
+| `refactor` | Code refactor (no feature/fix) |
+| `perf`     | Performance improvement        |
+| `test`     | Add/update tests               |
+| `build`    | Build system/dependencies      |
+| `ci`       | CI/config changes              |
+| `chore`    | Maintenance/misc               |
+| `revert`   | Revert commit                  |
+
+## Breaking Changes
+
+```
+# Exclamation mark after type/scope
+feat!: remove deprecated endpoint
+
+# BREAKING CHANGE footer
+feat: allow config to extend other configs
+
+BREAKING CHANGE: `extends` key behavior changed
+```
 
 ## Workflow
 
-### 1. Check Repository Status
+### 1. Analyze Diff
 
 ```bash
-# View current status
-git status
+# If files are staged, use staged diff
+git diff --staged
 
-# View staged changes
-git diff --cached
-
-# View unstaged changes
+# If nothing staged, use working tree diff
 git diff
 
-# View changed files summary
-git diff --stat
+# Also check status
+git status --porcelain
 ```
 
-### 2. Stage Changes
+### 2. Stage Files (if needed)
+
+If nothing is staged or you want to group changes differently:
 
 ```bash
 # Stage specific files
-git add path/to/file.ts
+git add path/to/file1 path/to/file2
 
-# Stage all modified tracked files
-git add -u
-
-# Stage all changes (careful with new files)
-git add -A
+# Stage by pattern
+git add *.test.*
+git add src/components/*
 
 # Interactive staging
 git add -p
 ```
 
-### 3. Analyze Changes
+**Never commit secrets** (.env, credentials.json, private keys).
 
-Determine from the diff:
-- What files were modified
-- Nature of changes (feature, fix, refactor, etc.)
-- The scope/component affected
-- Impact and purpose
+### 3. Generate Commit Message
 
-### 4. Create Commit
+Analyze the diff to determine:
 
-```bash
-# Commit with message
-git commit -m "type(scope): subject"
+- **Type**: What kind of change is this?
+- **Scope**: What area/module is affected?
+- **Description**: One-line summary of what changed (present tense, imperative mood, <72 chars)
 
-# Commit with body
-git commit -m "type(scope): subject" -m "Detailed body explanation"
-
-# Open editor for message
-git commit
-```
-
-## Conventional Commit Format
-
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
-```
-
-### Types
-
-| Type | Use For | Example |
-|------|---------|---------|
-| `feat` | New feature | `feat(auth): add JWT token refresh` |
-| `fix` | Bug fix | `fix(api): handle null response` |
-| `docs` | Documentation | `docs(readme): update install steps` |
-| `style` | Formatting only | `style: fix indentation` |
-| `refactor` | Code restructure | `refactor(utils): extract helper` |
-| `test` | Test changes | `test(auth): add login tests` |
-| `chore` | Maintenance | `chore(deps): update packages` |
-| `build` | Build system | `build: update webpack config` |
-| `ci` | CI/CD changes | `ci: add deploy workflow` |
-| `perf` | Performance | `perf(query): add index lookup` |
-
-### Scope (Optional)
-
-The component or area affected:
-- `auth`, `api`, `ui`, `db`, `config`
-- Feature names: `login`, `checkout`, `dashboard`
-- Layer names: `service`, `controller`, `model`
-
-### Subject Rules
-
-- Use imperative mood: "add" not "added" or "adds"
-- Lowercase first letter
-- No period at end
-- Max 50 characters
-- Be specific and meaningful
-
-### Body (Optional)
-
-- Explain **why**, not what (the diff shows what)
-- Wrap at 72 characters
-- Separate from subject with blank line
-
-### Footer (Optional)
-
-- Breaking changes: `BREAKING CHANGE: description`
-- Issue references: `Fixes #123`, `Closes #456`
-
-## Examples
-
-### Simple Feature
+### 4. Execute Commit
 
 ```bash
-git commit -m "feat(cart): add quantity selector"
+# Single line
+git commit -m "<type>[scope]: <description>"
+
+# Multi-line with body/footer
+git commit -m "$(cat <<'EOF'
+<type>[scope]: <description>
+
+<optional body>
+
+<optional footer>
+EOF
+)"
 ```
 
-### Bug Fix with Context
+## Best Practices
 
-```bash
-git commit -m "fix(auth): prevent token expiry during refresh
+- One logical change per commit
+- Present tense: "add" not "added"
+- Imperative mood: "fix bug" not "fixes bug"
+- Reference issues: `Closes #123`, `Refs #456`
+- Keep description under 72 characters
 
-The refresh token was being invalidated before the new token
-was issued, causing a race condition on slow connections.
+## Git Safety Protocol
 
-Fixes #234"
-```
-
-### Breaking Change
-
-```bash
-git commit -m "refactor(api)!: change response format to JSON:API
-
-BREAKING CHANGE: API responses now follow JSON:API spec.
-All clients must update their response parsing logic.
-
-Migration guide: docs/migration-v2.md"
-```
-
-### Multiple Scopes
-
-```bash
-git commit -m "feat(auth,api): add role-based access control"
-```
-
-## Message Patterns by Change Type
-
-### New Files Added
-
-```bash
-# New feature file
-feat(module): add user preferences service
-
-# New test file
-test(auth): add unit tests for login flow
-
-# New config file
-chore(config): add production environment settings
-```
-
-### Files Modified
-
-```bash
-# Bug fix
-fix(parser): handle empty input gracefully
-
-# Enhancement
-feat(search): add fuzzy matching support
-
-# Refactor
-refactor(utils): simplify date formatting logic
-```
-
-### Files Deleted
-
-```bash
-# Remove deprecated code
-chore: remove legacy authentication module
-
-# Clean up
-refactor(api): remove unused endpoints
-```
-
-### Dependency Changes
-
-```bash
-# Update dependencies
-chore(deps): update lodash to 4.17.21
-
-# Add new dependency
-chore(deps): add zod for schema validation
-
-# Remove dependency
-chore(deps): remove moment.js in favor of date-fns
-```
-
-## Quick Reference
-
-```bash
-# View what will be committed
-git diff --cached --stat
-
-# Amend last commit (unpushed only)
-git commit --amend
-
-# Amend without changing message
-git commit --amend --no-edit
-
-# View recent commits
-git log --oneline -5
-```
-
-## Restrictions
-
+- NEVER update git config
+- NEVER run destructive commands (--force, hard reset) without explicit request
+- NEVER skip hooks (--no-verify) unless user asks
+- NEVER force push to main/master
+- If commit fails due to hooks, fix and create NEW commit (don't amend)
 - Do NOT add "Co-authored-by" or AI signatures
 - Do NOT include "Generated with" messages
-- Do NOT modify git configuration
 - Do NOT use emojis in commit messages
-- Use only existing git user configuration
