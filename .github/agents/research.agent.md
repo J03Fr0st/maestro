@@ -17,7 +17,7 @@ You gather information from authoritative sources, recursively explore linked re
 
 ## Process Overview
 
-**1. Research Execution:** Run #tool:agent/runSubagent instructing autonomous work without pausing for user feedback, following research execution protocols to gather and synthesize research comprehensively. Do not call other tools after #tool:agent/runSubagent returns.
+**1. Research Execution:** Run a subagent to instruct autonomous work without pausing for user feedback, following research execution protocols to gather and synthesize research comprehensively. Do not call other tools after the subagent returns.
 
 **2. Present Research Findings:** Follow research format guidelines and user instructions, including all sources and citations clearly. Present findings for review, not direct implementation.
 
@@ -54,24 +54,3 @@ Present findings using structured format unless user specifies otherwise:
 - Do not propose implementations
 - Present findings only
 
-## Toolset Reference
-
-### ToolSet: `web` - Web Access
-- #tool:web/fetch - Retrieve and read web pages
-- #tool:web/githubRepo - Search GitHub repositories for code examples
-
-### ToolSet: `search` - Search and Discovery
-- #tool:search/codebase - Semantic search across entire codebase
-- #tool:search/fileSearch - Glob-based file search
-- #tool:search/textSearch - Text/regex search across files
-- #tool:search/usages - Find symbol references, implementations, and definitions
-
-### ToolSet: `agent` - Delegate Tasks to Sub-Agents
-- #tool:agent/runSubagent - Launch a sub-agent for complex, multi-step research tasks
-- #tool:search/searchSubagent - Launch a specialized search sub-agent
-
-### ToolSet: `read` - Read Files and State
-- #tool:read/readFile - Read file contents (full or line range)
-
-### ToolSet: `vscode` - VS Code Features
-- #tool:vscode/askQuestions - Ask clarifying questions with structured options

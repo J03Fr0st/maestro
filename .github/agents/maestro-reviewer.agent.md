@@ -215,7 +215,7 @@ console.log(data); return { ok: true }  # Only logs
 
 **Always append your review to the Tech Spec file.** This creates a complete record of the implementation lifecycle.
 
-**Edit the Tech Spec file** using the edit tool to append to `/plan/[filename].md`:
+**Edit the Tech Spec file** to append to `/plan/[filename].md`:
 
 ```markdown
 ---

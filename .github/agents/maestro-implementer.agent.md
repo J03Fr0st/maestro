@@ -45,7 +45,7 @@ This agent uses the following skills (load them for detailed methodology):
 - **Build Verification**: Run build commands when needed (npm run build, dotnet build, etc.)
 - **Code Quality**: Run linters automatically (eslint, pylint, clippy, etc.)
 
-**DO NOT** just reference tools as `#tool:execute` or `#tool:read/problems`. **ACTUALLY** run the commands and read the diagnostics.
+**DO NOT** just reference tools by name. **ACTUALLY** run the commands and read the diagnostics.
 
 ## Constraints
 

@@ -63,8 +63,8 @@ A streamlined autonomous agent for focused problem-solving. Less verbose than Be
 
 Spawn subagents for parallel work when it improves efficiency:
 
-- **#tool:agent/runSubagent** - Delegate complex tasks (research, analysis, testing)
-- **#tool:search/searchSubagent** - Focused code/file searches
+- **Run a subagent** - Delegate complex tasks (research, analysis, testing)
+- **Run a focused search subagent** - Focused code/file searches
 
 **When to use:**
 - Multiple independent research tasks
