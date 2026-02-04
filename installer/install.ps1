@@ -10,7 +10,9 @@ param(
     [ValidateSet('Both', 'Standard', 'Insiders')]
     [string]$VSCodeType = 'Both',
 
-    [string]$WorkspacePath = (Get-Location).Path
+    [string]$WorkspacePath = (Get-Location).Path,
+
+    [string]$ProfileId = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -78,6 +80,52 @@ if ($isInteractive -and $Host.UI.SupportsVirtualTerminal) {
         default { $VSCodeType = 'Both' }
     }
 
+    # If User scope, prompt for profile selection
+    if ($Scope -eq 'User') {
+        $allProfiles = @()
+
+        if (($VSCodeType -eq 'Both' -or $VSCodeType -eq 'Standard') -and $userDataPaths.Standard) {
+            $standardProfiles = Get-VSCodeProfiles -UserDataPath $userDataPaths.Standard
+            foreach ($p in $standardProfiles) {
+                $p.VSCodeType = 'Standard'
+                $allProfiles += $p
+            }
+        }
+
+        if (($VSCodeType -eq 'Both' -or $VSCodeType -eq 'Insiders') -and $userDataPaths.Insiders) {
+            $insidersProfiles = Get-VSCodeProfiles -UserDataPath $userDataPaths.Insiders
+            foreach ($p in $insidersProfiles) {
+                $p.VSCodeType = 'Insiders'
+                $p.Name = "$($p.Name) (Insiders)"
+                $allProfiles += $p
+            }
+        }
+
+        if ($allProfiles.Count -gt 1) {
+            Write-Host ""
+            Write-Host "Available VS Code profiles:"
+            for ($i = 0; $i -lt $allProfiles.Count; $i++) {
+                $profile = $allProfiles[$i]
+                $marker = if ($profile.Id -eq 'default') { ' (default)' } else { '' }
+                Write-Host "  [$($i + 1)] $($profile.Name)$marker"
+                Write-Host "       ID: $($profile.Id)"
+            }
+            Write-Host "  [A] All profiles"
+            Write-Host ""
+            $profileChoice = Read-Host "Enter choice (1-$($allProfiles.Count) or A, default=1)"
+
+            if ($profileChoice -eq 'A' -or $profileChoice -eq 'a') {
+                $ProfileId = 'all'
+            } elseif ($profileChoice -match '^\d+$' -and [int]$profileChoice -ge 1 -and [int]$profileChoice -le $allProfiles.Count) {
+                $selectedProfile = $allProfiles[[int]$profileChoice - 1]
+                $ProfileId = $selectedProfile.Id
+                $VSCodeType = $selectedProfile.VSCodeType
+            } else {
+                $ProfileId = 'default'
+            }
+        }
+    }
+
     Write-Host ""
 }
 
@@ -137,6 +185,54 @@ function Get-VSCodeUserDataPaths {
     return $paths
 }
 
+# Detect VS Code profiles
+function Get-VSCodeProfiles {
+    param(
+        [string]$UserDataPath
+    )
+
+    $profiles = @()
+
+    # Default profile (User folder directly)
+    $defaultPromptsPath = Join-Path $UserDataPath "User\prompts"
+    $profiles += @{
+        Id = 'default'
+        Name = 'Default Profile'
+        PromptsPath = $defaultPromptsPath
+        InstructionsPath = Join-Path $UserDataPath "User\instructions"
+    }
+
+    # Check for additional profiles
+    $profilesDir = Join-Path $UserDataPath "User\profiles"
+    if (Test-Path $profilesDir) {
+        $profileFolders = Get-ChildItem -Path $profilesDir -Directory
+        foreach ($folder in $profileFolders) {
+            # Try to get profile name from profile.json if it exists
+            $profileName = $folder.Name
+            $profileJson = Join-Path $folder.FullName "profile.json"
+            if (Test-Path $profileJson) {
+                try {
+                    $profileData = Get-Content $profileJson -Raw | ConvertFrom-Json
+                    if ($profileData.name) {
+                        $profileName = $profileData.name
+                    }
+                } catch {
+                    # Ignore JSON parsing errors
+                }
+            }
+
+            $profiles += @{
+                Id = $folder.Name
+                Name = $profileName
+                PromptsPath = Join-Path $folder.FullName "prompts"
+                InstructionsPath = Join-Path $folder.FullName "instructions"
+            }
+        }
+    }
+
+    return $profiles
+}
+
 # Detect installations
 $vscodePaths = Get-VSCodePaths
 $userDataPaths = Get-VSCodeUserDataPaths
@@ -176,7 +272,8 @@ function Get-TargetPaths {
         [string]$Scope,
         [string]$VSCodeType,
         [string]$WorkspacePath,
-        [hashtable]$UserDataPaths
+        [hashtable]$UserDataPaths,
+        [string]$ProfileId
     )
 
     $targets = @()
@@ -192,20 +289,43 @@ function Get-TargetPaths {
         }
         'User' {
             # Install to VS Code user prompts folder (where VS Code stores user-level agents)
+            # Handle profile selection
             if (($VSCodeType -eq 'Both' -or $VSCodeType -eq 'Standard') -and $UserDataPaths.Standard) {
-                $targets += @{
-                    Type = 'User-Standard'
-                    Path = Join-Path $UserDataPaths.Standard "User\prompts"
-                    Description = "VS Code User Profile"
-                    IsUserScope = $true
+                $profiles = Get-VSCodeProfiles -UserDataPath $UserDataPaths.Standard
+                foreach ($profile in $profiles) {
+                    if ($ProfileId -eq 'all' -or $ProfileId -eq '' -or $ProfileId -eq $profile.Id) {
+                        $targets += @{
+                            Type = 'User-Standard'
+                            Path = $profile.PromptsPath
+                            InstructionsPath = $profile.InstructionsPath
+                            Description = "VS Code Profile: $($profile.Name)"
+                            ProfileId = $profile.Id
+                            IsUserScope = $true
+                        }
+                        # If specific profile selected (not 'all'), only add that one
+                        if ($ProfileId -ne 'all' -and $ProfileId -ne '') {
+                            break
+                        }
+                    }
                 }
             }
             if (($VSCodeType -eq 'Both' -or $VSCodeType -eq 'Insiders') -and $UserDataPaths.Insiders) {
-                $targets += @{
-                    Type = 'User-Insiders'
-                    Path = Join-Path $UserDataPaths.Insiders "User\prompts"
-                    Description = "VS Code Insiders User Profile"
-                    IsUserScope = $true
+                $profiles = Get-VSCodeProfiles -UserDataPath $UserDataPaths.Insiders
+                foreach ($profile in $profiles) {
+                    if ($ProfileId -eq 'all' -or $ProfileId -eq '' -or $ProfileId -eq $profile.Id) {
+                        $targets += @{
+                            Type = 'User-Insiders'
+                            Path = $profile.PromptsPath
+                            InstructionsPath = $profile.InstructionsPath
+                            Description = "VS Code Insiders Profile: $($profile.Name)"
+                            ProfileId = $profile.Id
+                            IsUserScope = $true
+                        }
+                        # If specific profile selected (not 'all'), only add that one
+                        if ($ProfileId -ne 'all' -and $ProfileId -ne '') {
+                            break
+                        }
+                    }
                 }
             }
         }
@@ -389,7 +509,7 @@ if ($VSCodeType -eq 'Insiders' -and -not $hasInsiders) {
 }
 
 # Get target paths
-$targets = Get-TargetPaths -Scope $Scope -VSCodeType $VSCodeType -WorkspacePath $WorkspacePath -UserDataPaths $userDataPaths
+$targets = Get-TargetPaths -Scope $Scope -VSCodeType $VSCodeType -WorkspacePath $WorkspacePath -UserDataPaths $userDataPaths -ProfileId $ProfileId
 
 if ($targets.Count -eq 0) {
     Write-Err "Error: No valid installation targets found for scope '$Scope'."

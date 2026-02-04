@@ -46,6 +46,7 @@ Automated installer for Maestro GitHub Copilot configuration files.
 |-----------|--------|---------|-------------|
 | `-Scope` | Workspace, User, Global | Workspace | Where to install |
 | `-VSCodeType` | Both, Standard, Insiders | Both | Which VS Code to target |
+| `-ProfileId` | profile ID, 'all' | (default) | VS Code profile to install to |
 | `-WorkspacePath` | path | Current dir | Workspace location |
 | `-WhatIf` | switch | - | Preview mode |
 
@@ -55,6 +56,7 @@ Automated installer for Maestro GitHub Copilot configuration files.
 |------|--------|---------|-------------|
 | `-s` | workspace, user, global | workspace | Where to install |
 | `-t` | both, standard, insiders | both | Which VS Code to target |
+| `-p` | profile ID, 'all' | (default) | VS Code profile to install to |
 | `-w` | path | Current dir | Workspace location |
 | `-n` | - | - | Dry-run mode |
 | `-h` | - | - | Show help |
@@ -90,6 +92,28 @@ Automated installer for Maestro GitHub Copilot configuration files.
 # macOS/Linux
 ./installer/install.sh -s global -t both
 ```
+
+### Install to a Specific VS Code Profile
+
+VS Code profiles have their own prompts folders. The installer auto-detects profiles and lets you choose interactively, or you can specify directly:
+
+```powershell
+# Windows - Install to specific profile by ID
+.\installer\install.ps1 -Scope User -ProfileId "5ec026e8"
+
+# Windows - Install to all profiles
+.\installer\install.ps1 -Scope User -ProfileId all
+
+# macOS/Linux - Install to specific profile
+./installer/install.sh -s user -p "5ec026e8"
+
+# macOS/Linux - Install to all profiles
+./installer/install.sh -s user -p all
+```
+
+Profile paths:
+- **Default**: `Code/User/prompts/` or `Code - Insiders/User/prompts/`
+- **Named profile**: `Code/User/profiles/<profile-id>/prompts/`
 
 ## What Gets Installed
 
@@ -164,9 +188,25 @@ To remove Maestro configuration, simply delete the `.github` folder from your in
 # Workspace
 rm -rf .github
 
-# User profile (macOS/Linux)
-# User profile - delete agent files from prompts folder
+# User profile - default (macOS/Linux)
 rm -rf ~/.config/Code/User/prompts/*.agent.md
+rm -rf ~/.config/Code/User/prompts/*.prompt.md
+rm -rf ~/.config/Code/User/prompts/*.instructions.md
+
+# User profile - named profile (macOS/Linux)
+rm -rf ~/.config/Code/User/profiles/<profile-id>/prompts/*.agent.md
+rm -rf ~/.config/Code/User/profiles/<profile-id>/prompts/*.prompt.md
+rm -rf ~/.config/Code/User/profiles/<profile-id>/prompts/*.instructions.md
+
+# User profile - default (Windows)
+# %APPDATA%\Code\User\prompts\*.agent.md
+# %APPDATA%\Code\User\prompts\*.prompt.md
+# %APPDATA%\Code\User\prompts\*.instructions.md
+
+# User profile - named profile (Windows)
+# %APPDATA%\Code\User\profiles\<profile-id>\prompts\*.agent.md
+# %APPDATA%\Code\User\profiles\<profile-id>\prompts\*.prompt.md
+# %APPDATA%\Code\User\profiles\<profile-id>\prompts\*.instructions.md
 
 # Global
 rm -rf ~/.github

@@ -1,10 +1,11 @@
 #!/bin/bash
 # Maestro Installer for VS Code and VS Code Insiders
-# Usage: ./install.sh [-s scope] [-t type] [-w workspace] [-n]
+# Usage: ./install.sh [-s scope] [-t type] [-w workspace] [-p profile] [-n]
 # Options:
 #   -s scope    : workspace, user, global (default: workspace)
 #   -t type     : both, standard, insiders (default: both)
 #   -w workspace: path to workspace (default: current directory)
+#   -p profile  : profile ID or 'all' for all profiles (default: default profile)
 #   -n          : dry-run mode (show what would be done)
 
 set -e
@@ -21,20 +22,23 @@ SCOPE="workspace"
 VSCODE_TYPE="both"
 WORKSPACE_PATH="$(pwd)"
 DRY_RUN=false
+PROFILE_ID=""
 
 # Parse arguments
-while getopts "s:t:w:nh" opt; do
+while getopts "s:t:w:p:nh" opt; do
     case $opt in
         s) SCOPE="$OPTARG" ;;
         t) VSCODE_TYPE="$OPTARG" ;;
         w) WORKSPACE_PATH="$OPTARG" ;;
+        p) PROFILE_ID="$OPTARG" ;;
         n) DRY_RUN=true ;;
         h)
-            echo "Usage: $0 [-s scope] [-t type] [-w workspace] [-n]"
+            echo "Usage: $0 [-s scope] [-t type] [-w workspace] [-p profile] [-n]"
             echo "Options:"
             echo "  -s scope    : workspace, user, global (default: workspace)"
             echo "  -t type     : both, standard, insiders (default: both)"
             echo "  -w workspace: path to workspace (default: current directory)"
+            echo "  -p profile  : profile ID or 'all' for all profiles (default: default profile)"
             echo "  -n          : dry-run mode (show what would be done)"
             exit 0
             ;;
@@ -123,6 +127,48 @@ if ! $HAS_STANDARD && ! $HAS_INSIDERS; then
     echo "Please install VS Code or VS Code Insiders first."
     exit 1
 fi
+
+# Function to get VS Code profiles
+get_vscode_profiles() {
+    local user_data_path="$1"
+    local vscode_type="$2"
+
+    PROFILES=()
+    PROFILE_IDS=()
+    PROFILE_PATHS=()
+    PROFILE_INSTRUCTION_PATHS=()
+
+    # Default profile
+    PROFILES+=("Default Profile")
+    PROFILE_IDS+=("default")
+    PROFILE_PATHS+=("$user_data_path/User/prompts")
+    PROFILE_INSTRUCTION_PATHS+=("$user_data_path/User/instructions")
+
+    # Check for additional profiles
+    local profiles_dir="$user_data_path/User/profiles"
+    if [[ -d "$profiles_dir" ]]; then
+        for profile_dir in "$profiles_dir"/*/; do
+            if [[ -d "$profile_dir" ]]; then
+                local profile_id=$(basename "$profile_dir")
+                local profile_name="$profile_id"
+
+                # Try to get name from profile.json
+                local profile_json="${profile_dir}profile.json"
+                if [[ -f "$profile_json" ]]; then
+                    local name=$(grep -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' "$profile_json" 2>/dev/null | sed 's/.*"\([^"]*\)"$/\1/' || true)
+                    if [[ -n "$name" ]]; then
+                        profile_name="$name"
+                    fi
+                fi
+
+                PROFILES+=("$profile_name")
+                PROFILE_IDS+=("$profile_id")
+                PROFILE_PATHS+=("${profile_dir}prompts")
+                PROFILE_INSTRUCTION_PATHS+=("${profile_dir}instructions")
+            fi
+        done
+    fi
+}
 
 # Copy function for workspace/global scope (full folder structure)
 install_maestro_files() {
@@ -298,12 +344,44 @@ case "$SCOPE" in
         ;;
     user)
         if [[ "$VSCODE_TYPE" == "both" || "$VSCODE_TYPE" == "standard" ]] && [[ -n "$STANDARD_USER_DATA" ]]; then
-            install_maestro_user_files "$STANDARD_USER_DATA/User/prompts" "VS Code User Profile"
-            SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+            get_vscode_profiles "$STANDARD_USER_DATA" "Standard"
+
+            for i in "${!PROFILE_IDS[@]}"; do
+                local pid="${PROFILE_IDS[$i]}"
+                local pname="${PROFILES[$i]}"
+                local ppath="${PROFILE_PATHS[$i]}"
+
+                # Check if this profile should be installed
+                if [[ -z "$PROFILE_ID" || "$PROFILE_ID" == "all" || "$PROFILE_ID" == "$pid" ]]; then
+                    install_maestro_user_files "$ppath" "VS Code Profile: $pname"
+                    SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+
+                    # If specific profile, stop after finding it
+                    if [[ -n "$PROFILE_ID" && "$PROFILE_ID" != "all" ]]; then
+                        break
+                    fi
+                fi
+            done
         fi
         if [[ "$VSCODE_TYPE" == "both" || "$VSCODE_TYPE" == "insiders" ]] && [[ -n "$INSIDERS_USER_DATA" ]]; then
-            install_maestro_user_files "$INSIDERS_USER_DATA/User/prompts" "VS Code Insiders User Profile"
-            SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+            get_vscode_profiles "$INSIDERS_USER_DATA" "Insiders"
+
+            for i in "${!PROFILE_IDS[@]}"; do
+                local pid="${PROFILE_IDS[$i]}"
+                local pname="${PROFILES[$i]} (Insiders)"
+                local ppath="${PROFILE_PATHS[$i]}"
+
+                # Check if this profile should be installed
+                if [[ -z "$PROFILE_ID" || "$PROFILE_ID" == "all" || "$PROFILE_ID" == "$pid" ]]; then
+                    install_maestro_user_files "$ppath" "VS Code Insiders Profile: $pname"
+                    SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+
+                    # If specific profile, stop after finding it
+                    if [[ -n "$PROFILE_ID" && "$PROFILE_ID" != "all" ]]; then
+                        break
+                    fi
+                fi
+            done
         fi
         ;;
     global)
