@@ -1,6 +1,6 @@
 ---
 description: 'Orchestrate development workflows: Planning → Implementation → Review → Commit with quality gates.'
-tools: ['read', 'edit', 'search', 'agent', 'todo']
+tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'memory', 'todo']
 agents: ['maestro-conductor','maestro-debugger','maestro-implementer','maestro-mapper','maestro-planner','maestro-reviewer','maestro-verifier']
 ---
 
