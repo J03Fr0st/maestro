@@ -1,7 +1,7 @@
 ---
 description: 'Review code using the code-review and sonarqube-review skills and return a structured report.'
 name: 'Code Review'
-tools: ['read', 'search', 'edit']
+tools: ['read', 'agent', 'edit', 'search']
 ---
 
 # Code Review Agent
