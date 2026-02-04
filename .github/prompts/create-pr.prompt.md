@@ -2,7 +2,6 @@
 name: create-pr
 description: Create a pull request with comprehensive description, conventional commits, and proper categorization
 argument-hint: "[optional: PR title or target branch]"
-tools: [git, github, terminal]
 ---
 
 Create a pull request following these steps:
