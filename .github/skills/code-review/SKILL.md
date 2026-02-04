@@ -3,319 +3,87 @@ name: code-review
 description: Code review checklist for pull requests covering correctness, security, performance, and maintainability. Use when reviewing PRs, doing self-review before submission, training new reviewers, or establishing review standards.
 ---
 
-# Code Review Checklist
+# Code Review Skill
 
-## Quick Checklist
+Comprehensive code review guidance for Angular + C# + PostgreSQL projects.
 
-### Correctness
-- [ ] Code does what it's supposed to do
-- [ ] Edge cases are handled
-- [ ] Error handling is appropriate
-- [ ] No obvious bugs
+## Quick Start
 
-### Security
-- [ ] Input validation present
-- [ ] No SQL injection vulnerabilities
-- [ ] No XSS vulnerabilities
-- [ ] Authorization checks in place
-- [ ] No hardcoded secrets
+**Every review, open these three:**
 
-### Performance
-- [ ] No N+1 query problems
-- [ ] No unnecessary loops or computations
-- [ ] Appropriate caching considered
-- [ ] Large data sets handled properly
+1. [CODE_REVIEW_CHECKLIST.md](references/CODE_REVIEW_CHECKLIST.md) - High-signal checklist for every PR
+2. [PULL_REQUEST_TEMPLATE.md](references/PULL_REQUEST_TEMPLATE.md) - What authors must provide
+3. [CODE_REVIEW_OVERVIEW.md](references/CODE_REVIEW_OVERVIEW.md) - Goals, responsibilities, etiquette
 
-### Maintainability
-- [ ] Code is readable and understandable
-- [ ] Functions are focused (single responsibility)
-- [ ] No excessive complexity
-- [ ] Consistent with codebase style
+## Reference Files
 
-### Testing
-- [ ] Unit tests for new functionality
-- [ ] Edge cases tested
-- [ ] Tests are meaningful (not just for coverage)
+### Core Review Process
+| File | Purpose |
+|------|---------|
+| [CODE_REVIEW_OVERVIEW.md](references/CODE_REVIEW_OVERVIEW.md) | Goals, expectations, workflow |
+| [CODE_REVIEW_CHECKLIST.md](references/CODE_REVIEW_CHECKLIST.md) | Universal review checklist |
+| [PULL_REQUEST_TEMPLATE.md](references/PULL_REQUEST_TEMPLATE.md) | PR submission template |
 
----
+### Frontend (Angular)
+| File | Purpose |
+|------|---------|
+| [CODE_REVIEW_FRONTEND.md](references/CODE_REVIEW_FRONTEND.md) | Angular-specific guidance |
+| [ANGULAR_PERFORMANCE_REVIEW.md](references/ANGULAR_PERFORMANCE_REVIEW.md) | Performance regression prevention |
 
-## Detailed Review Guide
+### Backend (C# / API)
+| File | Purpose |
+|------|---------|
+| [CODE_REVIEW_BACKEND.md](references/CODE_REVIEW_BACKEND.md) | C# and API best practices |
+| [DATABASE_REVIEW.md](references/DATABASE_REVIEW.md) | Query efficiency, migrations, N+1 |
 
-### 1. Functionality
+### Quality & Safety
+| File | Purpose |
+|------|---------|
+| [SECURITY_REVIEW.md](references/SECURITY_REVIEW.md) | Security awareness checklist |
+| [TESTING_REVIEW.md](references/TESTING_REVIEW.md) | Test quality standards |
 
-**Questions to Ask:**
-- Does this solve the stated problem?
-- Are all requirements addressed?
-- Do the changes work as expected?
-
-**Red Flags:**
-```typescript
-// Incomplete implementation
-function processOrder(order: Order) {
-  // TODO: implement validation
-  saveOrder(order);
-}
-
-// Missing error handling
-async function fetchUser(id: string) {
-  const response = await fetch(`/api/users/${id}`);
-  return response.json(); // What if it fails?
-}
-```
-
-### 2. Logic & Correctness
-
-**Questions to Ask:**
-- Are there off-by-one errors?
-- Are boundary conditions handled?
-- Is null/undefined handled correctly?
-
-**Common Issues:**
-```typescript
-// Off-by-one error
-for (let i = 0; i <= items.length; i++) { // Should be <
-  process(items[i]); // Accesses undefined!
-}
-
-// Missing null check
-function getDisplayName(user: User | null) {
-  return user.name; // Crashes if null!
-}
-
-// Correct: Should be
-function getDisplayName(user: User | null) {
-  return user?.name ?? 'Unknown';
-}
-```
-
-### 3. Security
-
-**Always Check For:**
-
-| Vulnerability | What to Look For |
-|---------------|------------------|
-| SQL Injection | String concatenation in queries |
-| XSS | User input rendered as HTML |
-| CSRF | Missing anti-forgery tokens |
-| Auth Bypass | Missing authentication checks |
-| IDOR | Missing authorization checks |
-
-**Example Issues:**
-```csharp
-// SQL Injection
-var sql = $"SELECT * FROM Users WHERE Name = '{name}'"; // Bad!
-
-// Correct
-var sql = "SELECT * FROM Users WHERE Name = @Name";
-connection.Query(sql, new { Name = name });
-```
-
-```typescript
-// XSS
-<div [innerHTML]="userInput"></div> // Bad if not sanitized!
-
-// Correct
-<div>{{ userInput }}</div>
-```
-
-### 4. Performance
-
-**Questions to Ask:**
-- Are there unnecessary database calls?
-- Is data fetched efficiently?
-- Are large lists paginated?
-
-**Common Issues:**
-```typescript
-// N+1 query problem
-const orders = await getOrders();
-for (const order of orders) {
-  order.items = await getOrderItems(order.id); // Query per order!
-}
-
-// Correct: Use join or batch query
-const orders = await getOrdersWithItems();
-```
-
-```typescript
-// Inefficient: Maps entire array twice
-const filtered = items.map(x => transform(x)).filter(x => x.valid);
-
-// Better: Single pass
-const filtered = items.reduce((acc, x) => {
-  const transformed = transform(x);
-  if (transformed.valid) acc.push(transformed);
-  return acc;
-}, []);
-```
-
-### 5. Readability
-
-**Good Code Is:**
-- Easy to understand without comments
-- Uses meaningful names
-- Has consistent formatting
-- Isn't overly clever
-
-**Naming Examples:**
-```typescript
-// Bad names
-const d = new Date();
-const u = getUser();
-function proc(x: any) { }
-
-// Good names
-const orderDate = new Date();
-const currentUser = getUser();
-function processPayment(payment: Payment) { }
-```
-
-### 6. Maintainability
-
-**Questions to Ask:**
-- Would a new team member understand this?
-- Is this easy to modify?
-- Is it DRY without being over-abstracted?
-
-**Signs of Trouble:**
-- Functions over 50 lines
-- Deep nesting (> 3 levels)
-- Copy-pasted code blocks
-- Magic numbers without explanation
-
-### 7. Testing
-
-**Good Tests:**
-- Test behavior, not implementation
-- Cover happy path and edge cases
-- Are independent and deterministic
-- Have descriptive names
-
-**Test Name Convention:**
-```typescript
-// Method_Scenario_ExpectedResult
-describe('calculateTotal', () => {
-  it('should return zero for empty cart', () => { });
-  it('should sum all item prices', () => { });
-  it('should apply discount when valid code', () => { });
-});
-```
-
----
-
-## Review Feedback Guidelines
-
-### Severity Levels
-
-| Level | When to Use | Example |
-|-------|-------------|---------|
-| **Blocker** | Must fix, can't merge | Security vulnerability |
-| **Major** | Should fix | Missing error handling |
-| **Minor** | Consider fixing | Naming improvement |
-| **Nitpick** | Optional | Style preference |
-
-### Giving Good Feedback
-
-**Do:**
-- Be specific (file, line, code)
-- Explain why it's an issue
-- Suggest a fix
-- Acknowledge good work
-
-**Don't:**
-- Be vague ("this is bad")
-- Be harsh or personal
-- Nitpick excessively
-- Only point out negatives
-
-### Examples
-
-**Bad Feedback:**
-> "This is wrong."
-
-**Good Feedback:**
-> "This could throw if `user` is null (line 42). Consider adding:
-> ```typescript
-> if (!user) return NotFound();
-> ```"
-
-**Bad Feedback:**
-> "I would never write it this way."
-
-**Good Feedback:**
-> "This nested ternary is hard to follow. An if/else block or early return might be clearer."
-
----
+### Advanced (Large Changes)
+| File | Purpose |
+|------|---------|
+| [PERFORMANCE_REVIEW.md](references/PERFORMANCE_REVIEW.md) | High-traffic change review |
+| [ARCHITECTURE_REVIEW.md](references/ARCHITECTURE_REVIEW.md) | Structural change review |
 
 ## Review Workflow
 
 ### Before Review
-1. Read the PR description
-2. Understand the context/requirements
+1. Read the PR description (use [PULL_REQUEST_TEMPLATE.md](references/PULL_REQUEST_TEMPLATE.md))
+2. Understand context and requirements
 3. Check CI status
 
 ### During Review
-1. First pass: Overall approach
-2. Second pass: Details
-3. Run locally if complex
+1. Open [CODE_REVIEW_CHECKLIST.md](references/CODE_REVIEW_CHECKLIST.md)
+2. **First pass:** Overall approach
+3. **Second pass:** Details using domain-specific guides
+4. Run locally if complex
 
 ### After Review
-1. Summarize findings
-2. Mark severity clearly
-3. Approve or request changes
+1. Summarize findings with severity levels
+2. Approve or request changes
+3. Follow up on fixes
 
----
+## Severity Levels
 
-## Requesting Code Review
+| Level | When to Use | Action |
+|-------|-------------|--------|
+| **🔴 Blocker** | Security flaw, data loss risk | Must fix, cannot merge |
+| **🟠 Major** | Missing error handling, logic bugs | Should fix before merge |
+| **🟡 Minor** | Naming, minor readability | Consider fixing |
+| **⚪ Nitpick** | Style preference | Optional |
 
-### When to Request Review
+## When to Use Each Guide
 
-**Mandatory:**
-- After completing major feature
-- Before merge to main
-- After fixing complex bug
-
-**Optional but valuable:**
-- When stuck (fresh perspective)
-- Before refactoring (baseline check)
-
-### How to Request
-
-**1. Get git SHAs:**
-```bash
-BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
-HEAD_SHA=$(git rev-parse HEAD)
-```
-
-**2. Provide context:**
-- What was implemented
-- What requirements/plan it follows
-- Commit range (BASE..HEAD)
-
-**3. Act on feedback:**
-- Fix Critical issues immediately
-- Fix Important issues before proceeding
-- Note Minor issues for later
-- Push back if reviewer is wrong (with reasoning)
-
-### Integration with Workflows
-
-**Task-based development:**
-- Review after EACH task
-- Catch issues before they compound
-- Fix before moving to next task
-
-**Batch development:**
-- Review after each batch (3 tasks)
-- Get feedback, apply, continue
-
-### Red Flags
-
-**Never:**
-- Skip review because "it's simple"
-- Ignore Critical issues
-- Proceed with unfixed Important issues
-
-**If reviewer wrong:**
-- Push back with technical reasoning
-- Show code/tests that prove it works
+| Scenario | Files to Use |
+|----------|-------------|
+| Any PR | Checklist + Overview |
+| Angular component | + Frontend + Angular Performance |
+| C# API change | + Backend |
+| Database migration | + Backend + Database |
+| Security-sensitive | + Security |
+| Adding tests | + Testing |
+| High-traffic area | + Performance |
+| Structural change | + Architecture |
