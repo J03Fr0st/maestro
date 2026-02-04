@@ -2,6 +2,7 @@
 description: 'Lightweight autonomous agent for focused problem-solving with minimal verbosity'
 name: 'Beta Beast'
 tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'todo']
+agents: ["Beta Beast"]
 ---
   
 # Beta Beast

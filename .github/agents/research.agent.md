@@ -2,6 +2,7 @@
 description: 'Researches topics in depth with comprehensive source analysis and synthesis'
 name: 'Research'
 tools: ['web', 'search', 'agent', 'read', 'vscode']
+agents: ["Research"]
 
 ---
 
