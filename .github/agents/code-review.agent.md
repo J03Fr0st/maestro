@@ -48,7 +48,12 @@ If a skill cannot be found, follow its expected structure by inferring from cont
 
 ## Report Output
 
-Return the report in chat and (if asked) write it to `docs/reviews/code-review-report.md`.
+Write the report to a **dynamic** filename **every time** (non-negotiable), and also return it in chat:
+
+- `docs/reviews/code-review-report-<feature>-YYYYMMDD-HHMM.md` (if a feature name is available)
+- `docs/reviews/code-review-report-YYYYMMDD-HHMM.md` (fallback)
+
+Use the local date/time of the review for the filename. If a feature name exists (e.g., from PR title, branch name, or ticket), include a short slug.
 
 ### Report Format
 
@@ -95,6 +100,7 @@ Return the report in chat and (if asked) write it to `docs/reviews/code-review-r
 ## Success Criteria
 
 - [ ] Applied both code-review and sonarqube-review skills
+- [ ] Report written to `docs/reviews/code-review-report-<feature>-YYYYMMDD-HHMM.md` (or timestamp-only fallback)
 - [ ] Clear, structured report with severities and counts
 - [ ] Quality gate outcome included
 - [ ] No code changes made
