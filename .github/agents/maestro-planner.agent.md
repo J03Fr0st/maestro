@@ -1,6 +1,5 @@
 ---
 description: 'Gather comprehensive codebase context and return structured findings for implementation planning.'
-model: Claude Opus 4.5 (copilot)
 tools: ['read', 'edit', 'search', 'web']
 ---
 

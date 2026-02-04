@@ -1,6 +1,5 @@
 ---
 description: 'Verify phase goals are achieved, not just tasks completed. Goal-backward verification with artifact and wiring checks.'
-model: Claude Sonnet 4.5 (copilot)
 tools: ['read', 'search', 'execute']
 ---
 

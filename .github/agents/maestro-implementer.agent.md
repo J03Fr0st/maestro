@@ -1,6 +1,5 @@
 ---
 description: 'Execute implementation phases using strict TDD: write failing tests first, then minimal code to pass.'
-model: Gemini 3 Flash (Preview) (copilot)
 tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'todo']
 handoffs:
   - label: Request Review

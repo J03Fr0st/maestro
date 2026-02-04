@@ -1,6 +1,5 @@
 ---
 description: 'Validate implementations against plans. Check correctness, security, and quality. Return APPROVED, NEEDS_REVISION, or FAILED.'
-model: GPT-5.2 (copilot)
 tools: ['read', 'search', 'execute', 'edit']
 handoffs:
   - label: Fix Issues

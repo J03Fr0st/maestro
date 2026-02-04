@@ -1,6 +1,5 @@
 ---
 description: 'Systematic debugging using scientific method. Hypothesis testing with persistent debug sessions.'
-model: Claude Sonnet 4.5 (copilot)
 tools: ['read', 'search', 'execute', 'edit']
 ---
 

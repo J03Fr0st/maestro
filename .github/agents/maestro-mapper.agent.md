@@ -1,6 +1,5 @@
 ---
 description: 'Explore codebase and create structured analysis documents. Maps technology, architecture, conventions, and concerns.'
-model: Claude Sonnet 4.5 (copilot)
 tools: ['read', 'search', 'execute']
 ---
 

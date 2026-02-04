@@ -1,6 +1,5 @@
 ---
 description: 'Orchestrate development workflows: Planning → Implementation → Review → Commit with quality gates.'
-model: Claude Sonnet 4.5 (copilot)
 tools: ['read', 'edit', 'search', 'agent', 'todo']
 ---
 
