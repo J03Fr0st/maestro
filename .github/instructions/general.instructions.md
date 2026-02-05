@@ -63,6 +63,9 @@ These are typical workflows IF such skills exist in your context:
 - Include type annotations (TypeScript)
 - Use meaningful variable names
 - Handle async/await properly
+- Apply DRY: avoid duplication; prefer shared helpers and reuse
+- Apply SOLID: keep responsibilities focused, depend on abstractions, and keep code easy to extend
+- Apply YAGNI: avoid speculative features or over-engineering
 
 ## Avoid
 - Placeholder comments like `// TODO: implement`
@@ -70,6 +73,8 @@ These are typical workflows IF such skills exist in your context:
 - Hardcoded values that should be configurable
 - Excessive comments for obvious code
 - Changes outside the scope of the request
+- Duplicated logic that violates DRY
+- Overly abstract designs that violate YAGNI
 
 
 
