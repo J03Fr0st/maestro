@@ -46,6 +46,7 @@ VS Code supports four main agent categories:
 | `maestro-verifier.agent.md` | Verify phase goals achieved, not just tasks completed |
 | `maestro-mapper.agent.md` | Explore codebase and create structured analysis documents |
 | `maestro-debugger.agent.md` | Systematic debugging using scientific method |
+| `code-review.agent.md` | Code review and static analysis reporting |
 
 ## Agent File Format
 
@@ -87,6 +88,7 @@ Instructions for the agent's behavior...
 | `model` | string | No | Specific AI model to use |
 | `infer` | boolean | No | Enable subagent functionality |
 | `target` | string | No | Environment: `vscode` or `github-copilot` |
+| `agents` | list | No | Sub-agents this agent can delegate to |
 | `handoffs` | list | No | Sequential workflow transitions to other agents |
 | `mcp-servers` | object | No | Optional MCP server configurations |
 

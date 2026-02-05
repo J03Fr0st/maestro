@@ -26,6 +26,9 @@ VS Code supports three types of instruction files:
 | `dotnet.instructions.md` | `**/*.cs` | .NET and C# development guidelines |
 | `testing.instructions.md` | `**/*.spec.ts` | Testing standards and patterns |
 | `security.instructions.md` | `**` | Security-focused coding guidelines |
+| `agents.instructions.md` | `**/*.agent.md` | Agent file creation guidelines |
+| `instructions.instructions.md` | `**/*.instructions.md` | Instruction file creation guidelines |
+| `prompts.instructions.md` | `**/*.prompt.md` | Prompt file creation guidelines |
 
 ## Instruction File Format
 

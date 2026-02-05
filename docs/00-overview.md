@@ -30,6 +30,7 @@ Custom agents for AI-assisted development (`.github/agents/`):
 | **maestro Verifier** | Verify phase goals achieved, not just tasks completed |
 | **maestro Mapper** | Explore codebase and create structured analysis documents |
 | **maestro Debugger** | Systematic debugging using scientific method |
+| **Code Review** | Code review and static analysis reporting |
 
 ### Instructions
 
@@ -44,6 +45,8 @@ Coding guidelines applied automatically based on file type (`.github/instruction
 | **Testing** | Test files - testing standards |
 | **Security** | All files - security practices |
 | **Agents** | Agent file guidelines |
+| **Instructions** | `*.instructions.md` files - instruction file guidelines |
+| **Prompts** | `*.prompt.md` files - prompt file guidelines |
 
 ### Prompts
 
@@ -53,6 +56,7 @@ Reusable task templates (`.github/prompts/`):
 |--------|---------|
 | `commit` | Smart git commit (triggers git-commit skill) |
 | `project-docs` | Project documentation (triggers project-documentation skill) |
+| `create-pr` | Create pull request with comprehensive description |
 | `review` | Code review checklist |
 | `adr` | Architecture decision records |
 | `changelog` | Changelog entries |
@@ -75,16 +79,20 @@ Domain-specific knowledge following [Agent Skills spec](https://agentskills.io/s
 | **pr-description** | PR description templates |
 | **project-documentation** | Documentation guidelines |
 | **receiving-code-review** | Handling review feedback |
-| **skill-authoring** | Creating skills following spec |
+| **frontend-design** | Production-grade frontend interface design |
+| **refactor** | Surgical code refactoring |
+| **skill-creator** | Creating skills following spec |
+| **sonarqube-review** | SonarQube-style code analysis |
 | **systematic-debugging** | Root cause debugging |
 | **test-driven-development** | TDD workflow enforcement |
 | **using-git-worktrees** | Isolated workspaces |
+| **using-skills** | Mandatory skill checking before responses |
 | **verification-before-completion** | Evidence before claims |
 | **writing-plans** | Comprehensive implementation plans |
 
 ## Skills Overview
 
-Maestro includes 16 skills covering:
+Maestro includes 20 skills covering:
 
 **Development Discipline:**
 - test-driven-development - TDD with RED-GREEN-REFACTOR
@@ -104,10 +112,16 @@ Maestro includes 16 skills covering:
 - git-commit - Conventional commits
 - pr-description - PR templates
 
+**Design & Quality:**
+- frontend-design - Production-grade frontend interfaces
+- refactor - Surgical code refactoring
+- sonarqube-review - SonarQube-style code analysis
+
 **Platform:**
 - gh-cli - GitHub CLI
 - azure-devops-cli - Azure DevOps CLI
-- skill-authoring - Creating skills
+- skill-creator - Creating skills
+- using-skills - Skill checking and activation
 - project-documentation - Documentation
 
 ## Documentation

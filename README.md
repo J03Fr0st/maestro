@@ -47,7 +47,8 @@ maestro/
 │   │   ├── maestro-debugger.agent.md    # Systematic debugging
 │   │   ├── alphabeast.agent.md          # Autonomous problem-solving
 │   │   ├── betabeast.agent.md           # Extended autonomous agent
-│   │   └── research.agent.md            # Research and information gathering
+│   │   ├── research.agent.md            # Research and information gathering
+│   │   └── code-review.agent.md         # Code review and static analysis
 │   ├── instructions/                    # Custom instructions
 │   │   ├── general.instructions.md
 │   │   ├── typescript.instructions.md
@@ -55,9 +56,12 @@ maestro/
 │   │   ├── dotnet.instructions.md
 │   │   ├── testing.instructions.md
 │   │   ├── security.instructions.md
-│   │   └── agents.instructions.md
+│   │   ├── agents.instructions.md
+│   │   ├── instructions.instructions.md
+│   │   └── prompts.instructions.md
 │   ├── prompts/                         # Reusable prompts
 │   │   ├── commit.prompt.md
+│   │   ├── create-pr.prompt.md
 │   │   ├── review.prompt.md
 │   │   ├── project-docs.prompt.md
 │   │   ├── prd.prompt.md
@@ -66,12 +70,25 @@ maestro/
 │   │   └── changelog.prompt.md
 │   └── skills/                          # Domain knowledge
 │       ├── azure-devops-cli/
+│       ├── brainstorming/
 │       ├── code-review/
+│       ├── dispatching-parallel-agents/
+│       ├── executing-plans/
+│       ├── frontend-design/
 │       ├── gh-cli/
 │       ├── git-commit/
 │       ├── pr-description/
 │       ├── project-documentation/
-│       └── skill-authoring/
+│       ├── receiving-code-review/
+│       ├── refactor/
+│       ├── skill-creator/
+│       ├── sonarqube-review/
+│       ├── systematic-debugging/
+│       ├── test-driven-development/
+│       ├── using-git-worktrees/
+│       ├── using-skills/
+│       ├── verification-before-completion/
+│       └── writing-plans/
 ├── installer/                           # Installation scripts
 └── docs/                                # Documentation
 ```
@@ -90,8 +107,9 @@ maestro/
 | **maestro Verifier** | Verify phase goals achieved, not just tasks completed |
 | **maestro Mapper** | Explore codebase and create structured analysis documents |
 | **maestro Debugger** | Systematic debugging using scientific method |
+| **Code Review** | Code review and static analysis reporting |
 
-### Skills (16)
+### Skills (20)
 
 | Skill | Purpose |
 |-------|---------|
@@ -105,10 +123,14 @@ maestro/
 | pr-description | PR description templates |
 | project-documentation | Documentation guidelines |
 | receiving-code-review | Handling review feedback |
-| skill-authoring | Creating skills following spec |
+| frontend-design | Production-grade frontend interface design |
+| refactor | Surgical code refactoring |
+| skill-creator | Creating skills following spec |
+| sonarqube-review | SonarQube-style code analysis |
 | systematic-debugging | Root cause debugging |
 | test-driven-development | TDD workflow enforcement |
 | using-git-worktrees | Isolated workspaces |
+| using-skills | Mandatory skill checking before responses |
 | verification-before-completion | Evidence before claims |
 | writing-plans | Comprehensive implementation plans |
 

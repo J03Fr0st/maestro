@@ -11,12 +11,25 @@ Skills are stored in `.github/skills/<skill-name>/SKILL.md`.
 | Skill | Description |
 |-------|-------------|
 | [`azure-devops-cli`](../.github/skills/azure-devops-cli/SKILL.md) | Azure DevOps CLI for projects, repos, pipelines, PRs |
+| [`brainstorming`](../.github/skills/brainstorming/SKILL.md) | Design exploration before implementation |
 | [`code-review`](../.github/skills/code-review/SKILL.md) | Code review checklist covering correctness, security, performance |
+| [`dispatching-parallel-agents`](../.github/skills/dispatching-parallel-agents/SKILL.md) | Parallel agent workflows |
+| [`executing-plans`](../.github/skills/executing-plans/SKILL.md) | Batch execution with checkpoints |
+| [`frontend-design`](../.github/skills/frontend-design/SKILL.md) | Production-grade frontend interface design |
 | [`gh-cli`](../.github/skills/gh-cli/SKILL.md) | GitHub CLI for repositories, issues, PRs, and Actions |
 | [`git-commit`](../.github/skills/git-commit/SKILL.md) | Conventional commit messages with quality checks |
 | [`pr-description`](../.github/skills/pr-description/SKILL.md) | Generate PR descriptions from git changes |
 | [`project-documentation`](../.github/skills/project-documentation/SKILL.md) | Brownfield project documentation and analysis |
-| [`skill-authoring`](../.github/skills/skill-authoring/SKILL.md) | Create agent skills following the spec |
+| [`receiving-code-review`](../.github/skills/receiving-code-review/SKILL.md) | Handling review feedback |
+| [`refactor`](../.github/skills/refactor/SKILL.md) | Surgical code refactoring |
+| [`skill-creator`](../.github/skills/skill-creator/SKILL.md) | Create agent skills following the spec |
+| [`sonarqube-review`](../.github/skills/sonarqube-review/SKILL.md) | SonarQube-style code analysis |
+| [`systematic-debugging`](../.github/skills/systematic-debugging/SKILL.md) | Root cause debugging |
+| [`test-driven-development`](../.github/skills/test-driven-development/SKILL.md) | TDD workflow enforcement |
+| [`using-git-worktrees`](../.github/skills/using-git-worktrees/SKILL.md) | Isolated workspaces |
+| [`using-skills`](../.github/skills/using-skills/SKILL.md) | Mandatory skill checking before responses |
+| [`verification-before-completion`](../.github/skills/verification-before-completion/SKILL.md) | Evidence before claims |
+| [`writing-plans`](../.github/skills/writing-plans/SKILL.md) | Comprehensive implementation plans |
 
 ## Skill Structure
 

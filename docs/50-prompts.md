@@ -12,6 +12,7 @@ Prompt files are stored in `.github/prompts/`.
 |--------|---------|
 | `commit.prompt.md` | Smart git commit (triggers git-commit skill) |
 | `project-docs.prompt.md` | Project documentation (triggers project-documentation skill) |
+| `create-pr.prompt.md` | Create pull request with comprehensive description |
 | `review.prompt.md` | Code review checklist |
 | `adr.prompt.md` | Architecture decision records |
 | `changelog.prompt.md` | Changelog entries |
