@@ -82,7 +82,7 @@ Instruct subagents to use appropriate skills:
 | Executing plans | executing-plans |
 | Need isolation | using-git-worktrees |
 | Creating plans | writing-plans |
-| After implementation | code simplification via maestro-simplifier |
+| After implementation | code-simplifier |
 
 ### Subagent Prompts with Skills
 
@@ -248,6 +248,8 @@ Run a subagent:
   description: "Simplify and refine implemented code"
   prompt: |
     Simplify and refine the recently implemented code.
+
+    REQUIRED: Use the code-simplifier skill.
 
     Tech Spec: /plan/[filename].md
 
