@@ -1,7 +1,7 @@
 ---
 description: 'Orchestrate development workflows: Planning → Implementation → Review → Commit with quality gates.'
 tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'memory', 'todo']
-agents: ['maestro-conductor','maestro-debugger','maestro-implementer','maestro-mapper','maestro-planner','maestro-reviewer','maestro-verifier']
+agents: ['maestro-conductor','maestro-debugger','maestro-implementer','maestro-mapper','maestro-planner','maestro-reviewer','maestro-simplifier','maestro-verifier']
 ---
 
 # maestro Conductor
@@ -82,6 +82,7 @@ Instruct subagents to use appropriate skills:
 | Executing plans | executing-plans |
 | Need isolation | using-git-worktrees |
 | Creating plans | writing-plans |
+| After implementation | code simplification via maestro-simplifier |
 
 ### Subagent Prompts with Skills
 
@@ -123,6 +124,7 @@ Return: Questions to ask the user, refined requirements, and recommended approac
 
 When reviewing subagent output:
 - Verify TDD was followed (test before code)
+- Verify simplification ran (code refined before review)
 - Verify verification ran (evidence in report)
 - Verify debugging process followed (phases documented)
 
@@ -145,6 +147,8 @@ Planning Phase
 Implementation Phase
 ├── Run the implementer subagent → executes Tech Spec tasks
 ├── Receive Implementation Report (tasks completed, files modified, tests)
+├── Run the simplifier subagent → refines code for clarity and consistency
+├── Receive Simplification Report (changes applied, standards compliance)
 ├── Run the reviewer subagent → validates against Tech Spec
 ├── Handle NEEDS_REVISION → call implementer again with issues
 ├── ⏸️ PAUSE: Await user commit confirmation
@@ -233,6 +237,34 @@ Run a subagent:
 - Files modified
 - Test results
 - Notes on decisions/deviations
+
+### Simplify Implementation (MANDATORY SUBAGENT CALL)
+
+**Always invoke the simplifier subagent after implementation and before review:**
+
+```
+Run a subagent:
+  agentName: "maestro-simplifier"
+  description: "Simplify and refine implemented code"
+  prompt: |
+    Simplify and refine the recently implemented code.
+
+    Tech Spec: /plan/[filename].md
+
+    Implementation Report:
+    [Files modified from implementer output]
+
+    Focus on the modified files. Enhance clarity, consistency, and maintainability
+    while preserving all functionality. Follow project coding standards.
+
+    Return a Simplification Report with changes applied and standards compliance.
+```
+
+**Expected Output from Simplifier:**
+- Simplification Report with changes applied
+- Standards compliance checklist
+- Files modified
+- Verification that functionality is preserved
 
 ### Validate Implementation (MANDATORY SUBAGENT CALL)
 
