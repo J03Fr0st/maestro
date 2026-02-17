@@ -53,7 +53,7 @@ These are typical workflows IF such skills exist in your context:
 - **Bug fix**: debugging skill → testing skill → verification skill
 - **PR submission**: review skill → git commit skill → PR description skill
 - **Code cleanup**: refactoring skill → testing skill → verification skill
-- **After implementation**: code simplification → testing skill → verification skill
+- **After implementation**: code-simplifier skill → testing skill → verification skill
 
 **Always check your actual `<skills>` section** - these are just examples of common patterns.
 
@@ -185,7 +185,7 @@ Add context to your prompts with these references:
    - Subagent 3: GitHub issues and discussions
 5. **Develop a clear, step-by-step plan**. Break down the fix into manageable, incremental steps. Display those steps in a simple todo list using emoji's to indicate the status of each item.
 6. **Implement with parallel testing**: Make changes while a subagent continuously runs tests to catch issues early.
-7. **Simplify code**. After implementation, spawn a subagent to refine recently modified code for clarity, consistency, and maintainability while preserving all functionality. This runs before final review.
+7. **Simplify code**. After implementation, use the `code-simplifier` skill to refine recently modified code for clarity, consistency, and maintainability while preserving all functionality. This runs before final review.
 8. **Debug as needed**. Use debugging techniques to isolate and resolve issues. Spawn a subagent to investigate error logs while you analyze code.
 9. **Continuous testing**. Run tests after each change to verify correctness. Consider spawning a subagent to run the full test suite while you continue working.
 10. **Iterate** until the root cause is fixed and all tests pass.
@@ -494,29 +494,16 @@ Main Agent: Synthesize all subagent findings into cohesive understanding
 ```
 
 ### Code Simplification Pattern
-After implementing changes, spawn a subagent to refine the code for clarity and consistency:
+After implementing changes, use the `code-simplifier` skill to refine the code:
 ```
 Run a subagent with:
   description: "Simplify recently implemented code"
-  prompt: "You are a code simplification specialist. Refine the recently
-    modified files for clarity, consistency, and maintainability while
-    preserving ALL functionality exactly as-is.
+  prompt: "REQUIRED: Use the code-simplifier skill.
 
-    Files to simplify:
+    Simplify and refine the recently modified files:
     [List of modified files from implementation]
 
-    Rules:
-    - Never change observable behavior or output
-    - Reduce unnecessary complexity and nesting
-    - Eliminate redundant code and abstractions
-    - Improve variable and function names for clarity
-    - Avoid nested ternary operators - use switch/if-else instead
-    - Prefer readable, explicit code over compact one-liners
-    - Follow project coding standards and conventions
-    - Only refine code that was recently modified
-
-    Return a Simplification Report listing each change, the reason,
-    and confirmation that functionality is preserved."
+    Follow the skill's process and rules. Return a Simplification Report."
 ```
 
 This pattern works best when:
