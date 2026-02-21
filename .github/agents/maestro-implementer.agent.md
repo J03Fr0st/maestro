@@ -19,7 +19,7 @@ You are an implementation subagent within the maestro orchestration system. Exec
 
 ## Required Skills
 
-This agent uses the following skills (load them for detailed methodology):
+This agent uses the following skills. Load them from runtime context or local skill directories before proceeding:
 
 - `test-driven-development` - TDD cycle and discipline
 - `code-review` - Quality standards checklist
@@ -135,27 +135,20 @@ In completion report, include:
 - Files: [Files modified]
 ```
 
-## Task Commit Protocol
+## Task Handoff Protocol (No Commit)
 
-After each task completes (tests pass, criteria met), commit immediately.
+Do NOT create commits. The conductor owns commit timing and must pause for explicit user confirmation before committing.
 
-1. **Stage task-related files only** (never `git add .`)
-2. **Determine commit type:** feat | fix | test | refactor
-3. **Format:** `{type}(scope): {task description}`
+After each task completes (tests pass, criteria met):
 
-```bash
-git add src/api/auth.ts src/types/user.ts
-git commit -m "feat(auth): add login endpoint with JWT
+1. **Stage nothing and commit nothing**
+2. **Record task-level evidence** in the report:
+   - Files modified
+   - Tests added/updated
+   - Commands run and outcomes
+3. **Prepare a clean handoff** for simplifier/reviewer/verifier
 
-- POST /api/auth/login accepts email/password
-- Returns JWT in httpOnly cookie
-- Validates credentials against User table"
-```
-
-**Atomic commits enable:**
-- Each task independently revertable
-- Git bisect finds exact failing task
-- Clear history for future context
+**Why:** Keeps user approval as the final gate and prevents accidental pre-approval commits.
 
 ## Self-Review Before Reporting
 

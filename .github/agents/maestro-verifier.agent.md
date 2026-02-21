@@ -15,7 +15,7 @@ You are a verification specialist. Verify that phases achieved their GOALS, not 
 
 ## Required Skills
 
-This agent uses the following skills (load them for detailed methodology):
+This agent uses the following skills. Load them from runtime context or local skill directories before proceeding:
 
 - `verification-before-completion` - Evidence-based verification discipline
 
@@ -47,8 +47,8 @@ A truth is achievable if supporting artifacts exist, are substantive, and are wi
 #### Level 1: Existence
 
 ```bash
-# Check file exists
-ls [path]
+# Cross-platform existence checks (choose what fits environment)
+rg --files | rg "[artifact-path-or-name]"
 ```
 
 If MISSING → artifact fails.
@@ -57,11 +57,13 @@ If MISSING → artifact fails.
 
 Check real implementation, not stub.
 
-**Line count minimums:**
-- Component: 15+ lines
-- API route: 10+ lines
-- Utility: 10+ lines
-- Schema: 5+ lines
+Use evidence quality, not fixed line-count thresholds. A short file can be complete; a long file can still be placeholder.
+
+Substantive signals include:
+- Meaningful control flow and data handling
+- Real integration code (not only scaffolding)
+- Tests/assertions that validate behavior
+- Absence of placeholder-only behavior
 
 **Stub patterns to detect:**
 - TODO, FIXME, placeholder
@@ -76,13 +78,15 @@ Check artifact is connected to system.
 
 **Is it imported?**
 ```bash
-grep -r "import.*[ArtifactName]" src/
+rg -n "[ArtifactName]" src
 ```
 
 **Is it used?**
 ```bash
-grep -r "[ArtifactName]" src/ | grep -v import
+rg -n "[ArtifactName]" src
 ```
+
+Then verify call-sites are behavioral (not type-only or dead references).
 
 ### Step 4: Verify Key Links
 
@@ -156,3 +160,4 @@ Verification complete when:
 - [ ] All key links checked
 - [ ] Clear status: PASSED | GAPS_FOUND | NEEDS_HUMAN
 - [ ] Gaps documented with specific fixes needed
+- [ ] Evidence is reproducible and cross-platform (no shell-specific assumptions)

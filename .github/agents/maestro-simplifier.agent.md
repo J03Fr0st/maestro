@@ -2,9 +2,9 @@
 description: 'Simplify and refine recently modified code for clarity, consistency, and maintainability while preserving all functionality.'
 tools: ['read', 'edit', 'search']
 handoffs:
-  - label: Review Code
+  - label: Review and Verify
     agent: maestro-reviewer
-    prompt: 'Review the simplified implementation against the Tech Spec: '
+    prompt: 'Review the simplified implementation against the Tech Spec, then hand off to maestro-verifier for goal verification: '
 ---
 
 # maestro Simplifier
@@ -19,9 +19,10 @@ You are a code simplification specialist within the maestro orchestration system
 
 ## Required Skills
 
-This agent uses the following skills (load them for detailed methodology):
+This agent uses the following skills. Load them from runtime context or local skill directories before proceeding:
 
 - `code-simplifier` - Simplification process, rules, and reporting format
+- `refactor` - Surgical refactoring guidance for structural improvements without behavior changes
 
 ## Core Responsibilities
 

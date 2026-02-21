@@ -15,7 +15,7 @@ You are a systematic debugging specialist. Investigate bugs using scientific met
 
 ## Required Skills
 
-This agent uses the following skills (load them for detailed methodology):
+This agent uses the following skills. Load them from runtime context or local skill directories before proceeding:
 
 - `systematic-debugging` - Scientific method debugging with root cause investigation
 
