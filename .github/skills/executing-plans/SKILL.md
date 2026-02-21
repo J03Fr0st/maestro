@@ -1,95 +1,84 @@
 ---
 name: executing-plans
-description: Execute implementation plans with batch execution and review checkpoints. Use when you have a written plan to implement task-by-task and want checkpoints between batches or single-agent execution.
+description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
 ---
 
 # Executing Plans
 
-Load plan, review critically, execute tasks in batches, report for review.
+## Overview
 
-## Plan Location
+Load plan, review critically, execute tasks in batches, report for review between batches.
 
-Plans are typically saved at: `docs/plans/YYYY-MM-DD-<feature-name>.md`
+**Core principle:** Batch execution with checkpoints for architect review.
 
-Created by the `writing-plans` skill.
+**Announce at start:** "I'm using the executing-plans skill to implement this plan."
 
 ## The Process
 
 ### Step 1: Load and Review Plan
-
 1. Read plan file
-2. Review critically - identify questions or concerns
-3. If concerns: Raise them before starting
-4. If no concerns: Create todo list and proceed
+2. Review critically - identify any questions or concerns about the plan
+3. If concerns: Raise them with your human partner before starting
+4. If no concerns: Create TodoWrite and proceed
 
 ### Step 2: Execute Batch
-
 **Default: First 3 tasks**
 
 For each task:
 1. Mark as in_progress
-2. Follow each step exactly
+2. Follow each step exactly (plan has bite-sized steps)
 3. Run verifications as specified
 4. Mark as completed
 
 ### Step 3: Report
-
 When batch complete:
 - Show what was implemented
 - Show verification output
 - Say: "Ready for feedback."
 
 ### Step 4: Continue
-
 Based on feedback:
 - Apply changes if needed
 - Execute next batch
 - Repeat until complete
 
-### Step 5: Complete
+### Step 5: Complete Development
 
-After all tasks complete:
-- Verify all tests pass
-- Present completion options
+After all tasks complete and verified:
+- Announce: "I'm using the finishing-a-development-branch skill to complete this work."
+- **REQUIRED SUB-SKILL:** Use finishing-a-development-branch
+- Follow that skill to verify tests, present options, execute choice
 
-## When to Stop and Ask
+## When to Stop and Ask for Help
 
 **STOP executing immediately when:**
-- Hit a blocker mid-batch
-- Plan has critical gaps
+- Hit a blocker mid-batch (missing dependency, test fails, instruction unclear)
+- Plan has critical gaps preventing starting
 - You don't understand an instruction
 - Verification fails repeatedly
 
 **Ask for clarification rather than guessing.**
 
-## Remember
+## When to Revisit Earlier Steps
 
+**Return to Review (Step 1) when:**
+- Partner updates the plan based on your feedback
+- Fundamental approach needs rethinking
+
+**Don't force through blockers** - stop and ask.
+
+## Remember
 - Review plan critically first
 - Follow plan steps exactly
 - Don't skip verifications
-- Between batches: report and wait
+- Reference skills when plan says to
+- Between batches: just report and wait
 - Stop when blocked, don't guess
+- Never start implementation on main/master branch without explicit user consent
 
-## Example Batch Report
+## Integration
 
-```
-## Batch 1 Complete (Tasks 1-3)
-
-**Task 1: Email Validator** ✅
-- Created `src/validators/email.py`
-- Test passes: `pytest tests/validators/test_email.py -v`
-
-**Task 2: Integrate Validator** ✅
-- Modified `src/api/users.py:45-52`
-- Test passes: `pytest tests/api/test_users.py -v`
-
-**Task 3: Error Response** ✅
-- Added validation error handling
-- All tests pass
-
-**Ready for feedback before Tasks 4-6.**
-```
-
-## Related Skills
-
-- `writing-plans` - Create implementation plans (use first)
+**Required workflow skills:**
+- **using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
+- **writing-plans** - Creates the plan this skill executes
+- **finishing-a-development-branch** - Complete development after all tasks
