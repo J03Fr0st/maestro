@@ -59,7 +59,7 @@ Think of the agent as exploring a path: a narrow bridge with cliffs needs specif
 Skills use a three-level loading system:
 
 1. **Metadata** (name + description) — Always in context (~100 tokens)
-2. **SKILL.md body** — When skill triggers (< 500 lines recommended)
+2. **SKILL.md body** — When skill triggers (< 5000 tokens / 500 lines recommended)
 3. **Bundled resources** — Loaded only as needed by the agent
 
 ## Directory Structure
@@ -90,10 +90,10 @@ skills/
 - `description`: Max 1024 chars. Primary triggering mechanism — see CSO section below.
 
 **Optional frontmatter fields:**
-- `license`: License name (e.g., `MIT`, `Apache-2.0`)
-- `compatibility`: Environment requirements (e.g., `Requires git, docker, jq`)
+- `license`: License name (e.g., `MIT`, `Apache-2.0`) or reference to a bundled license file
+- `compatibility`: Environment requirements (e.g., `Requires git, docker, jq`). Max 500 chars. Only include if your skill has specific environment requirements.
 - `metadata`: Arbitrary key-value pairs (author, version, etc.)
-- `allowed-tools`: Space-delimited pre-approved tools (experimental)
+- `allowed-tools`: Space-delimited pre-approved tools (experimental). Example: `Bash(git:*) Bash(jq:*) Read`
 
 **Body template:**
 ```markdown
@@ -125,32 +125,30 @@ What goes wrong + fixes
 
 ### Description Field
 
-**Description = When to Use, NOT What the Skill Does.**
+**Per the [official spec](https://agentskills.io/specification):** Describe both what the skill does (capabilities/domain) AND when to use it (triggering conditions). Max 1024 chars.
 
-The description is loaded to decide IF the skill applies. Do NOT summarize the skill's process or workflow — this causes agents to follow the description instead of reading the full skill content.
-
-**Why this matters:** When a description summarizes workflow, agents may follow the description as a shortcut and skip reading the skill body. A description saying "code review between tasks" caused an agent to do ONE review, even though the skill clearly showed TWO. Changing it to just "Use when executing implementation plans with independent tasks" fixed the problem.
+**Critical distinction:** Describe capabilities and triggering conditions — NOT the internal workflow or process. When a description summarizes the internal workflow, agents follow it as a shortcut and skip reading the full skill body. A description saying "code review between tasks" caused an agent to do ONE review, even though the skill clearly showed TWO. Changing it to just "Use when executing implementation plans with independent tasks" fixed the problem.
 
 ```yaml
-# ❌ BAD: Summarizes workflow — agent may follow this and skip reading the skill
+# ❌ BAD: Internal workflow — agent follows this instead of reading the skill
 description: Use when executing plans - dispatches subagent per task with code review between tasks
 
-# ❌ BAD: Too much process detail
+# ❌ BAD: Process steps, not capabilities
 description: Use for TDD - write test first, watch it fail, write minimal code, refactor
 
-# ✅ GOOD: Just triggering conditions, no workflow summary
-description: Use when executing implementation plans with independent tasks
+# ✅ GOOD: Capabilities + triggering conditions (per spec)
+description: Extracts text and tables from PDF files, fills PDF forms, and merges multiple PDFs. Use when working with PDF documents or when the user mentions PDFs, forms, or document extraction.
 
-# ✅ GOOD: Triggering conditions only
-description: Use when implementing any feature or bugfix, before writing implementation code
+# ✅ GOOD: Triggering conditions (minimal, no workflow)
+description: Use when executing implementation plans with independent tasks in the current session
 ```
 
 **Format rules:**
-- Start with "Use when..." to focus on triggering conditions
 - Write in third person (injected into system prompt)
 - Keep under 500 characters if possible
 - Include specific symptoms, situations, and contexts that signal this skill applies
-- NEVER summarize the skill's process or workflow
+- OK to describe capabilities (what the skill enables)
+- NEVER describe internal workflow steps or process
 
 ### Keyword Coverage
 
