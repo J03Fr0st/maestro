@@ -135,9 +135,9 @@ Skills act as additions to models, so effectiveness depends on the underlying mo
 
 **Testing considerations by model**:
 
-* **Claude Haiku** (fast, economical): Does the Skill provide enough guidance?
-* **Claude Sonnet** (balanced): Is the Skill clear and efficient?
-* **Claude Opus** (powerful reasoning): Does the Skill avoid over-explaining?
+* **Claude Haiku** / **Copilot (fast model)** (fast, economical): Does the Skill provide enough guidance?
+* **Claude Sonnet** / **Copilot (standard)** (balanced): Is the Skill clear and efficient?
+* **Claude Opus** / **Copilot (advanced reasoning)** (powerful reasoning): Does the Skill avoid over-explaining?
 
 What works perfectly for Opus might need more detail for Haiku. If you plan to use your Skill across multiple models, aim for instructions that work well with all of them.
 
@@ -1005,7 +1005,7 @@ When Claude performs complex, open-ended tasks, it can make mistakes. The "plan-
 
 Skills run in the code execution environment with platform-specific limitations:
 
-* **claude.ai**: Can install packages from npm and PyPI and pull from GitHub repositories
+* **claude.ai** / **GitHub Copilot**: Can install packages from npm and PyPI and pull from GitHub repositories
 * **Anthropic API**: Has no network access and no runtime package installation
 
 List required packages in your SKILL.md and verify they're available in the [code execution tool documentation](/en/docs/agents-and-tools/tool-use/code-execution-tool).
@@ -1142,6 +1142,10 @@ Before sharing a Skill, verify:
 
   <Card title="Use Skills in Claude Code" icon="terminal" href="/en/docs/claude-code/skills">
     Create and manage Skills in Claude Code
+  </Card>
+
+  <Card title="Use Skills in GitHub Copilot" icon="github" href="https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot">
+    Use .github/skills/ to extend Copilot with domain knowledge
   </Card>
 
   <Card title="Use Skills with the API" icon="code" href="/en/api/skills-guide">

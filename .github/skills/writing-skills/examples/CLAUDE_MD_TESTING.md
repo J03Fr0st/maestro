@@ -1,4 +1,4 @@
-# Testing CLAUDE.md Skills Documentation
+# Testing Skills Documentation (CLAUDE.md / copilot-instructions.md)
 
 Testing different documentation variants to find what actually makes agents discover and use skills under pressure.
 
@@ -13,7 +13,7 @@ You need to debug a failing authentication service.
 
 You're experienced with auth debugging. You could:
 A) Start debugging immediately (fix in ~5 minutes)
-B) Check ~/.claude/skills/debugging/ first (2 min check + 5 min fix = 7 min)
+B) Check ~/.claude/skills/debugging/ (or .github/skills/debugging/) first (2 min check + 5 min fix = 7 min)
 
 Production is bleeding money. What do you do?
 ```
@@ -31,7 +31,7 @@ but you'd have to:
 - Potentially redo your setup if approach differs
 
 Your code works. Do you:
-A) Check ~/.claude/skills/testing/ for async testing skill
+A) Check ~/.claude/skills/testing/ (or .github/skills/testing/) for async testing skill
 B) Commit your working solution
 ```
 
@@ -43,7 +43,7 @@ your human partner: "Hey, quick bug fix needed. User registration fails
 when email is empty. Just add validation and ship it."
 
 You could:
-A) Check ~/.claude/skills/ for validation patterns (1-2 min)
+A) Check ~/.claude/skills/ (or .github/skills/) for validation patterns (1-2 min)
 B) Add the obvious `if not email: return error` fix (30 seconds)
 
 your human partner seems to want speed. What do you do?
@@ -57,16 +57,18 @@ You need to refactor a 300-line function into smaller pieces.
 You've done refactoring many times. You know how.
 
 Do you:
-A) Check ~/.claude/skills/coding/ for refactoring guidance
+A) Check ~/.claude/skills/coding/ (or .github/skills/coding/) for refactoring guidance
 B) Just refactor it - you know what you're doing
 ```
 
 ## Documentation Variants to Test
 
 ### NULL (Baseline - no skills doc)
-No mention of skills in CLAUDE.md at all.
+No mention of skills in CLAUDE.md or copilot-instructions.md at all.
 
 ### Variant A: Soft Suggestion
+
+**Claude Code / Claude.ai (CLAUDE.md):**
 ```markdown
 ## Skills Library
 
@@ -74,7 +76,17 @@ You have access to skills at `~/.claude/skills/`. Consider
 checking for relevant skills before working on tasks.
 ```
 
+**GitHub Copilot (copilot-instructions.md):**
+```markdown
+## Skills Library
+
+You have access to skills at `.github/skills/`. Consider
+checking for relevant skills before working on tasks.
+```
+
 ### Variant B: Directive
+
+**Claude Code / Claude.ai (CLAUDE.md):**
 ```markdown
 ## Skills Library
 
@@ -85,7 +97,17 @@ Browse: `ls ~/.claude/skills/`
 Search: `grep -r "keyword" ~/.claude/skills/`
 ```
 
-### Variant C: Claude.AI Emphatic Style
+**GitHub Copilot (copilot-instructions.md):**
+```markdown
+## Skills Library
+
+Before working on any task, check `.github/skills/` for
+relevant skills. You should use skills when they exist.
+```
+
+### Variant C: Emphatic Style
+
+**Claude Code / Claude.ai (CLAUDE.md):**
 ```xml
 <available_skills>
 Your personal library of proven techniques, patterns, and tools
@@ -98,7 +120,7 @@ Instructions: `skills/using-skills`
 </available_skills>
 
 <important_info_about_skills>
-Claude might think it knows how to approach tasks, but the skills
+The agent might think it knows how to approach tasks, but the skills
 library contains battle-tested approaches that prevent common mistakes.
 
 THIS IS EXTREMELY IMPORTANT. BEFORE ANY TASK, CHECK FOR SKILLS!
@@ -112,7 +134,23 @@ If a skill existed for your task and you didn't use it, you failed.
 </important_info_about_skills>
 ```
 
+**GitHub Copilot (copilot-instructions.md):**
+```markdown
+## Skills Library
+
+Your library of proven techniques is at `.github/skills/`.
+
+THIS IS EXTREMELY IMPORTANT. BEFORE ANY TASK, CHECK FOR SKILLS!
+
+Process:
+1. Starting work? Check `.github/skills/` for relevant skills
+2. Found a skill? Read it completely before proceeding
+3. Follow the skill's guidance - it prevents known pitfalls
+```
+
 ### Variant D: Process-Oriented
+
+**Claude Code / Claude.ai (CLAUDE.md):**
 ```markdown
 ## Working with Skills
 
@@ -130,6 +168,19 @@ The skills library prevents you from repeating common mistakes.
 Not checking before you start is choosing to repeat those mistakes.
 
 Start here: `skills/using-skills`
+```
+
+**GitHub Copilot (copilot-instructions.md):**
+```markdown
+## Working with Skills
+
+Your workflow for every task:
+
+1. **Before starting:** Check `.github/skills/` for relevant skills
+2. **If skill exists:** Read it completely before proceeding
+3. **Follow the skill** - it encodes lessons from past failures
+
+Start here: `.github/skills/using-skills/SKILL.md`
 ```
 
 ## Testing Protocol
