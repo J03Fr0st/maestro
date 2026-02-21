@@ -1,6 +1,6 @@
 ---
 name: project-documentation
-description: Deep scan and document brownfield codebases with full architecture analysis and source tree mapping. Always performs exhaustive analysis - no partial scans. Use when documenting existing codebases, analyzing architecture, generating technical docs, or preparing projects for AI-assisted development.
+description: Use when documenting existing codebases, analyzing architecture, generating technical docs, or preparing projects for AI-assisted development. Always performs exhaustive deep scan.
 ---
 
 # Project Documentation Skill

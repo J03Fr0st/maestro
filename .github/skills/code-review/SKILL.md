@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Code review checklist for pull requests covering correctness, security, performance, and maintainability. Use when reviewing PRs, doing self-review before submission, training new reviewers, or establishing review standards.
+description: Use when reviewing PRs, doing self-review before submission, training new reviewers, or establishing review standards. Covers Angular, C#, and PostgreSQL projects.
 ---
 
 # Code Review Skill

@@ -1,6 +1,6 @@
 ---
 name: using-skills
-description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
+description: Use when starting any conversation - ensures skills are checked before responding to any request, including clarifying questions.
 ---
 
 <EXTREMELY-IMPORTANT>

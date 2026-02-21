@@ -1,6 +1,6 @@
 ---
 name: sonarqube-review
-description: Review code like SonarQube with comprehensive rules for bugs, vulnerabilities, code smells, and security hotspots. Use when reviewing code quality, performing static analysis, or ensuring code meets quality gates.
+description: Use when reviewing code quality, performing static analysis, or ensuring code meets quality gates. Covers bugs, vulnerabilities, code smells, and security hotspots.
 ---
 
 # SonarQube-Style Code Review

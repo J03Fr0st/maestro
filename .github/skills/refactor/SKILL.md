@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: 'Surgical code refactoring to improve maintainability without changing behavior. Use when code is hard to maintain, functions/classes are too large, code smells need addressing, or users ask to refactor/clean up. Less drastic than repo-rebuilder; use for gradual improvements.'
+description: Use when code is hard to maintain, functions or classes are too large, code smells need addressing, or the user asks to refactor or clean up code.
 license: MIT
 ---
 

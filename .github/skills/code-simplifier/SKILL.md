@@ -1,7 +1,6 @@
 ---
 name: code-simplifier
-description: |
-  Refine recently modified code to enhance clarity, consistency, and maintainability while preserving all functionality. Use after completing a coding task, writing a logical chunk of code, fixing a bug, or finishing an implementation. Activates automatically after code changes to ensure project standards compliance. Focuses only on recently modified code unless instructed otherwise. Prioritizes readable, explicit code over overly compact solutions.
+description: Use after completing a coding task, fixing a bug, or finishing an implementation to improve code clarity and ensure project standards compliance.
 ---
 
 # Code Simplifier

@@ -1,6 +1,6 @@
 ---
 name: azure-devops-cli
-description: Azure DevOps CLI for projects, repos, pipelines, PRs, and work items. Use when working with Azure DevOps from the command line to manage PRs, pipelines, work items/boards, repos, and variable groups, or to automate DevOps workflows.
+description: Use when working with Azure DevOps from the command line to manage PRs, pipelines, work items, repos, or variable groups, or to automate DevOps workflows.
 ---
 
 # Azure DevOps CLI
