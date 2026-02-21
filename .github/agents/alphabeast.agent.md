@@ -2,7 +2,6 @@
 description: 'Autonomous agent that aggressively parallelizes work using subagents for maximum efficiency'
 name: 'Alpha Beast'
 tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'memory', 'todo']
-agents: ["Alpha Beast"]
 ---
 
 # Alpha Beast
