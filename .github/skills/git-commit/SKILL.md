@@ -1,13 +1,16 @@
 ---
 name: git-commit
-description: 'Use when asked to commit changes, create a git commit, or when the user mentions "/commit".'
+description: >
+  Create git commits using the Conventional Commits format. Use this skill whenever the user says
+  "commit this", "save my work", "stage and commit", "commit my changes", "conventional commit",
+  "create a commit", or mentions "/commit". Make sure to use this skill whenever the user mentions
+  committing, saving changes to git, or staging files for commit, even if they don't explicitly
+  ask for it.
 license: MIT
 
 ---
 
 # Git Commit with Conventional Commits
-
-## Overview
 
 Create standardized, semantic git commits using the Conventional Commits specification. Analyze the actual diff to determine appropriate type, scope, and message.
 
@@ -66,7 +69,7 @@ git status --porcelain
 
 ### 2. Stage Files (if needed)
 
-If nothing is staged or you want to group changes differently:
+Stage specific files rather than using `git add .` or `git add -A` to avoid accidentally including secrets or large binaries.
 
 ```bash
 # Stage specific files
@@ -75,12 +78,9 @@ git add path/to/file1 path/to/file2
 # Stage by pattern
 git add *.test.*
 git add src/components/*
-
-# Interactive staging
-git add -p
 ```
 
-**Never commit secrets** (.env, credentials.json, private keys).
+Check for secrets before staging (.env, credentials.json, private keys). Committing secrets can expose them permanently in git history, even after deletion.
 
 ### 3. Generate Commit Message
 
@@ -107,6 +107,23 @@ EOF
 )"
 ```
 
+### Example
+
+User has modified `src/auth/login.ts` and `src/auth/login.test.ts` to fix a password validation bug:
+
+```bash
+git add src/auth/login.ts src/auth/login.test.ts
+git commit -m "$(cat <<'EOF'
+fix(auth): validate password length before hashing
+
+Previously passwords under 8 chars were hashed then rejected,
+wasting cycles. Now validation happens first.
+
+Closes #247
+EOF
+)"
+```
+
 ## Best Practices
 
 - One logical change per commit
@@ -117,11 +134,10 @@ EOF
 
 ## Git Safety Protocol
 
-- NEVER update git config
-- NEVER run destructive commands (--force, hard reset) without explicit request
-- NEVER skip hooks (--no-verify) unless user asks
-- NEVER force push to main/master
-- If commit fails due to hooks, fix and create NEW commit (don't amend)
-- Do NOT add "Co-authored-by" or AI signatures
-- Do NOT include "Generated with" messages
-- Do NOT use emojis in commit messages
+- Do not update git config -- the user's git identity and settings are intentional.
+- Do not run destructive commands (`--force`, `--hard` reset) unless the user explicitly asks. These can permanently lose work that cannot be recovered.
+- Do not skip hooks (`--no-verify`) unless the user asks. Hooks enforce project-specific quality checks (linting, tests, secrets scanning).
+- Do not force push to main/master. This rewrites shared history and can break other developers' work.
+- If a commit fails due to hooks, fix the issue and create a NEW commit. Using `--amend` after a failed commit would modify the previous (unrelated) commit, destroying its content.
+- By default, omit "Co-authored-by" and "Generated with" footers. If the user or project conventions request AI attribution, add it.
+- Do not use emojis in commit messages (they add noise and can cause tooling issues).

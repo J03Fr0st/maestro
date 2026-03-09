@@ -1,6 +1,9 @@
 ---
 name: gh-cli
-description: Use when working with GitHub from the command line to create PRs, manage issues or projects, monitor Actions, or automate GitHub workflows.
+description: >
+  Use when working with GitHub from the command line to create PRs, manage issues or projects, monitor Actions, or automate GitHub workflows.
+  Make sure to use this skill whenever the user mentions "GitHub pull request", "check CI status", "create release",
+  "manage issues", "merge PR", "GitHub Actions", or "gh command", even if they don't explicitly ask for it.
 ---
 
 # GitHub CLI (gh)
@@ -13,8 +16,10 @@ Work with GitHub from the command line. See [full reference](references/REFERENC
 # Install
 brew install gh              # macOS
 winget install GitHub.cli    # Windows
+sudo apt install gh          # Debian/Ubuntu (via https://github.com/cli/cli/blob/trunk/docs/install_linux.md)
+sudo dnf install gh          # Fedora
 
-# Authenticate
+# Authenticate (required before any gh commands work)
 gh auth login
 
 # Verify
@@ -37,7 +42,7 @@ gh pr list --author @me
 gh pr view 123
 gh pr checkout 123
 
-# Merge PR
+# Merge PR (--squash keeps history clean; --delete-branch avoids stale branches)
 gh pr merge 123 --squash --delete-branch
 
 # Review PR
@@ -80,11 +85,11 @@ gh repo view --web
 # List workflow runs
 gh run list
 
-# View run
+# View run (--log shows full output, useful for debugging failures)
 gh run view 123456789
 gh run view 123456789 --log
 
-# Watch run
+# Watch run (blocks until complete, good for waiting on CI)
 gh run watch 123456789
 
 # Trigger workflow
@@ -94,7 +99,7 @@ gh workflow run ci.yml --ref main
 ### Releases
 
 ```bash
-# Create release
+# Create release (uses tag as version identifier)
 gh release create v1.0.0 --notes "Release notes"
 
 # List releases
@@ -109,6 +114,7 @@ gh release download v1.0.0
 ### Create PR from Current Branch
 
 ```bash
+# --fill auto-populates title/body from commit messages, saving time on single-commit PRs
 gh pr create --fill
 gh pr create --title "feat: description" --body "Details"
 ```
@@ -116,12 +122,14 @@ gh pr create --title "feat: description" --body "Details"
 ### Check PR Status
 
 ```bash
+# --watch polls until all checks complete
 gh pr checks 123 --watch
 ```
 
 ### API Requests
 
 ```bash
+# For anything not covered by built-in commands, use the API directly
 gh api /user
 gh api /repos/owner/repo/issues --method POST --field title="Issue"
 ```
@@ -129,6 +137,7 @@ gh api /repos/owner/repo/issues --method POST --field title="Issue"
 ### JSON Output
 
 ```bash
+# --json + --jq is useful for scripting and extracting specific fields
 gh pr list --json number,title,author
 gh pr view 123 --json title,body,state --jq '.title'
 ```
@@ -137,16 +146,16 @@ gh pr view 123 --json title,body,state --jq '.title'
 
 | Flag | Description |
 |------|-------------|
-| `--repo owner/repo` | Target repository |
-| `--json FIELDS` | Output JSON |
-| `--jq EXPRESSION` | Filter JSON |
-| `--web` | Open in browser |
+| `--repo owner/repo` | Target a specific repository (when not in a git repo) |
+| `--json FIELDS` | Output as JSON |
+| `--jq EXPRESSION` | Filter JSON output |
+| `--web` | Open in browser instead of terminal |
 
 ## Edge Cases
 
-- Use `--repo` flag when not in a git repository
-- Use `gh auth refresh --scopes` to add permissions
-- Use `--paginate` for large result sets
+- Use `--repo` flag when not inside a git repository
+- Use `gh auth refresh --scopes` to add permissions (e.g., for org-level operations)
+- Use `--paginate` for large result sets that exceed default page size
 - Draft PRs need `--draft` flag
 
 ## References

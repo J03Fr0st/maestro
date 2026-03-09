@@ -1,6 +1,11 @@
 ---
 name: pr-description
-description: Use when creating PRs, preparing pull request descriptions, documenting changes, or generating release notes. Works with GitHub and Azure DevOps.
+description: >
+  Generate pull request descriptions and create PRs. Use this skill whenever the user says
+  "create a PR", "open a pull request", "write a PR description", "prepare a PR", "push and PR",
+  or "document my changes for review". Works with GitHub and Azure DevOps. Make sure to use this
+  skill whenever the user mentions pull requests or preparing changes for review, even if they
+  don't explicitly ask for it.
 ---
 
 # PR Description Generator
@@ -12,21 +17,13 @@ Generate comprehensive pull request descriptions by analyzing git changes. Works
 ### 1. Analyze Changes
 
 ```bash
-# View all changes (staged and unstaged)
-git diff
-
-# View staged changes only
-git diff --cached
-
-# View changed files summary
-git diff --stat
-
-# View recent commits on current branch
-git log --oneline -10
-
-# Compare with base branch
+# View all changes vs base branch
 git log main..HEAD --oneline
 git diff main...HEAD --stat
+
+# View staged/unstaged changes if uncommitted work exists
+git diff --cached
+git diff
 ```
 
 ### 2. Categorize Changes
@@ -44,7 +41,9 @@ Group changes into logical categories:
 
 ### 3. Generate Description
 
-Use this format:
+Scale the template to match the PR size. For large PRs, use the full format. For small or trivial PRs (typo fix, dependency bump, single-file change), use just the Summary and omit empty sections.
+
+#### Full format (multi-file, feature work)
 
 ```markdown
 ## Summary
@@ -58,7 +57,6 @@ Use this format:
 
 ### [Category Name]
 - Specific change with details (file paths, version numbers)
-- Another change
 
 ### [Another Category]
 - Change details
@@ -80,13 +78,21 @@ Use this format:
 - Migration steps if applicable
 ```
 
+#### Lightweight format (trivial PRs)
+
+```markdown
+## Summary
+One sentence describing the change.
+
+## Change Type
+- [x] Bug Fix
+```
+
 > **Work Item Linking:**
 > - **GitHub**: Use `Fixes #123` or `Closes #123` to auto-close issues
 > - **Azure DevOps**: Use `AB#12345` syntax to link work items in the description
 
-## Best Practices
-
-### Title Format
+## Title Format
 
 Use conventional commit format: `<type>: <brief description>`
 
@@ -101,7 +107,7 @@ Use conventional commit format: `<type>: <brief description>`
 | `build` | Build system changes |
 | `ci` | CI/CD changes |
 
-### Description Guidelines
+## Description Guidelines
 
 1. **Be Specific**: Include version numbers, package names, file paths
 2. **Explain Why**: Focus on the purpose, not just what changed
@@ -110,11 +116,15 @@ Use conventional commit format: `<type>: <brief description>`
    - GitHub: `Fixes #123` or `Closes #456`
    - Azure DevOps: `AB#12345` (auto-links to work item)
 
-## Example Output
+## Examples
+
+### Example 1: Feature PR
 
 ```markdown
 ## Summary
-Updates authentication system to use JWT tokens instead of session cookies, improving scalability and enabling stateless API design. Also updates related dependencies and adds comprehensive test coverage.
+Updates authentication system to use JWT tokens instead of session cookies, improving
+scalability and enabling stateless API design. Also updates related dependencies and
+adds comprehensive test coverage.
 
 ## Related Work Items
 AB#4521, AB#4522
@@ -137,13 +147,9 @@ AB#4521, AB#4522
 
 ## Change Type
 - [x] New Feature
-- [ ] Bug Fix
 - [x] Dependency Updates
-- [ ] Build Configuration
-- [ ] Pipeline Configuration
 - [x] Code Refactoring
 - [x] Test Addition
-- [ ] Documentation
 - [x] Breaking Change
 
 ## Risks & Considerations
@@ -152,11 +158,19 @@ AB#4521, AB#4522
 - **Security**: JWT secret must be configured in environment variables
 ```
 
+### Example 2: Trivial PR
+
+```markdown
+## Summary
+Fix typo in error message shown when database connection times out.
+
+## Change Type
+- [x] Bug Fix
+```
+
 ## Creating the PR
 
 ### Step 1: Detect Platform
-
-Determine which platform the repository uses:
 
 ```bash
 # Check for GitHub remote
@@ -168,14 +182,12 @@ git remote -v | grep -i "dev.azure.com\|visualstudio.com"
 
 ### Step 2: Write Description to Temp File
 
-Always write the PR description to a temporary markdown file first:
+Write the PR description to `.github/.tmp/pr-description.md` using the Write tool. Using a temp file avoids shell escaping issues with complex markdown content (backticks, quotes, special characters).
 
 ```bash
-# Create temp file for PR description
-# Location: .github/.tmp/pr-description.md
+# Ensure the directory exists
+mkdir -p .github/.tmp
 ```
-
-Write the generated description to `.github/.tmp/pr-description.md` using the Write tool.
 
 ### Step 3: Create PR Using the File
 
@@ -206,26 +218,15 @@ az repos pr create \
 az repos pr update \
   --id <PR_ID> \
   --description "$(cat .github/.tmp/pr-description.md)"
-
-# Create PR with auto-complete enabled
-az repos pr create \
-  --title "<type>: <description>" \
-  --description "$(cat .github/.tmp/pr-description.md)" \
-  --source-branch "$(git branch --show-current)" \
-  --target-branch main \
-  --auto-complete true
 ```
 
-### Step 4: Clean Up (Optional)
-
-The temp file can be kept for reference or deleted:
+### Step 4: Clean Up
 
 ```bash
-# Delete temp file after PR creation
 rm .github/.tmp/pr-description.md
 ```
 
-> **Note**: The `.github/.tmp/` directory should be in `.gitignore` to prevent committing temp files.
+> The `.github/.tmp/` directory should be in `.gitignore` to prevent committing temp files.
 
 ## Platform-Specific Notes
 
@@ -234,14 +235,12 @@ rm .github/.tmp/pr-description.md
 - Uses `gh` CLI (GitHub CLI)
 - Supports `--body-file` for reading description from file
 - Work items: Reference with `Fixes #123` or `Closes #123`
-- Install: `winget install GitHub.cli` or `brew install gh`
 
 ### Azure DevOps
 
 - Uses `az repos` CLI (Azure CLI with DevOps extension)
 - Requires reading file content with `$(cat file)` for `--description`
 - Work items: Link with `--work-items <ID>` flag
-- Install: `az extension add --name azure-devops`
 - Auth: `az login` then `az devops configure --defaults organization=<ORG_URL> project=<PROJECT>`
 
 ```bash
@@ -252,14 +251,6 @@ az repos pr create \
   --source-branch "$(git branch --show-current)" \
   --target-branch main \
   --work-items 12345 67890
-
-# ADO: Set required reviewers
-az repos pr create \
-  --title "<type>: <description>" \
-  --description "$(cat .github/.tmp/pr-description.md)" \
-  --source-branch "$(git branch --show-current)" \
-  --target-branch main \
-  --reviewers "user@example.com"
 ```
 
 ## Quick Reference Commands

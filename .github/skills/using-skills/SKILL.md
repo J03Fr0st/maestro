@@ -1,95 +1,78 @@
 ---
 name: using-skills
-description: Use when starting any conversation - ensures skills are checked before responding to any request, including clarifying questions.
+description: >
+  Check and invoke skills when starting tasks that might benefit from specialized
+  workflows. Triggers: beginning a new task, planning an approach, exploring the
+  codebase, writing code, debugging, refactoring, or any work where project
+  conventions matter.
 ---
-
-<EXTREMELY-IMPORTANT>
-If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
-
-IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
-
-This is not negotiable. This is not optional. You cannot rationalize your way out of this.
-</EXTREMELY-IMPORTANT>
-
-## How to Access Skills
-
-**In Claude Code:** Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to you—follow it directly. Never use the Read tool on skill files.
-
-**In other environments:** Check your platform's documentation for how skills are loaded.
 
 # Using Skills
 
-## The Rule
+Skills encode hard-won project conventions, prevent common mistakes, and provide
+tested workflows. Skipping a relevant skill means rediscovering lessons the team
+already learned — or worse, introducing bugs the skill was written to prevent.
 
-**Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
+## How to Access Skills
 
-```dot
-digraph skill_flow {
-    "User message received" [shape=doublecircle];
-    "About to EnterPlanMode?" [shape=doublecircle];
-    "Already brainstormed?" [shape=diamond];
-    "Invoke brainstorming skill" [shape=box];
-    "Might any skill apply?" [shape=diamond];
-    "Invoke Skill tool" [shape=box];
-    "Announce: 'Using [skill] to [purpose]'" [shape=box];
-    "Has checklist?" [shape=diamond];
-    "Create TodoWrite todo per item" [shape=box];
-    "Follow skill exactly" [shape=box];
-    "Respond (including clarifications)" [shape=doublecircle];
+**In Claude Code:** Use the `Skill` tool. Invoking a skill loads its content for
+you to follow directly. Do not use the Read tool on skill files — the Skill tool
+handles loading.
 
-    "About to EnterPlanMode?" -> "Already brainstormed?";
-    "Already brainstormed?" -> "Invoke brainstorming skill" [label="no"];
-    "Already brainstormed?" -> "Might any skill apply?" [label="yes"];
-    "Invoke brainstorming skill" -> "Might any skill apply?";
+**In other environments:** Check your platform's documentation for how skills are
+loaded.
 
-    "User message received" -> "Might any skill apply?";
-    "Might any skill apply?" -> "Invoke Skill tool" [label="yes, even 1%"];
-    "Might any skill apply?" -> "Respond (including clarifications)" [label="definitely not"];
-    "Invoke Skill tool" -> "Announce: 'Using [skill] to [purpose]'";
-    "Announce: 'Using [skill] to [purpose]'" -> "Has checklist?";
-    "Has checklist?" -> "Create TodoWrite todo per item" [label="yes"];
-    "Has checklist?" -> "Follow skill exactly" [label="no"];
-    "Create TodoWrite todo per item" -> "Follow skill exactly";
-}
-```
+## Skill Check Process
 
-## Red Flags
+Follow these steps when you receive a new task:
 
-These thoughts mean STOP—you're rationalizing:
-
-| Thought | Reality |
-|---------|---------|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
-| "I need more context first" | Skill check comes BEFORE clarifying questions. |
-| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
-| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
-| "Let me gather information first" | Skills tell you HOW to gather information. |
-| "This doesn't need a formal skill" | If a skill exists, use it. |
-| "I remember this skill" | Skills evolve. Read current version. |
-| "This doesn't count as a task" | Action = task. Check for skills. |
-| "The skill is overkill" | Simple things become complex. Use it. |
-| "I'll just do this one thing first" | Check BEFORE doing anything. |
-| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
-| "I know what that means" | Knowing the concept ≠ using the skill. Invoke it. |
+1. **Scan available skills** — review the skill list for anything related to the
+   task at hand (even tangentially).
+2. **Invoke matching skills** — if a skill might apply, invoke it. If it turns
+   out to be irrelevant after reading, move on. The cost of checking is low; the
+   cost of skipping is high.
+3. **Announce your choice** — tell the user which skill you are applying and why
+   (e.g., "Using the TDD skill because this task adds new functionality").
+4. **Follow the skill** — if the skill includes a checklist, track each item.
+   Apply the skill's guidance throughout the task, not just at the start.
 
 ## Skill Priority
 
-When multiple skills could apply, use this order:
+When multiple skills could apply, load process skills first, then implementation
+skills:
 
-1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
-2. **Implementation skills second** - these guide execution
+- **Process skills** (brainstorming, debugging, TDD) determine *how* to approach
+  the task. Load these first because they shape the entire workflow.
+- **Implementation skills** (language patterns, framework conventions) guide
+  execution within that workflow.
 
-"Let's build X" → brainstorming first, then implementation skills.
-"Fix this bug" → debugging first, then domain-specific skills.
+Example: "Build feature X" — load brainstorming first, then implementation
+skills. "Fix this bug" — load debugging first, then domain-specific skills.
+
+## Matching Skills to Tasks
+
+Quick guidance for common situations:
+
+- **"Add a feature" / "Build X"** — check for brainstorming, architecture, and
+  relevant language/framework skills.
+- **"Fix a bug" / "Debug this"** — check for debugging and testing skills.
+- **"Refactor" / "Clean up"** — check for code-quality and pattern skills.
+- **"Write tests"** — check for TDD or testing skills.
+- **"Explore the codebase"** — skills often describe *how* to explore
+  effectively. Check before diving in.
+- **Clarifying questions** — check for skills even before asking follow-up
+  questions. A skill may tell you exactly what context to gather.
 
 ## Skill Types
 
-**Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.
+**Rigid skills** (TDD, debugging): Follow the prescribed steps exactly. These
+skills exist because deviation leads to known failure modes.
 
-**Flexible** (patterns): Adapt principles to context.
+**Flexible skills** (patterns, conventions): Adapt the principles to context.
+The skill itself indicates which type it is.
 
-The skill itself tells you which.
+## Relationship Between Skills and User Instructions
 
-## User Instructions
-
-Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
+User instructions define *what* to do ("Add feature X", "Fix bug Y"). Skills
+define *how* to do it well. A direct user instruction does not override the
+workflow a skill provides — apply both together.

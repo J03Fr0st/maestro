@@ -1,18 +1,29 @@
 ---
 name: code-review
-description: Use when reviewing PRs, doing self-review before submission, training new reviewers, or establishing review standards. Covers Angular, C#, and PostgreSQL projects.
+description: >
+  Use when reviewing PRs, doing self-review before submission, training new reviewers, or establishing review standards.
+  Make sure to use this skill whenever the user mentions "review my code", "check this PR", "code quality",
+  "review standards", "PR feedback", or "code review", even if they don't explicitly ask for it.
 ---
 
 # Code Review Skill
 
-Comprehensive code review guidance for Angular + C# + PostgreSQL projects.
+Comprehensive code review guidance. The checklists and processes below apply broadly to any codebase, with additional specialized references for Angular, C#, and PostgreSQL projects.
+
+## Routing Heuristic
+
+Start your review from the right reference based on the change:
+
+1. **Every PR** -- open [CODE_REVIEW_CHECKLIST.md](references/CODE_REVIEW_CHECKLIST.md) first. It covers universal concerns (naming, error handling, tests, readability).
+2. **Domain-specific changes** -- layer on the relevant guide (Frontend, Backend, Database, Security) after the checklist pass.
+3. **Large or structural changes** -- add [ARCHITECTURE_REVIEW.md](references/ARCHITECTURE_REVIEW.md) or [PERFORMANCE_REVIEW.md](references/PERFORMANCE_REVIEW.md) as a third pass.
 
 ## Quick Start
 
 **Every review, open these three:**
 
 1. [CODE_REVIEW_CHECKLIST.md](references/CODE_REVIEW_CHECKLIST.md) - High-signal checklist for every PR
-2. [PULL_REQUEST_TEMPLATE.md](references/PULL_REQUEST_TEMPLATE.md) - What authors must provide
+2. [PULL_REQUEST_TEMPLATE.md](references/PULL_REQUEST_TEMPLATE.md) - What authors should provide
 3. [CODE_REVIEW_OVERVIEW.md](references/CODE_REVIEW_OVERVIEW.md) - Goals, responsibilities, etiquette
 
 ## Reference Files
@@ -70,10 +81,10 @@ Comprehensive code review guidance for Angular + C# + PostgreSQL projects.
 
 | Level | When to Use | Action |
 |-------|-------------|--------|
-| **🔴 Blocker** | Security flaw, data loss risk | Must fix, cannot merge |
-| **🟠 Major** | Missing error handling, logic bugs | Should fix before merge |
-| **🟡 Minor** | Naming, minor readability | Consider fixing |
-| **⚪ Nitpick** | Style preference | Optional |
+| **Blocker** | Security flaw, data loss risk | Must fix, cannot merge |
+| **Major** | Missing error handling, logic bugs | Should fix before merge |
+| **Minor** | Naming, minor readability | Consider fixing |
+| **Nitpick** | Style preference | Optional |
 
 ## When to Use Each Guide
 

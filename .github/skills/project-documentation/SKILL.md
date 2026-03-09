@@ -1,401 +1,176 @@
 ---
 name: project-documentation
-description: Use when documenting existing codebases, analyzing architecture, generating technical docs, or preparing projects for AI-assisted development. Always performs exhaustive deep scan.
+description: >
+  Use when the user asks to generate docs, document this project, create technical documentation,
+  analyze a codebase, onboard to this project, write a project overview, create architecture docs,
+  or prepare a project for AI-assisted development.
 ---
 
-# Project Documentation Skill
+# Project Documentation
 
-A comprehensive workflow for analyzing and documenting existing (brownfield) codebases to enable AI-assisted development. This skill systematically scans projects, detects architecture patterns, and generates structured documentation that helps both humans and AI agents understand how to extend the codebase.
+Analyze and document existing codebases to enable AI-assisted development. Systematically scan projects, detect architecture patterns, and generate structured documentation that helps both humans and AI agents understand how to extend the codebase.
 
-> **CRITICAL: This skill ALWAYS performs a FULL DEEP SCAN. There is no quick, partial, or surface-level mode. Every file is read, every pattern is analyzed, every component is documented. Do not skip steps or abbreviate the process.**
+## Scanning Approach
 
-## Workflow Overview
+Perform a thorough scan because AI agents downstream need complete context to make safe code changes. This means:
 
-This skill **ALWAYS performs a Full Deep Scan** - there is no partial or quick scan mode.
+- **Prioritize source directories** -- `src/`, `app/`, `lib/`, `components/`, `api/`, `services/`
+- **Skip generated and vendor code** -- `node_modules/`, `dist/`, `build/`, `.next/`, `vendor/`, `__pycache__/`. These are reproducible and add noise without insight
+- **Sample large test suites** -- read representative test files to understand patterns, then note coverage scope. Reading every test file in a 500-file suite is diminishing returns
+- **Read all config files** -- `package.json`, `tsconfig.json`, `.env.example`, CI configs. These are small and high-signal
+- **Trace entry points fully** -- follow the main entry points through the call graph to understand the core architecture
 
-### Deep Scan Requirements
+The goal is to produce documentation thorough enough that an AI agent could plan and implement a new feature using only these docs as context.
 
-- **Read every source file** - No skipping or sampling
-- **Analyze all code paths** - Entry points, modules, utilities, tests
-- **Extract all patterns** - Architecture, conventions, dependencies
-- **Document all components** - APIs, models, UI, state, infrastructure
-- **Map all relationships** - File dependencies, data flow, integrations
+## Workflow
 
-The goal is exhaustive analysis that leaves no stone unturned. This enables AI agents to understand the complete codebase context for future development.
+### Step 1: Detect Project Structure
 
-## Output Document Selection
+Analyze the project root:
 
-By default, all 12 documentation files are generated. Users can optionally specify a subset.
+- Identify package managers (`package.json`, `go.mod`, `requirements.txt`, `Cargo.toml`)
+- Detect framework markers (`next.config.*`, `nuxt.config.*`, `angular.json`)
+- Analyze directory layout (`src/`, `app/`, `lib/`, `components/`)
+- Determine repo type: monolith, monorepo, or multi-part
 
-### Default: Full Documentation Set
+See [references/project-types.md](./references/project-types.md) for classification details.
 
-When no specific documents are requested, generate ALL documents:
+### Step 2: Classify Project Type
 
-```
-index.md, project-overview.md, source-tree-analysis.md, architecture.md,
-component-inventory.md, development-guide.md, api-contracts.md, data-models.md,
-state-management.md, testing-guide.md, configuration.md, deployment-guide.md
-```
+Match against known types: **web**, **mobile**, **backend**, **cli**, **library**, **desktop**, **data**, **infra**. See [references/project-types.md](./references/project-types.md) for key patterns and critical directories per type.
 
-### Presets
+### Step 3: Scan the Codebase
 
-Users can request a preset to generate a focused subset:
+Run these scans against all relevant source code:
 
-| Preset | Documents Generated |
-|--------|---------------------|
+| Scan | Focus Areas | Key Directories |
+|------|-------------|-----------------|
+| API | Routes, HTTP methods, auth, middleware | `controllers/`, `routes/`, `api/`, `handlers/` |
+| Data Models | Schemas, relationships, constraints, migrations | `models/`, `schemas/`, `prisma/`, `migrations/` |
+| UI Components | Component library, props, design patterns | `components/`, `ui/`, `widgets/` |
+| State Management | Stores, actions, data flow, side effects | `store/`, `state/`, `context/` |
+| Configuration | Env vars, build config, feature flags | root config files, `.env.example` |
+| Tests | Frameworks, patterns, fixtures, coverage | `tests/`, `__tests__/`, `spec/` |
+
+### Step 4: Generate Documentation
+
+Generate documentation files into `docs/` (or user-specified location). By default, produce all 12 documents. Each template is in `references/`.
+
+| Document | Template | Purpose |
+|----------|----------|---------|
+| `index.md` | [references/index.md](./references/index.md) | Master navigation hub |
+| `project-overview.md` | [references/project-overview.md](./references/project-overview.md) | Executive summary |
+| `source-tree-analysis.md` | [references/source-tree-analysis.md](./references/source-tree-analysis.md) | Annotated directory tree |
+| `architecture.md` | [references/architecture.md](./references/architecture.md) | Technical architecture |
+| `component-inventory.md` | [references/component-inventory.md](./references/component-inventory.md) | UI component catalog |
+| `development-guide.md` | [references/development-guide.md](./references/development-guide.md) | Setup and workflow |
+| `api-contracts.md` | [references/api-contracts.md](./references/api-contracts.md) | API documentation |
+| `data-models.md` | [references/data-models.md](./references/data-models.md) | Database schemas |
+| `state-management.md` | [references/state-management.md](./references/state-management.md) | State patterns and flow |
+| `testing-guide.md` | [references/testing-guide.md](./references/testing-guide.md) | Test structure |
+| `configuration.md` | [references/configuration.md](./references/configuration.md) | Environment config |
+| `deployment-guide.md` | [references/deployment-guide.md](./references/deployment-guide.md) | Deployment process |
+
+Optional: [references/adr.md](./references/adr.md) for Architecture Decision Records.
+
+When generating each document:
+
+1. Read the template from `references/`
+2. Fill all `{placeholder}` values with actual findings from the scan
+3. Mark truly inapplicable sections as "Not applicable to this project type"
+
+### Step 5: Validate
+
+Use [references/validation-checklist.md](./references/validation-checklist.md) to verify:
+
+- No `{placeholder}` text remains
+- No "TODO" or "TBD" markers
+- All links resolve correctly
+- Examples are realistic
+- Mermaid diagrams render
+
+## Presets
+
+Users can request a focused subset instead of all 12 documents:
+
+| Preset | Documents |
+|--------|-----------|
 | `--preset=core` | index, project-overview, source-tree-analysis, architecture, development-guide |
 | `--preset=api` | index, architecture, api-contracts, data-models, configuration |
 | `--preset=frontend` | index, architecture, component-inventory, state-management, testing-guide |
 | `--preset=devops` | index, configuration, deployment-guide, testing-guide |
 | `--preset=minimal` | index, project-overview, architecture |
 
-### Custom Selection
+Users can also select or exclude individual documents:
+- *"Generate only: architecture, api-contracts, data-models"*
+- *"Generate full docs except: component-inventory, state-management"*
 
-Users can specify individual documents:
+`index.md` is included with every selection because it serves as the navigation hub.
 
-```
-"Generate documentation for this project, but only: architecture, api-contracts, data-models"
-```
+## Multi-Part Projects
 
-Or exclude specific documents:
+For projects with multiple parts (client/server, microservices):
 
-```
-"Generate full documentation except: component-inventory, state-management"
-```
+1. Detect all parts by scanning for separate package managers
+2. Document each part with part-specific files (e.g., `architecture-client.md`)
+3. Create an integration document covering communication patterns and shared dependencies
+4. Link everything from a unified `index.md`
 
-### Important Notes
+## Write-As-You-Go
 
-- **Scanning is always full** - Even when generating fewer documents, the deep scan still analyzes the entire codebase
-- **index.md is always included** - It serves as the navigation hub
-- **Dependencies are respected** - If a document references another (e.g., architecture references data-models), consider including both
+To manage context efficiently during generation:
 
-## Workflow Execution
+1. Write each document immediately after generating it (do not hold all docs in memory)
+2. Validate each section before moving on
+3. Keep only summaries in working context after writing
 
-### Step 1: Initialize and Detect Project Structure
+## Example Output
 
-First, analyze the project to understand its structure:
+A generated `project-overview.md` looks like this (abbreviated):
 
-```
-Project Root Analysis Checklist:
-- [ ] Identify package managers (package.json, go.mod, requirements.txt, Cargo.toml)
-- [ ] Detect framework markers (next.config.*, nuxt.config.*, angular.json)
-- [ ] Analyze directory structure (src/, app/, lib/, components/)
-- [ ] Determine repository type (monolith, monorepo, multi-part)
-```
+```markdown
+# MyApp - Project Overview
 
-**Repository Types:**
-- **Monolith**: Single cohesive codebase
-- **Monorepo**: Multiple packages/apps in one repository (pnpm-workspace, lerna, nx, turborepo)
-- **Multi-part**: Separate client/server or microservice architecture
+**Type:** Web Application (React + TypeScript)
+**Framework:** Next.js 14 (App Router)
+**Database:** PostgreSQL via Prisma ORM
+**State:** Zustand + React Query
 
-### Step 2: Classify Project Type
+## Architecture Summary
 
-Match the project against these type definitions:
+Server-rendered React application using Next.js App Router with
+API routes serving a PostgreSQL database through Prisma. Authentication
+via NextAuth.js with Google and GitHub providers.
 
-| Type | Key Patterns | Critical Directories |
-|------|-------------|---------------------|
-| **web** | package.json, tsconfig.json, vite/webpack/next config | src/, app/, pages/, components/, api/ |
-| **mobile** | app.json, capacitor.config, pubspec.yaml | screens/, components/, ios/, android/ |
-| **backend** | Express/FastAPI/Go patterns, API routes | api/, services/, controllers/, models/ |
-| **cli** | bin/, commands/, single entry point | src/, cmd/, cli/, bin/ |
-| **library** | Index exports, dist output, no app entry | src/, lib/, dist/ |
-| **desktop** | Electron, Tauri, Wails configs | main/, renderer/, src-tauri/ |
-| **data** | Airflow, dbt, pipeline configs | dags/, pipelines/, models/ |
-| **infra** | Terraform, Kubernetes, Pulumi | terraform/, k8s/, charts/ |
+## Key Entry Points
 
-### Step 3: Execute Full Deep Scan
+| Entry Point | Path | Purpose |
+|-------------|------|---------|
+| App root | `src/app/layout.tsx` | Root layout with providers |
+| API routes | `src/app/api/` | REST endpoints |
+| DB schema | `prisma/schema.prisma` | Data model definitions |
 
-Perform ALL scans exhaustively. Do not skip any scan type - analyze everything present in the codebase.
+## Tech Stack
 
-#### API Scan (ALWAYS execute)
-- Find ALL route definitions (controllers/, routes/, api/, handlers/)
-- Extract EVERY HTTP method, path, and parameter
-- Document ALL request/response schemas
-- Identify ALL authentication requirements
-- Map middleware chains and request lifecycle
-
-#### Data Models Scan (ALWAYS execute)
-- Locate ALL schema definitions (models/, schemas/, prisma/, migrations/)
-- Extract EVERY table/collection structure
-- Document ALL relationships and constraints
-- Map complete data flow patterns
-- Identify validation rules and defaults
-
-#### UI Components Scan (ALWAYS execute)
-- Inventory COMPLETE component library (components/, ui/, widgets/)
-- Categorize ALL components by type (Layout, Form, Display, Navigation)
-- Identify ALL design system patterns
-- Document ALL props interfaces and their types
-- Map component dependencies and composition patterns
-
-#### State Management Scan (ALWAYS execute)
-- Identify ALL state management solutions (Redux, Context, Zustand, Pinia, etc.)
-- Map COMPLETE store structure
-- Document ALL actions/reducers/selectors
-- Track FULL state flow through application
-- Identify side effects and async patterns
-
-#### Configuration Scan (ALWAYS execute)
-- Find ALL configuration files
-- Document environment variables and their purposes
-- Map build and bundler configurations
-- Identify feature flags and runtime settings
-
-#### Test Coverage Scan (ALWAYS execute)
-- Inventory ALL test files and their locations
-- Identify testing frameworks and patterns
-- Document test utilities and fixtures
-- Map coverage of critical paths
-
-### Step 4: Generate Source Tree Analysis
-
-Create an annotated directory tree highlighting:
-
-```
-project-root/
-├── src/                    # Main source code
-│   ├── api/               # API client and services
-│   │   ├── client.ts      # Main API client [ENTRY]
-│   │   └── services/      # Service modules
-│   ├── components/        # Reusable UI components
-│   ├── types/             # TypeScript type definitions
-│   └── utils/             # Utility functions
-├── tests/                  # Test files
-│   ├── unit/              # Unit tests
-│   └── integration/       # Integration tests
-└── dist/                   # Build output [GENERATED]
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| Frontend | React | 18.2 |
+| Framework | Next.js | 14.1 |
+| Database | PostgreSQL | 15 |
+| ORM | Prisma | 5.8 |
+| Auth | NextAuth.js | 4.24 |
 ```
 
-### Step 5: Extract Development Information
+## Best Practices
 
-Document setup and operations:
-
-**Prerequisites:**
-- Runtime versions (Node.js, Python, Go, etc.)
-- Required global tools
-- Environment variables needed
-
-**Commands:**
-- Installation steps
-- Development server
-- Build process
-- Test execution
-- Deployment process
-
-### Step 6: Generate Complete Documentation Set
-
-Generate ALL documentation files. Every file is required - populate with findings or note "Not applicable to this project type" if truly absent.
-
-```
-docs/
-├── index.md                    # Master navigation index (REQUIRED)
-├── project-overview.md         # Executive summary (REQUIRED)
-├── source-tree-analysis.md     # Directory structure (REQUIRED)
-├── architecture.md             # Technical architecture (REQUIRED)
-├── component-inventory.md      # UI components (REQUIRED)
-├── development-guide.md        # Setup and workflow (REQUIRED)
-├── api-contracts.md            # API documentation (REQUIRED)
-├── data-models.md              # Database schemas (REQUIRED)
-├── state-management.md         # State patterns and flow (REQUIRED)
-├── testing-guide.md            # Test structure and patterns (REQUIRED)
-├── configuration.md            # Environment and config (REQUIRED)
-└── deployment-guide.md         # Deployment process (REQUIRED)
-```
-
-## Documentation Templates
-
-All templates are located in `references/`. Use these templates when generating documentation:
-
-| Document | Template File | Purpose |
-|----------|---------------|---------|
-| index.md | [references/index.md](./references/index.md) | Master navigation index |
-| project-overview.md | [references/project-overview.md](./references/project-overview.md) | Executive summary |
-| source-tree-analysis.md | [references/source-tree-analysis.md](./references/source-tree-analysis.md) | Directory structure |
-| architecture.md | [references/architecture.md](./references/architecture.md) | Technical architecture |
-| component-inventory.md | [references/component-inventory.md](./references/component-inventory.md) | UI components |
-| development-guide.md | [references/development-guide.md](./references/development-guide.md) | Setup and workflow |
-| api-contracts.md | [references/api-contracts.md](./references/api-contracts.md) | API documentation |
-| data-models.md | [references/data-models.md](./references/data-models.md) | Database schemas |
-| state-management.md | [references/state-management.md](./references/state-management.md) | State patterns |
-| testing-guide.md | [references/testing-guide.md](./references/testing-guide.md) | Test structure |
-| configuration.md | [references/configuration.md](./references/configuration.md) | Environment config |
-| deployment-guide.md | [references/deployment-guide.md](./references/deployment-guide.md) | Deployment process |
-
-### Template Usage
-
-1. **Read the template** before generating each document
-2. **Fill ALL placeholders** - no `{placeholder}` should remain
-3. **Adapt to project** - use actual values from codebase analysis
-4. **Mark N/A sections** - if truly not applicable, note "Not applicable to this project type"
-
-### Bonus Template
-
-| Document | Template File | Purpose |
-|----------|---------------|---------|
-| adr.md | [references/adr.md](./references/adr.md) | Architecture Decision Records (optional) |
+- **CommonMark compliance** -- all markdown must follow CommonMark spec
+- **No time estimates** -- they vary too much to be useful
+- **Active voice, present tense** -- "The function returns" not "The function will return"
+- **Task-oriented** -- write for user goals, not feature lists
+- **Mermaid diagrams** -- use appropriate types (flowchart, sequenceDiagram, erDiagram, classDiagram). Keep diagrams focused: 5-10 nodes ideal, 15 max
 
 ## Additional References
 
 - [Project Type Detection](./references/project-types.md)
 - [Example Prompts](./references/examples.md)
 - [Validation Checklist](./references/validation-checklist.md)
-
-## Best Practices
-
-### Documentation Quality Rules
-
-1. **CommonMark Compliance** - All markdown must follow CommonMark specification
-2. **No Time Estimates** - Never include duration estimates (they vary too much)
-3. **Task-Oriented** - Write for user goals, not feature lists
-4. **Active Voice** - "Click the button" not "The button should be clicked"
-5. **Present Tense** - "The function returns" not "The function will return"
-6. **Working Examples** - Include realistic, tested code snippets
-
-### Mermaid Diagram Guidelines
-
-Use appropriate diagram types:
-- **flowchart** - Process flows, decision trees
-- **sequenceDiagram** - API interactions, message flows
-- **classDiagram** - Object models, class relationships
-- **erDiagram** - Database schemas
-- **stateDiagram-v2** - State machines
-
-Keep diagrams focused (5-10 nodes ideal, max 15).
-
-### Write-As-You-Go Architecture
-
-To manage context efficiently:
-
-1. **Write immediately** - Save each document right after generation
-2. **Validate sections** - Check completeness before moving on
-3. **Purge details** - Keep only summaries in context
-4. **Track state** - Record progress for resumability
-
-## Multi-Part Project Handling
-
-For projects with multiple parts (client/server, microservices):
-
-1. **Detect all parts** - Scan for separate package.json, go.mod, etc.
-2. **Document each part** - Generate part-specific docs (architecture-{part_id}.md)
-3. **Map integration** - Document how parts communicate
-4. **Create unified index** - Link all part documentation
-
-### Integration Documentation
-
-```
-# Integration Architecture
-
-## Communication Patterns
-{how_parts_communicate}
-
-## Integration Points
-| From | To | Type | Details |
-|------|-----|------|---------|
-| {source} | {target} | {method} | {specifics} |
-
-## Data Flow Between Parts
-{cross_part_data_flow}
-
-## Shared Dependencies
-{common_libraries}
-```
-
-## State Management for Resumability
-
-Track workflow progress in a state file:
-
-```json
-{
-  "workflow_version": "1.0.0",
-  "timestamps": {
-    "started": "2024-01-15T10:00:00Z",
-    "last_updated": "2024-01-15T10:30:00Z"
-  },
-  "completed_steps": [
-    {"step": "step_1", "summary": "Project classified", "timestamp": "..."},
-    {"step": "step_2", "summary": "Tech stack analyzed", "timestamp": "..."}
-  ],
-  "current_step": "step_3",
-  "outputs_generated": ["index.md", "project-overview.md"],
-  "findings": {
-    "project_type": "web",
-    "framework": "React + TypeScript",
-    "parts_count": 1
-  }
-}
-```
-
-## Validation Checklist
-
-Before completing documentation, verify FULL coverage:
-
-### Scan Completeness
-- [ ] Every source directory has been scanned
-- [ ] All source files have been read (not sampled)
-- [ ] All entry points identified and documented
-- [ ] All dependencies analyzed and listed
-
-### Documentation Completeness
-- [ ] All requested documentation files generated (all 12 by default, or user-specified subset)
-- [ ] index.md always included with links to generated docs only
-- [ ] Technology stack accurate and complete
-- [ ] API endpoints fully documented with schemas
-- [ ] Data models captured with relationships
-- [ ] UI components inventoried with props
-- [ ] State management patterns mapped
-- [ ] Test coverage documented
-- [ ] Configuration fully documented
-- [ ] Development commands verified and tested
-- [ ] Deployment process documented
-
-### Quality Checks
-- [ ] Index links all generated docs
-- [ ] Markdown renders correctly
-- [ ] No placeholder content remaining
-- [ ] No "TODO" or "TBD" markers left
-- [ ] Examples are realistic and working
-- [ ] Mermaid diagrams render correctly
-
-## Example Usage Prompts
-
-**Full Deep Scan (Default):**
-> "Document this project for AI-assisted development."
-
-This triggers a complete deep scan with all 12 documentation files generated.
-
-**Using a Preset:**
-> "Document this project using the API preset."
-
-Generates: index, architecture, api-contracts, data-models, configuration.
-
-**Custom Document Selection:**
-> "Document this project, but only generate: architecture, component-inventory, and state-management."
-
-Generates only the specified documents plus index.md.
-
-**Excluding Documents:**
-> "Generate full documentation for this project, except deployment-guide and testing-guide."
-
-Generates all documents except the ones specified.
-
-**Update Documentation:**
-> "Rescan this project and update the existing documentation with any changes since the last scan."
-
-This performs a full rescan - not incremental. All files are re-read and documentation regenerated.
-
-**Specific Area (Still Deep):**
-> "Document the authentication system in this project."
-
-Even for specific areas, perform deep analysis: all related files, complete data flow, full security patterns, integration points, and test coverage.
-
-## Output Location
-
-By default, generate documentation in:
-- `docs/` - For project documentation
-- Or user-specified location
-
-Always create an `index.md` as the master entry point that AI agents can reference for context.
-
----
-
-_This skill enables comprehensive brownfield project documentation through exhaustive deep scanning. No shortcuts, no partial scans - full analysis every time._

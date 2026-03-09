@@ -1,6 +1,10 @@
 ---
 name: dispatching-parallel-agents
-description: Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies
+description: >
+  Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies.
+  Make sure to use this skill whenever the user mentions "multiple test failures", "fixing several bugs at once",
+  "parallel investigations", "independent subtasks", "split this up", or "work on these simultaneously",
+  even if they don't explicitly ask for it.
 ---
 
 # Dispatching Parallel Agents
@@ -11,60 +15,50 @@ When you have multiple unrelated failures (different test files, different subsy
 
 **Core principle:** Dispatch one agent per independent problem domain. Let them work concurrently.
 
-## When to Use
+## When to Use (and When Not To)
 
-```dot
-digraph when_to_use {
-    "Multiple failures?" [shape=diamond];
-    "Are they independent?" [shape=diamond];
-    "Single agent investigates all" [shape=box];
-    "One agent per problem domain" [shape=box];
-    "Can they work in parallel?" [shape=diamond];
-    "Sequential agents" [shape=box];
-    "Parallel dispatch" [shape=box];
+**Decision flow:**
 
-    "Multiple failures?" -> "Are they independent?" [label="yes"];
-    "Are they independent?" -> "Single agent investigates all" [label="no - related"];
-    "Are they independent?" -> "Can they work in parallel?" [label="yes"];
-    "Can they work in parallel?" -> "Parallel dispatch" [label="yes"];
-    "Can they work in parallel?" -> "Sequential agents" [label="no - shared state"];
-}
-```
+1. Are there multiple failures or tasks? If no, use a single agent.
+2. Are they independent (different root causes, different subsystems)? If no (they are related), use a single agent to investigate all -- fixing one may fix the others.
+3. Can agents work without shared state? If no (they would edit the same files or use the same resources), use sequential agents.
+4. If yes to all three: **dispatch in parallel.**
 
-**Use when:**
+**Good fit:**
 - 3+ test files failing with different root causes
 - Multiple subsystems broken independently
 - Each problem can be understood without context from others
 - No shared state between investigations
 
-**Don't use when:**
-- Failures are related (fix one might fix others)
-- Need to understand full system state
-- Agents would interfere with each other
+**Poor fit:**
+- Failures are related (fix one and others may resolve)
+- Understanding requires seeing the entire system state
+- Exploratory debugging where you do not yet know what is broken
+- Agents would interfere (editing same files, using same resources)
 
 ## The Pattern
 
 ### 1. Identify Independent Domains
 
-Group failures by what's broken:
+Group failures by what is broken:
 - File A tests: Tool approval flow
 - File B tests: Batch completion behavior
 - File C tests: Abort functionality
 
-Each domain is independent - fixing tool approval doesn't affect abort tests.
+Each domain is independent -- fixing tool approval does not affect abort tests.
 
 ### 2. Create Focused Agent Tasks
 
 Each agent gets:
 - **Specific scope:** One test file or subsystem
 - **Clear goal:** Make these tests pass
-- **Constraints:** Don't change other code
+- **Constraints:** Do not change other code
 - **Expected output:** Summary of what you found and fixed
 
 ### 3. Dispatch in Parallel
 
 ```typescript
-// In Claude Code / AI environment
+// Pseudocode -- Claude Code agent dispatch
 Task("Fix agent-tool-abort.test.ts failures")
 Task("Fix batch-completion-behavior.test.ts failures")
 Task("Fix tool-approval-race-conditions.test.ts failures")
@@ -75,7 +69,7 @@ Task("Fix tool-approval-race-conditions.test.ts failures")
 
 When agents return:
 - Read each summary
-- Verify fixes don't conflict
+- Verify fixes do not conflict
 - Run full test suite
 - Integrate all changes
 
@@ -109,24 +103,12 @@ Return: Summary of what you found and what you fixed.
 
 ## Common Mistakes
 
-**❌ Too broad:** "Fix all the tests" - agent gets lost
-**✅ Specific:** "Fix agent-tool-abort.test.ts" - focused scope
-
-**❌ No context:** "Fix the race condition" - agent doesn't know where
-**✅ Context:** Paste the error messages and test names
-
-**❌ No constraints:** Agent might refactor everything
-**✅ Constraints:** "Do NOT change production code" or "Fix tests only"
-
-**❌ Vague output:** "Fix it" - you don't know what changed
-**✅ Specific:** "Return summary of root cause and changes"
-
-## When NOT to Use
-
-**Related failures:** Fixing one might fix others - investigate together first
-**Need full context:** Understanding requires seeing entire system
-**Exploratory debugging:** You don't know what's broken yet
-**Shared state:** Agents would interfere (editing same files, using same resources)
+| Mistake | Fix |
+|---------|-----|
+| Too broad: "Fix all the tests" | Scope to one file/subsystem: "Fix agent-tool-abort.test.ts" |
+| No context: "Fix the race condition" | Paste the error messages and test names |
+| No constraints: agent refactors everything | Add: "Do NOT change production code" or "Fix tests only" |
+| Vague output: "Fix it" | Require: "Return summary of root cause and changes" |
 
 ## Real Example
 
@@ -137,13 +119,13 @@ Return: Summary of what you found and what you fixed.
 - batch-completion-behavior.test.ts: 2 failures (tools not executing)
 - tool-approval-race-conditions.test.ts: 1 failure (execution count = 0)
 
-**Decision:** Independent domains - abort logic separate from batch completion separate from race conditions
+**Decision:** Independent domains -- abort logic separate from batch completion separate from race conditions
 
 **Dispatch:**
 ```
-Agent 1 → Fix agent-tool-abort.test.ts
-Agent 2 → Fix batch-completion-behavior.test.ts
-Agent 3 → Fix tool-approval-race-conditions.test.ts
+Agent 1 -> Fix agent-tool-abort.test.ts
+Agent 2 -> Fix batch-completion-behavior.test.ts
+Agent 3 -> Fix tool-approval-race-conditions.test.ts
 ```
 
 **Results:**
@@ -153,15 +135,6 @@ Agent 3 → Fix tool-approval-race-conditions.test.ts
 
 **Integration:** All fixes independent, no conflicts, full suite green
 
-**Time saved:** 3 problems solved in parallel vs sequentially
-
-## Key Benefits
-
-1. **Parallelization** - Multiple investigations happen simultaneously
-2. **Focus** - Each agent has narrow scope, less context to track
-3. **Independence** - Agents don't interfere with each other
-4. **Speed** - 3 problems solved in time of 1
-
 ## Verification
 
 After agents return:
@@ -169,9 +142,3 @@ After agents return:
 2. **Check for conflicts** - Did agents edit same code?
 3. **Run full suite** - Verify all fixes work together
 4. **Spot check** - Agents can make systematic errors
-
-## Real-World Impact
-
-- 6 failures across 3 files → 3 agents dispatched in parallel
-- All investigations completed concurrently
-- All fixes integrated successfully, zero conflicts
