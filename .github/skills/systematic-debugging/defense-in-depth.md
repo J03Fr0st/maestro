@@ -6,6 +6,17 @@ When you fix a bug caused by invalid data, adding validation at one place feels 
 
 **Core principle:** Validate at EVERY layer data passes through. Make the bug structurally impossible.
 
+## Why Multiple Layers
+
+Single validation: "We fixed the bug"
+Multiple layers: "We made the bug impossible"
+
+Different layers catch different cases:
+- Entry validation catches most bugs
+- Business logic catches edge cases
+- Environment guards prevent context-specific dangers
+- Debug logging helps when other layers fail
+
 ## The Four Layers
 
 ### Layer 1: Entry Point Validation
@@ -18,6 +29,9 @@ function createProject(name: string, workingDirectory: string) {
   }
   if (!existsSync(workingDirectory)) {
     throw new Error(`workingDirectory does not exist: ${workingDirectory}`);
+  }
+  if (!statSync(workingDirectory).isDirectory()) {
+    throw new Error(`workingDirectory is not a directory: ${workingDirectory}`);
   }
   // ... proceed
 }
@@ -40,11 +54,15 @@ function initializeWorkspace(projectDir: string, sessionId: string) {
 
 ```typescript
 async function gitInit(directory: string) {
+  // In tests, refuse git init outside temp directories
   if (process.env.NODE_ENV === 'test') {
     const normalized = normalize(resolve(directory));
     const tmpDir = normalize(resolve(tmpdir()));
+
     if (!normalized.startsWith(tmpDir)) {
-      throw new Error(`Refusing git init outside temp dir during tests: ${directory}`);
+      throw new Error(
+        `Refusing git init outside temp dir during tests: ${directory}`
+      );
     }
   }
   // ... proceed
@@ -57,7 +75,11 @@ async function gitInit(directory: string) {
 ```typescript
 async function gitInit(directory: string) {
   const stack = new Error().stack;
-  logger.debug('About to git init', { directory, cwd: process.cwd(), stack });
+  logger.debug('About to git init', {
+    directory,
+    cwd: process.cwd(),
+    stack,
+  });
   // ... proceed
 }
 ```
@@ -71,12 +93,30 @@ When you find a bug:
 3. **Add validation at each layer** - Entry, business, environment, debug
 4. **Test each layer** - Try to bypass layer 1, verify layer 2 catches it
 
+## Example from Session
+
+Bug: Empty `projectDir` caused `git init` in source code
+
+**Data flow:**
+1. Test setup → empty string
+2. `Project.create(name, '')`
+3. `WorkspaceManager.createWorkspace('')`
+4. `git init` runs in `process.cwd()`
+
+**Four layers added:**
+- Layer 1: `Project.create()` validates not empty/exists/writable
+- Layer 2: `WorkspaceManager` validates projectDir not empty
+- Layer 3: `WorktreeManager` refuses git init outside tmpdir in tests
+- Layer 4: Stack trace logging before git init
+
+**Result:** All 1847 tests passed, bug impossible to reproduce
+
 ## Key Insight
 
-All four layers are necessary. During testing, each layer catches bugs the others miss:
-- Different code paths bypass entry validation
-- Mocks bypass business logic checks
-- Edge cases on different platforms need environment guards
-- Debug logging identifies structural misuse
+All four layers were necessary. During testing, each layer caught bugs the others missed:
+- Different code paths bypassed entry validation
+- Mocks bypassed business logic checks
+- Edge cases on different platforms needed environment guards
+- Debug logging identified structural misuse
 
 **Don't stop at one validation point.** Add checks at every layer.
