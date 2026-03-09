@@ -1,58 +1,98 @@
 ---
 name: writing-plans
-description: >
-  Use when you need to create an implementation plan for a multi-step task before
-  touching code. Make sure to use this skill whenever the user says "plan",
-  "implementation plan", "task breakdown", "break this down",
-  "how should I build this", or discusses requirements for a feature that needs
-  structured implementation, even if they don't explicitly ask for it.
+description: Use when you have a spec or requirements for a multi-step task, before touching code
 ---
 
 # Writing Plans
 
-Write comprehensive implementation plans that assume the implementing engineer has zero context for the codebase and limited familiarity with the problem domain. Document everything they need: which files to touch, complete code, testing steps, relevant docs, and how to verify. Deliver the plan as bite-sized tasks. DRY. YAGNI. Frequent commits.
+## Overview
 
-Assume the implementer is a skilled developer, but knows almost nothing about the project's toolset or domain.
+Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
 
-**Context:** Ideally run in a dedicated worktree (e.g., created by the brainstorming skill), but works from any branch.
+Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
+
+**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
+
+**Context:** This should be run in a dedicated worktree (created by brainstorming skill).
 
 **Save plans to:** `docs/plans/YYYY-MM-DD-<feature-name>.md`
 
-## Plan Structure
-
-Use the template at [references/plan-template.md](references/plan-template.md) as the base structure.
-
-Every plan starts with:
-- **Goal** — One sentence describing what this builds
-- **Architecture** — 2-3 sentences about approach
-- **Tech Stack** — Key technologies/libraries
-
-### Choosing TDD vs Direct Implementation
-
-**Use TDD tasks** (test-first steps) when the work involves testable logic: business rules, data transformations, APIs, algorithms. Most implementation plans should use TDD.
-
-**Use direct implementation tasks** when the work is not meaningfully testable with unit tests: configuration files, CI/CD pipelines, infrastructure-as-code, UI layout/styling, documentation, or migration scripts. In these cases, structure each task as:
-
-1. Implement the change
-2. Verify it works (manual check, build succeeds, deploy succeeds, etc.)
-3. Commit
-
 ## Bite-Sized Task Granularity
 
-Each step should be one action (2-5 minutes):
-- "Write the failing test" — one step
-- "Run it to verify it fails" — one step
-- "Implement the minimal code to pass" — one step
-- "Run tests to verify they pass" — one step
-- "Commit" — one step
+**Each step is one action (2-5 minutes):**
+- "Write the failing test" - step
+- "Run it to make sure it fails" - step
+- "Implement the minimal code to make the test pass" - step
+- "Run the tests and make sure they pass" - step
+- "Commit" - step
 
-## Key Rules
+## Plan Document Header
 
-- Provide exact file paths, not approximate ones
-- Include complete code in the plan (not "add validation here")
-- Specify exact commands with expected output
-- One action per step — never combine actions
-- Commit after each task with a conventional commit message
+**Every plan MUST start with this header:**
+
+```markdown
+# [Feature Name] Implementation Plan
+
+> **For Claude:** REQUIRED SUB-SKILL: Use executing-plans to implement this plan task-by-task.
+
+**Goal:** [One sentence describing what this builds]
+
+**Architecture:** [2-3 sentences about approach]
+
+**Tech Stack:** [Key technologies/libraries]
+
+---
+```
+
+## Task Structure
+
+````markdown
+### Task N: [Component Name]
+
+**Files:**
+- Create: `exact/path/to/file.py`
+- Modify: `exact/path/to/existing.py:123-145`
+- Test: `tests/exact/path/to/test.py`
+
+**Step 1: Write the failing test**
+
+```python
+def test_specific_behavior():
+    result = function(input)
+    assert result == expected
+```
+
+**Step 2: Run test to verify it fails**
+
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: FAIL with "function not defined"
+
+**Step 3: Write minimal implementation**
+
+```python
+def function(input):
+    return expected
+```
+
+**Step 4: Run test to verify it passes**
+
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: PASS
+
+**Step 5: Commit**
+
+```bash
+git add tests/path/test.py src/path/file.py
+git commit -m "feat: add specific feature"
+```
+````
+
+## Remember
+- Exact file paths always
+- Complete code in plan (not "add validation")
+- Exact commands with expected output
+- Reference relevant skills with @ syntax
+- DRY, YAGNI, TDD, frequent commits
 
 ## Execution Handoff
 
@@ -60,8 +100,17 @@ After saving the plan, offer execution choice:
 
 **"Plan complete and saved to `docs/plans/<filename>.md`. Two execution options:**
 
-**1. Subagent-Driven (this session)** — Dispatch a fresh subagent per task, review between tasks, fast iteration. Uses the subagent-driven-development skill if available; otherwise, manually dispatch subagents using the Task tool.
+**1. Subagent-Driven (this session)** - I dispatch fresh subagent per task, review between tasks, fast iteration
 
-**2. Parallel Session (separate)** — Open a new session in the worktree. Use the executing-plans skill if available; otherwise, follow the plan task-by-task manually.
+**2. Parallel Session (separate)** - Open new session with executing-plans, batch execution with checkpoints
 
 **Which approach?"**
+
+**If Subagent-Driven chosen:**
+- **REQUIRED SUB-SKILL:** Use subagent-driven-development
+- Stay in this session
+- Fresh subagent per task + code review
+
+**If Parallel Session chosen:**
+- Guide them to open new session in worktree
+- **REQUIRED SUB-SKILL:** New session uses executing-plans

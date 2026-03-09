@@ -1,114 +1,139 @@
 ---
 name: verification-before-completion
-description: >
-  Use when about to claim work is done, finished, fixed, ready to merge,
-  passing, or complete — before committing or creating PRs.
-  Trigger phrases: "done", "finished", "ready to merge", "all tests pass",
-  "works now", "ship it", "that should fix it", "looks good", "completed",
-  "fixed the bug", "ready for review".
+description: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
 ---
 
 # Verification Before Completion
 
 ## Overview
 
-Run the verification command. Read the output. Then — and only then — claim the result.
+Claiming work is complete without verification is dishonesty, not efficiency.
 
-## Why This Matters
+**Core principle:** Evidence before claims, always.
 
-Without fresh verification, completion claims are guesses. Here's what actually happens when verification is skipped:
+**Violating the letter of this rule is violating the spirit of this rule.**
 
-- **Undefined functions ship** — code compiles in your head but crashes at runtime
-- **Missing requirements slip through** — "tests pass" doesn't mean requirements are met
-- **Trust erodes** — once the user has to re-check your claims, every future claim gets scrutinized
-- **Rework multiplies** — false completion leads to redirect, context-switching, and rework that costs more than the original verification would have
+## The Iron Law
 
-The pattern is consistent: unverified claims waste more time than they save.
+```
+NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
+```
 
-## The Verification Gate
+If you haven't run the verification command in this message, you cannot claim it passes.
 
-Before claiming any status:
+## The Gate Function
 
-1. **Identify** — What command proves this claim? (test suite, build, linter, etc.)
-2. **Run** — Execute the full command fresh (not from memory, not from a previous run)
-3. **Read** — Full output, check exit code, count failures
-4. **Confirm** — Does the output actually support the claim?
-   - If no: state the actual status with evidence
-   - If yes: state the claim with evidence
+```
+BEFORE claiming any status or expressing satisfaction:
 
-## What Counts as Verification
+1. IDENTIFY: What command proves this claim?
+2. RUN: Execute the FULL command (fresh, complete)
+3. READ: Full output, check exit code, count failures
+4. VERIFY: Does output confirm the claim?
+   - If NO: State actual status with evidence
+   - If YES: State claim WITH evidence
+5. ONLY THEN: Make the claim
+
+Skip any step = lying, not verifying
+```
+
+## Common Failures
 
 | Claim | Requires | Not Sufficient |
 |-------|----------|----------------|
 | Tests pass | Test command output: 0 failures | Previous run, "should pass" |
 | Linter clean | Linter output: 0 errors | Partial check, extrapolation |
-| Build succeeds | Build command: exit 0 | Linter passing, "logs look good" |
-| Bug fixed | Reproduce original symptom: passes | Code changed, assumed fixed |
+| Build succeeds | Build command: exit 0 | Linter passing, logs look good |
+| Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
 | Regression test works | Red-green cycle verified | Test passes once |
 | Agent completed | VCS diff shows changes | Agent reports "success" |
-| Requirements met | Line-by-line checklist | Tests passing alone |
+| Requirements met | Line-by-line checklist | Tests passing |
 
-## When to Apply
+## Red Flags - STOP
 
-**Before any completion-adjacent claim:**
-- Saying work is done, fixed, passing, or ready
-- Committing, creating a PR, or marking a task complete
-- Moving to the next task (verify the current one is actually finished)
-- Reporting on delegated work (verify the agent's output independently)
+- Using "should", "probably", "seems to"
+- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
+- About to commit/push/PR without verification
+- Trusting agent success reports
+- Relying on partial verification
+- Thinking "just this once"
+- Tired and wanting work over
+- **ANY wording implying success without having run verification**
 
-**This does not apply to:**
-- In-progress observations like "this approach looks promising"
-- Describing what you're about to do
-- Sharing intermediate results you haven't claimed are final
+## Rationalization Prevention
 
-The distinction: if you're asserting a state of completion or correctness, verify it first. If you're sharing work-in-progress, just be clear that it's in progress.
-
-## Red Flags — Pause and Verify
-
-Watch for these patterns in your own output — they usually signal an unverified claim:
-
-- Words like "should", "probably", "seems to" before a status claim
-- Satisfaction phrases ("Great!", "Perfect!", "Done!") before running verification
-- About to commit/push/PR without a fresh test run
-- Trusting an agent's success report without checking the diff
-- Thinking "the change is small enough that it obviously works"
-
-## Common Excuses and What to Do Instead
-
-| Temptation | What to do instead |
-|------------|-------------------|
-| "Should work now" | Run the verification and find out |
-| "I'm confident" | Confidence isn't evidence — run the command |
-| "Linter passed" | Linter checks style, not correctness — run the tests too |
-| "Agent said success" | Check the VCS diff and run verification independently |
-| "Partial check is enough" | Partial verification misses partial failures — run the full suite |
+| Excuse | Reality |
+|--------|---------|
+| "Should work now" | RUN the verification |
+| "I'm confident" | Confidence ≠ evidence |
+| "Just this once" | No exceptions |
+| "Linter passed" | Linter ≠ compiler |
+| "Agent said success" | Verify independently |
+| "I'm tired" | Exhaustion ≠ excuse |
+| "Partial check is enough" | Partial proves nothing |
+| "Different words so rule doesn't apply" | Spirit over letter |
 
 ## Key Patterns
 
 **Tests:**
 ```
-Run test command -> See "34/34 pass" -> "All tests pass"
-NOT: "Should pass now" / "Looks correct"
+✅ [Run test command] [See: 34/34 pass] "All tests pass"
+❌ "Should pass now" / "Looks correct"
+```
+
+**Regression tests (TDD Red-Green):**
+```
+✅ Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)
+❌ "I've written a regression test" (without red-green verification)
 ```
 
 **Build:**
 ```
-Run build -> See exit 0 -> "Build succeeds"
-NOT: "Linter passed" (linter doesn't check compilation)
+✅ [Run build] [See: exit 0] "Build passes"
+❌ "Linter passed" (linter doesn't check compilation)
 ```
 
 **Requirements:**
 ```
-Re-read plan -> Create checklist -> Verify each item -> Report gaps or completion
-NOT: "Tests pass, phase complete" (tests don't prove requirements)
+✅ Re-read plan → Create checklist → Verify each → Report gaps or completion
+❌ "Tests pass, phase complete"
 ```
 
 **Agent delegation:**
 ```
-Agent reports success -> Check VCS diff -> Run verification -> Report actual state
-NOT: Trust the agent report at face value
+✅ Agent reports success → Check VCS diff → Verify changes → Report actual state
+❌ Trust agent report
 ```
+
+## Why This Matters
+
+From 24 failure memories:
+- your human partner said "I don't believe you" - trust broken
+- Undefined functions shipped - would crash
+- Missing requirements shipped - incomplete features
+- Time wasted on false completion → redirect → rework
+- Violates: "Honesty is a core value. If you lie, you'll be replaced."
+
+## When To Apply
+
+**ALWAYS before:**
+- ANY variation of success/completion claims
+- ANY expression of satisfaction
+- ANY positive statement about work state
+- Committing, PR creation, task completion
+- Moving to next task
+- Delegating to agents
+
+**Rule applies to:**
+- Exact phrases
+- Paraphrases and synonyms
+- Implications of success
+- ANY communication suggesting completion/correctness
 
 ## The Bottom Line
 
-Run the command. Read the output. Then claim the result.
+**No shortcuts for verification.**
+
+Run the command. Read the output. THEN claim the result.
+
+This is non-negotiable.
